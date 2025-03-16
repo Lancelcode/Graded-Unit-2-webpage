@@ -126,6 +126,6 @@ mysqli_stmt_close($stmt);
 mysqli_close($link);
 ?>
 
-<?php include('includes/footer2.php'); ?>
+<?php include('includes/footer.php'); ?>
 </body>
 </html>

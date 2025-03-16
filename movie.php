@@ -7,107 +7,6 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        .card:hover {
-            transform: scale(1.05);
-        }
-
-        .rating-img {
-        width: 20px; /* Reduce width for smaller size */
-        height: auto; /* Maintain aspect ratio */
-        display: inline-block; /* Align properly with text */
-        vertical-align: middle; /* Align vertically with text */
-        }
-
-        .card img {
-            width: 100%;
-            object-fit: cover;
-        }
-        h2 {
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #ffffff;
-        }
-        .search-results {
-            background-color: #001c35;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 40px;
-        }
-        .placeholder {
-            text-align: center;
-            margin: 50px 0;
-            font-size: 1.5rem;
-            color: #888;
-        }
-        .poster {
-            width: 300px; /* Adjust the width for medium size */
-            height: auto; /* Maintain the aspect ratio */
-            display: inline-block; /* Ensure proper alignment */
-            vertical-align: middle; /* Align the image vertically */
-        }
-
-
-        .card .rating-img {
-        width: 70px;
-        height: auto;
-        display: inline-block;
-        vertical-align: middle;
-        }
-        
-        .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5);
-        }
-        .list-group-item {
-            background-color: #005680; /* Bluish list item */
-            color: #e0f7ff; /* Lighter text color for readability */
-            border: 1px solid #006994; /* Border for separation */
-        }
-        .list-group-item:hover {
-            background-color: #0077b6; /* Hover effect */
-            color: #ffffff; /* Brighter text on hover */
-        }
-        .btn-primary {
-            background: linear-gradient(to right, #0077b6, #0096c7); /* Brighter blue button */
-            border: none;
-            color: #ffffff;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(to left, #005680, #0077b6); /* Subtle gradient on hover */
-        }
-        .btn-secondary {
-            background: linear-gradient(to right, #6c757d, #495057);
-            border: none;
-            color: #ffffff;
-        }
-        .btn-secondary:hover {
-            background: linear-gradient(to left, #495057, #343a40);
-        }
-        .icon svg {
-            margin-right: 10px;
-            fill: #1eb1f6; /* Light blue icon color */
-        }
-        h1.text-primary {
-            color: #1eb1f6; /* Brighter blue for headings */
-        }
-
-        .card-body {
-            flex: 1 1 auto;
-            min-height: 1px;
-            padding: 1.25rem;
-            color:rgb(0, 0, 0) !important;
-        }
-       
-
-        </style>
-
 </head>
 <body>
 
@@ -142,52 +41,47 @@ $q = "SELECT * FROM movie_listings WHERE movie_id = $movie_id" ;
 $r = mysqli_query( $link, $q ) ;
 if ( mysqli_num_rows( $r ) == 1 )
 {
-    $row = mysqli_fetch_array( $r, MYSQLI_ASSOC );
+                        $row = mysqli_fetch_array( $r, MYSQLI_ASSOC );
 
-    # Check if cart already contains one movie id.
-    if ( isset( $_SESSION['cart'][$movie_id] ) )
-    {
-# Add one more booking if needed.
-        $_SESSION['cart'][$movie_id]['quantity']++;
-        echo '
-      <<div class="container mt-4">
-            <div class="header">
-                <h1 class="display-4">' . $row['movie_title'] . '</h1>
-                <h3 class="lead">Genre: ' . $row['genre'] . '</h3>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 mb-4">
-                    <div class="video-embed">
-                        <iframe src="' . $row['preview'] . '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                    <img src="' . $row['img'] . '" alt="Movie Poster" class="poster mb-3">
-                    <h3><strong>Release Date:</strong> ' . $row['release'] . '</h3>
-                    <h3><strong>Age Rating:</strong> <img src="' . $row['age_rating'] . '" alt="Age Rating" width="50"></h3>
-                    <h3><strong>Synopsis:</strong> ' . $row['further_info'] . '</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Show Times - ' . $row['theatre'] . '</h3>
-                            <div class="d-flex flex-wrap justify-content-between">
-                                <a href="show1.php"><button type="button" class="btn btn-secondary">Book > ' . $row['show1'] . '</button></a>
-                                <a href="show2.php"><button type="button" class="btn btn-secondary">Book > ' . $row['show2'] . '</button></a>
-                                <a href="show3.php"><button type="button" class="btn btn-secondary">Book > ' . $row['show3'] . '</button></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-</div>
-
-
-
-
-				
+                        # Check if cart already contains one movie id.
+                        if ( isset( $_SESSION['cart'][$movie_id] ) )
+                        {
+                    # Add one more booking if needed.
+                            $_SESSION['cart'][$movie_id]['quantity']++;
+                            echo '
+                        <<div class="container mt-4">
+                                <div class="header">
+                                    <h1 class="display-4">' . $row['movie_title'] . '</h1>
+                                    <h3 class="lead">Genre: ' . $row['genre'] . '</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="video-embed">
+                                            <iframe src="' . $row['preview'] . '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-4">
+                                        <img src="' . $row['img'] . '" alt="Movie Poster" class="poster mb-3">
+                                        <h3><strong>Release Date:</strong> ' . $row['release'] . '</h3>
+                                        <h3><strong>Age Rating:</strong> <img src="' . $row['age_rating'] . '" alt="Age Rating" width="50"></h3>
+                                        <h3><strong>Synopsis:</strong> ' . $row['further_info'] . '</h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h3 class="card-title">Show Times - ' . $row['theatre'] . '</h3>
+                                                <div class="d-flex flex-wrap justify-content-between">
+                                                    <a href="show1.php"><button type="button" class="btn btn-secondary">Book > ' . $row['show1'] . '</button></a>
+                                                    <a href="show2.php"><button type="button" class="btn btn-secondary">Book > ' . $row['show2'] . '</button></a>
+                                                    <a href="show3.php"><button type="button" class="btn btn-secondary">Book > ' . $row['show3'] . '</button></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    </div>			
 				</div>
 				<hr>
 			</div>
@@ -205,7 +99,7 @@ if ( mysqli_num_rows( $r ) == 1 )
             <div class="col-md-4">
 				<iframe class="embed-responsive-item" src='. $row['preview'].' 
 					frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-					allowfullscreen>
+					allowcreen>
 				</iframe>
 			 </div>
 		<div class="col-md-8">

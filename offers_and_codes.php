@@ -11,80 +11,9 @@ require('includes/connect_db.php');
     <!-- Bootstrap 4.5.2 CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
-    <style>
-        body {
-            background-color: #001c35; /* Deep bluish background */
-            color: #ffffff;
-            font-family: 'Roboto', sans-serif;
-        }
-        .offer-card {
-            border-radius: 15px;
-            overflow: hidden;
-            background-color: #002c5f; /* Dark bluish card */
-            color: #ffffff;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .offer-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-        .offer-card img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-        }
-        .offer-card h5 {
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: #1eb1f6; /* Light blue text for headings */
-        }
-        .offer-card p {
-            font-size: 0.9rem;
-            color: #d0eaff; /* Soft blue for descriptions */
-        }
-        .coupon-code {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #ffcc00;
-            background-color: #004d7a; /* Slightly lighter blue */
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .copy-btn {
-            margin-left: 10px;
-            font-size: 0.9rem;
-            padding: 5px 10px;
-            background-color: #ffcc00;
-            color: #00293c;
-            border: none;
-            transition: background-color 0.3s ease;
-        }
-        .copy-btn:hover {
-            background-color: #e6b800;
-        }
-        .banner {
-            background: linear-gradient(to right, #002c5f, #003d7a); /* Gradient for banner */
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .banner h1 {
-            font-size: 2.5rem;
-            color: #1eb1f6;
-            font-weight: bold;
-        }
-        .banner p {
-            font-size: 1.2rem;
-            color: #d0eaff;
-        }
-    </style>
 </head>
 <body>
-<?php include('includes/nav1.php'); ?>
+<?php include('includes/nav.php'); ?>
 
 <div class="container mt-5">
     <!-- Page Banner -->

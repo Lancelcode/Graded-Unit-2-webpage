@@ -81,8 +81,10 @@ if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' )
     <title>User Registration</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
+<?php include('includes/nav.php'); ?>
 <h2>Register</h2>
 <form action="register.php" class="was-validated" method="post">
     <label for="username">Username:</label><br>

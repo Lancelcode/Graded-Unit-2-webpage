@@ -1,6 +1,6 @@
-<h4?php session_start();
+<?php session_start();
 require('connect_db.php');
-include('includes/nav1.php');
+include('includes/nav.php');
 ?>
 
 
@@ -12,9 +12,7 @@ include('includes/nav1.php');
     <title>User Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 </head>
 <body class="d-flex flex-column min-vh-100">
 
@@ -36,7 +34,10 @@ include('includes/nav1.php');
     <br><br>
     <input type="submit" value="Login" >
 </form>
-<?php include('includes/footer2.php'); ?>
+<?php include('includes/footer.php'); ?>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
 

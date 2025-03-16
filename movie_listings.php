@@ -12,17 +12,17 @@ if ( mysqli_num_rows( $r ) > 0 )
     {
         echo '
 	
-<div class="col-md-3 d-flex justify-content-center">
-<div class="card" style="width: 18rem;">
-  <div class="card text-center">
-				
-   <img src='. $row['img'].' alt="Movie" class="img-thumbnail bg-secondary">
-   <h5 class="card-title">'. $row['movie_title'].'</h5>
-   <a href="movie.php?id='.$row['movie_id'].'" class="btn btn-secondary btn-block" role="button">
-    Book Now</a>
-   </div>
-</div>
-</div>  
+        <div class="col-md-3 d-flex justify-content-center">
+        <div class="card" style="width: 18rem;">
+        <div class="card text-center">
+                        
+        <img src='. $row['img'].' alt="Movie" class="img-thumbnail bg-secondary">
+        <h5 class="card-title">'. $row['movie_title'].'</h5>
+        <a href="movie.php?id='.$row['movie_id'].'" class="btn btn-secondary btn-block" role="button">
+            Book Now</a>
+        </div>
+        </div>
+        </div>  
 	';
     }
     # Close database connection.

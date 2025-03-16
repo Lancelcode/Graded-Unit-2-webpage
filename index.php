@@ -22,7 +22,7 @@
 </head>
 
 <body>
-<?php include('includes/nav1.php'); ?>
+<?php include('includes/nav.php'); ?>
 <div class="container mt-5">
     <h1 class="display-4">Welcome to I-Cinema</h1>
     <h3 class="lead">Your gateway to the latest movies and seamless booking experience.</h3>
@@ -57,7 +57,7 @@
     </div>
 </div>
 
-<?php include('includes/footer2.php'); ?>
+<?php include('includes/footer.php'); ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

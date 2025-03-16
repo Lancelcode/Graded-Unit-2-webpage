@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<?php include('includes/nav.php'); ?>
 <div class="container mt-5">
     <h1>Privacy Policy</h1>
     <p>Your privacy is important to us. This policy explains how we collect, use, and protect your information...</p>
@@ -17,6 +18,6 @@
         <li>You have the right to request data deletion at any time.</li>
     </ul>
 </div>
-<?php include('includes/footer2.php'); ?>
+<?php include('includes/footer.php'); ?>
 </body>
 </html>

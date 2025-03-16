@@ -28,7 +28,7 @@ foreach ($_SESSION['cart'] as $movie_id => $details) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<?php include('includes/nav1.php'); ?>
+<?php include('includes/nav.php'); ?>
 
 <div class="container mt-5">
     <h1>Checkout</h1>
@@ -39,6 +39,6 @@ foreach ($_SESSION['cart'] as $movie_id => $details) {
     </form>
 </div>
 
-<?php include('includes/footer2.php'); ?>
+<?php include('includes/footer.php'); ?>
 </body>
 </html>

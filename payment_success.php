@@ -48,7 +48,7 @@ mysqli_close($link);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<?php include('includes/nav1.php'); ?>
+<?php include('includes/nav.php'); ?>
 
 <div class="container mt-5">
     <h1 class="text-success">Payment Successful!</h1>
@@ -56,6 +56,6 @@ mysqli_close($link);
     <a href="index.php" class="btn btn-primary">Return to Home</a>
 </div>
 
-<?php include('includes/footer2.php'); ?>
+<?php include('includes/footer.php'); ?>
 </body>
 </html>

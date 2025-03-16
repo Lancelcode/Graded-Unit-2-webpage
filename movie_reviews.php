@@ -64,7 +64,7 @@ $totalPages = ceil($totalReviews / $reviewsPerPage);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<?php include('includes/nav1.php'); ?>
+<?php include('includes/nav.php'); ?>
 
 <div class="container mt-5">
     <h1 class="mb-4">Manage Reviews</h1>
@@ -176,7 +176,7 @@ $totalPages = ceil($totalReviews / $reviewsPerPage);
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<?php include('includes/footer2.php'); ?>
+<?php include('includes/footer.php'); ?>
 </body>
 </html>
 

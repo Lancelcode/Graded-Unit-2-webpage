@@ -17,94 +17,9 @@ if (!isset($_SESSION['username'])) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
-    <style>
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        .card:hover {
-            transform: scale(1.05);
-        }
-
-        .rating-img {
-        width: 20px; /* Reduce width for smaller size */
-        height: auto; /* Maintain aspect ratio */
-        display: inline-block; /* Align properly with text */
-        vertical-align: middle; /* Align vertically with text */
-        }
-
-        .card img {
-            width: 100%;
-            object-fit: cover;
-        }
-        h2 {
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #ffffff;
-        }
-        .search-results {
-            background-color: #001c35;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 40px;
-        }
-        .placeholder {
-            text-align: center;
-            margin: 50px 0;
-            font-size: 1.5rem;
-            color: #888;
-        }
-
-        .card .rating-img {
-        width: 70px;
-        height: auto;
-        display: inline-block;
-        vertical-align: middle;
-        }
-        
-        .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5);
-        }
-        .list-group-item {
-            background-color: #005680; /* Bluish list item */
-            color: #e0f7ff; /* Lighter text color for readability */
-            border: 1px solid #006994; /* Border for separation */
-        }
-        .list-group-item:hover {
-            background-color: #0077b6; /* Hover effect */
-            color: #ffffff; /* Brighter text on hover */
-        }
-        .btn-primary {
-            background: linear-gradient(to right, #0077b6, #0096c7); /* Brighter blue button */
-            border: none;
-            color: #ffffff;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(to left, #005680, #0077b6); /* Subtle gradient on hover */
-        }
-        .btn-secondary {
-            background: linear-gradient(to right, #6c757d, #495057);
-            border: none;
-            color: #ffffff;
-        }
-        .btn-secondary:hover {
-            background: linear-gradient(to left, #495057, #343a40);
-        }
-        .icon svg {
-            margin-right: 10px;
-            fill: #1eb1f6; /* Light blue icon color */
-        }
-        h1.text-primary {
-            color: #1eb1f6; /* Brighter blue for headings */
-        }
-        </style>
-
 </head>
 <body>
-<?php include('includes/nav1.php'); ?>
+<?php include('includes/nav.php'); ?>
 
 <div class="container mt-5">
     <!-- Search Form -->
@@ -316,7 +231,7 @@ if (!isset($_SESSION['username'])) {
 </div>
 
 </div>
-<?php include('includes/footer2.php'); ?>
+<?php include('includes/footer.php'); ?>
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

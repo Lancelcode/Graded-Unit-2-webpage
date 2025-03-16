@@ -11,6 +11,7 @@
     <title>Movies</title>
   </head>
   <body>
+  <?php include('includes/nav.php'); ?>
   <div class="container">
     <h1>Booking</h1>
 	
@@ -134,7 +135,7 @@ else
 			<a href="home.php" class="alert-link">View What\'s On Now </a>
 		</div>' ; }
 ?>
-
+<?php include('includes/footer.php'); ?>
 <script>
         
 

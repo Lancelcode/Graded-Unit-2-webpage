@@ -29,7 +29,7 @@ $r = mysqli_query($link, $q);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<?php include('includes/nav1.php'); ?>
+<?php include('includes/nav.php'); ?>
 
 <div class="container mt-5">
     <h1 class="mb-4">Your Saved Credit Cards</h1>
@@ -108,7 +108,7 @@ $r = mysqli_query($link, $q);
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<?php include('includes/footer2.php'); ?>
+<?php include('includes/footer.php'); ?>
 </body>
 </html>
 
