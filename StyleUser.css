@@ -1,0 +1,125 @@
+/* General Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #527ca6;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    color: #34495e;
+}
+
+body.dark-mode {
+    background-color: #2c3e50;
+    color: #f4f4f9;
+}
+
+/* Card-style movie display */
+.card {
+    background-color: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+    max-height: 250px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: #2c3e50;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    background-color: #7f8c8d;
+    border-color: #7f8c8d;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.btn-secondary:hover {
+    background-color: #626d71;
+    transform: scale(1.05);
+}
+
+/* Modal form styling */
+.modal .form-control, .modal .form-select {
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+/* Section headers */
+h1, h2, h3 {
+    font-weight: bold;
+    color: #34495e;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Movie grid layout */
+.container {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.row {
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Uniform column spacing */
+.col-md-4, .col-md-6 {
+    margin-bottom: 20px;
+}
+
+/* Footer styling (if used) */
+footer {
+    text-align: center;
+    padding: 15px 0;
+    background-color: #34495e;
+    color: #f4f4f9;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

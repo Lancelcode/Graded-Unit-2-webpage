@@ -1,0 +1,282 @@
+/* General Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Makes the body act like a flex container */
+    min-height: 100vh; /* Ensures the body spans the full height of the viewport */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    background: linear-gradient(to bottom, #00293c, #005680); /* Higher contrast background */
+    
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Header, H1, H2, H3 Styling */
+h1, h2, h3 {
+    color: #ffffff;
+}
+
+/* Button Styling */
+button {
+    padding: 10px 15px;
+    background-color: #0156b2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Card Image Styling */
+
+.card img {
+    width: 100%;
+    display: block;
+}
+
+
+/* Alert Styling */
+.alert {
+    margin-bottom: 20px;
+}
+
+/* Carousel Image Styling */
+.carousel-item img {
+    height: 500px; /* Maximum height for images */
+    width: 100%; /* Full width of the container */
+    object-fit: contain; /* Ensures images fit without cropping */
+    background-color: #000000a9; /* Optional: Background color */
+}
+
+/* Movie Details Section Styling */
+.movie-details {
+    text-align: center;
+    padding: 15px;
+    background-color: #ffffffb1; /* Light gray background for details */
+    border-top: 1px solid #000000; /* Subtle border above the details */
+}
+
+.movie-details h5 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.movie-details p {
+    margin: 5px 0 0;
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* Sticky Header Styling */
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #2c3e50;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    color: white;
+}
+
+.navbar .brand a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    position: relative;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.navbar-light .navbar-brand {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+.icon {
+    font-size: 1.2em;
+}
+
+/* Mobile View Styling */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+    .nav-links {
+        flex-direction: column;
+        display: none;
+        background: linear-gradient(to bottom, #00293c, #005680); /* Higher contrast background */
+                color: #e0f7ff; /* Light text for better readability */
+                font-family: 'Roboto', sans-serif;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+    }
+    .nav-links.active {
+        display: flex;
+    }
+}
+
+/* Main Content Area */
+.content {
+    flex: 1; /* Ensures this section takes up the remaining space */
+}
+
+.h2home {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.8em;
+    color: #2c3e50;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(255, 255, 255);
+}
+
+.navbar-light .navbar-brand {
+    color: rgba(255, 255, 255);
+}
+
+.navbar-light .navbar-nav .show>.nav-link {
+    color: rgba(255, 255, 255);
+}
+
+.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
+    color: rgb(255, 255, 255);
+}
+
+.movie-card h3 {
+    margin: 10px;
+    font-size: 1.1em;
+    text-align: center;
+}
+.display-4 {
+    font-size: 3.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    color: #ffffff;
+}
+
+.h2home {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.8em;
+    color: #ffffff;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #000000;
+}
+.btn-secondary {
+    background-color: #7f8c8d;
+    border-color: #7f8c8d;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.btn-primary {
+    background-color: #0019f3;
+    border-color: #3498db;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1rem;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+h1 {
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ffffff;
+}
+
+p.card-text {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #000000;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.5);
+}
+.list-group-item {
+    background-color: #005680; /* Bluish list item */
+    color: #e0f7ff; /* Lighter text color for readability */
+    border: 1px solid #006994; /* Border for separation */
+}
+.list-group-item:hover {
+    background-color: #0077b6; /* Hover effect */
+    color: #ffffff; /* Brighter text on hover */
+}
+.btn-primary {
+    background: linear-gradient(to right, #0077b6, #0096c7); /* Brighter blue button */
+    border: none;
+    color: #ffffff;
+}
+.btn-primary:hover {
+    background: linear-gradient(to left, #005680, #0077b6); /* Subtle gradient on hover */
+}
+.btn-secondary {
+    background: linear-gradient(to right, #6c757d, #495057);
+    border: none;
+    color: #ffffff;
+}
+.btn-secondary:hover {
+    background: linear-gradient(to left, #495057, #343a40);
+}
+.icon svg {
+    margin-right: 10px;
+    fill: #1eb1f6; /* Light blue icon color */
+}
+h1.text-primary {
+    color: #1eb1f6; /* Brighter blue for headings */
+}
