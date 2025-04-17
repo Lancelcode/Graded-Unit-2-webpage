@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <!-- MOVIES -->
                 <li class="nav-item">
-                    <a class="nav-link" href="movies.php">
+                    <a class="nav-link" href="movie.php">
                         <span class="icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor" class="bi bi-film" viewBox="0 0 16 16">

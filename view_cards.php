@@ -34,7 +34,7 @@ $r = mysqli_query($link, $q);
 <div class="container mt-5">
     <h1 class="mb-4">Your Saved Credit Cards</h1>
 
-    <?php if (mysqli_num_rows($r) > 0): ?>
+    <?php if (mysqli_num_rows($r) > 1): ?>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
