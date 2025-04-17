@@ -39,7 +39,7 @@ require ( 'connect_db.php' ) ;
 # Retrieve selective movie data from 'movie_listings' database table.
 $q = "SELECT * FROM movie_listings WHERE movie_id = $movie_id" ;
 $r = mysqli_query( $link, $q ) ;
-if ( mysqli_num_rows( $r ) == 1 )
+if ( mysqli_num_rows( $r ) == 0 )
 {
                         $row = mysqli_fetch_array( $r, MYSQLI_ASSOC );
 

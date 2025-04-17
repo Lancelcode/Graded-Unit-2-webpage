@@ -1,9 +1,8 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+
 session_start();
 ?>
-<?php include('includes/nav1.php'); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +17,7 @@ session_start();
 </head>
 
 <body>
+<?php include('includes/nav.php'); ?>
 <?php
 # Ensure the user is logged in
 if (!isset($_SESSION['id'])) {
