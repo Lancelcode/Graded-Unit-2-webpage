@@ -30,7 +30,7 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id'];
 
 # Connect to the database
-require('connect_db.php');
+require('includes/nav.php');
 
 # Check if the connection was successful
 if (!$link) {

@@ -4,7 +4,7 @@
 if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' )
 {
     # Connect to the database.
-    require ('connect_db.php');
+    require('includes/connect_db.php');
 
     # Initialize an error array.
     $errors = array();

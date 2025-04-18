@@ -2,7 +2,7 @@
 $q = intval($_GET['q']);
 
 # Open database connection.
-	require ( 'connect_db.php' ) ;
+require('includes/connect_db.php');
 if (!$link) {
     die('Could not connect: ' . mysqli_error($link));
 }

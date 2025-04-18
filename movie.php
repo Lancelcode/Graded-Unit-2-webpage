@@ -35,7 +35,7 @@ if ( !isset( $_SESSION[ 'id' ] ) ) { require ( 'login_tools.php' ) ; load() ; }
 # Get passed movie id and assign it to a variable.
 if ( isset( $_GET['movie_id'] ) ) $movie_id = $_GET['movie_id'] ;
 # Open database connection.
-require ( 'connect_db.php' ) ;
+require('includes/connect_db.php');
 # Retrieve selective movie data from 'movie_listings' database table.
 $q = "SELECT * FROM movie_listings WHERE movie_id = $movie_id" ;
 $r = mysqli_query( $link, $q ) ;

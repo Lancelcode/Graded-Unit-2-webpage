@@ -104,7 +104,7 @@
   <div class="container mt-4">
       <div class="movie-grid row">
           <?php
-          require('connect_db.php');
+          require('includes/connect_db.php');
           $q = "SELECT * FROM movie_listings";
           $r = mysqli_query($link, $q);
 

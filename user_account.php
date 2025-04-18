@@ -6,7 +6,7 @@ if (!isset($_SESSION['id'])) {
     load();
 }
 
-require('connect_db.php');
+require('includes/connect_db.php');
 
 // Fetch user details from the database
 $q = "SELECT * FROM new_users WHERE id={$_SESSION['id']}";

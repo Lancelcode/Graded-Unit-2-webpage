@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 }
 
 # Open database connection.
-require('connect_db.php');
+require('includes/connect_db.php');
 
 # Retrieve the user's saved credit cards from the database.
 $userId = $_SESSION['id'];

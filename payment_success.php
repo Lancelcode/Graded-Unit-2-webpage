@@ -1,6 +1,6 @@
 <?php
 session_start();
-require('connect_db.php');
+require('includes/connect_db.php');
 
 if (!isset($_SESSION['id'])) {
     header('Location: login.php');

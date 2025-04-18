@@ -1,6 +1,6 @@
 <?php
 # Open database connection.
-require ( 'connect_db.php' ) ;
+require('includes/connect_db.php');
 # Retrieve movies from 'movie_listing' database table.
 $q = "SELECT * FROM movie_listings" ;
 $r = mysqli_query( $link, $q ) ;

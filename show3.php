@@ -47,7 +47,7 @@ $total = 0;
 if (!empty($_SESSION['cart']))
 {
   # Open database connection.
-require ( 'connect_db.php' ) ;
+    require('includes/connect_db.php');
   
   # Retrieve all items in the cart from the 'movie' database table.
   $q = "SELECT * FROM movie_listings WHERE movie_id IN (";

@@ -3,7 +3,7 @@
 # Check form submitted.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     # Open database connection.
-    require('connect_db.php');
+    require('includes/connect_db.php');
 
     # Get connection, load, and validate functions.
     require('login_tools.php');
