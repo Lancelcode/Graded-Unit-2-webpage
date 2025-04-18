@@ -1,6 +1,4 @@
-<?php 
-session_start();
-
+<?php
 // If this registration logic truly belongs in the nav, keep it here.
 // Otherwise, move it to a dedicated "register.php" or similar.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
