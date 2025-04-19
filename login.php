@@ -1,4 +1,15 @@
-<?php session_start();
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+require_once __DIR__ . '/includes/init.php';   // starts / resumes the session
+
+// ── login‑required guard ─────────────────────
+if (isset($_SESSION['username'])) {           // <- use the key you store
+    header('Location: index.php');
+    exit();
+}
+
 require('includes/connect_db.php');
 include('includes/nav.php');
 ?>
