@@ -1,4 +1,4 @@
-<?php include('includes/nav1.php'); ?>
+<?php include('includes/connect_db.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

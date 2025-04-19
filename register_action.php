@@ -1,4 +1,12 @@
 <?php
+
+require_once __DIR__ . '/includes/init.php';
+if (isset($_SESSION['username'])) {
+    header('Location: index.php');
+    exit();
+}
+
+
 require('includes/connect_db.php');
 
 $errors = [];

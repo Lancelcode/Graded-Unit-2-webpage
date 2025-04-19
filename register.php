@@ -1,5 +1,9 @@
 <?php
-# DISPLAY COMPLETE REGISTRATION PAGE.
+require_once __DIR__ . '/includes/init.php';
+if (isset($_SESSION['username'])) {
+    header('Location: index.php');
+    exit();
+}
 # Check form submitted.
 if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' )
 {

@@ -1,9 +1,5 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
-    exit();
-}
+require_once __DIR__ . '/includes/init.php';   // starts the session once
 ?>
 
 
@@ -34,7 +30,7 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id'];
 
 # Connect to the database
-require('includes/nav.php');
+require('includes/connect_db.php');
 
 # Check if the connection was successful
 if (!$link) {

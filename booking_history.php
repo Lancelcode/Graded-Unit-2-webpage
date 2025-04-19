@@ -1,9 +1,5 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
-    exit();
-}
+require_once __DIR__ . '/includes/init.php';   // starts the session once
 // Include database connection
 require('includes/connect_db.php');
 

@@ -1,5 +1,6 @@
-<?php session_start();
-if (!isset($_SESSION['user_id'])) {
+<?php
+require_once __DIR__ . '/includes/init.php';
+if (!isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }

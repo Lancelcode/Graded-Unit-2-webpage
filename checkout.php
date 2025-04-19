@@ -1,7 +1,9 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
+require_once __DIR__ . '/includes/init.php';   // starts the session once
+
+// ── login‑required guard ─────────────────────
+if (!isset($_SESSION['username'])) {
+    header('Location: index.php');
     exit();
 }
 

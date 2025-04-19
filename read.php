@@ -1,6 +1,7 @@
-<?php session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
+<?php require_once __DIR__ . '/includes/init.php';   // starts the session once
+// Redirect to login if the user is not authenticated
+if (!isset($_SESSION['username'])) {
+    header('Location: login.php');
     exit();
 }
 include('includes/nav.php'); ?>

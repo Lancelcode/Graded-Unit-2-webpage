@@ -1,14 +1,13 @@
-<?php session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
-    exit();
-}?>
-<?php require('includes/connect_db.php'); ?>
 <?php
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
+require_once __DIR__ . '/includes/init.php';   // starts the session once
+// Redirect to login if the user is not authenticated
+if (!isset($_SESSION['username'])) {
     header('Location: login.php');
     exit();
-}
+}  // starts the session once
+?>
+<?php require('includes/connect_db.php'); ?>
+<?php
 
 if (isset($_GET['id'])) {
     $item_id = mysqli_real_escape_string($link, $_GET['id']);

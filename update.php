@@ -1,15 +1,11 @@
-<?php session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
+<?php require_once __DIR__ . '/includes/init.php';   // starts the session once
+// Redirect to login if the user is not authenticated
+if (!isset($_SESSION['username'])) {
+    header('Location: login.php');
     exit();
 }?>
 <?php require('includes/connect_db.php'); ?>
 <?php
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
-    header('Location: login.php');
-    exit();
-}
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $item_id = mysqli_real_escape_string($link, $_POST['item_id']);
     $item_name = mysqli_real_escape_string($link, $_POST['item_name']);

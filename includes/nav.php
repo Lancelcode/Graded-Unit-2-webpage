@@ -1,7 +1,4 @@
 <?php
-session_start();
-
-// ✅ Only run this if the Register form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($_POST['pass1'])) {
     require('connect_db.php');
 

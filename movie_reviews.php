@@ -1,16 +1,13 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
+require_once __DIR__ . '/includes/init.php';   // starts the session once
+// Redirect to login if the user is not authenticated
+if (!isset($_SESSION['username'])) {
+    header('Location: login.php');
     exit();
 }
 require('includes/connect_db.php');
 
-// Check if user is logged in
-if (!isset($_SESSION['id'])) {
-    header('Location: login.php');
-    exit();
-}
+
 
 $user_id = $_SESSION['id'];
 
