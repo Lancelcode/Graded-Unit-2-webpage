@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
 # Open database connection.
 require('includes/connect_db.php');
 # Retrieve movies from 'movie_listing' database table.

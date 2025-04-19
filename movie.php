@@ -15,7 +15,11 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 # DISPLAY COMPLETE LOGGED IN PAGE.
 # Access session.
-session_start() ;
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+} ;
 /*/ Session timeout duration (5 minutes)
 $timeout_duration = 300;
 

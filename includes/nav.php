@@ -1,21 +1,22 @@
 <?php
-// If this registration logic truly belongs in the nav, keep it here.
-// Otherwise, move it to a dedicated "register.php" or similar.
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    require ('connect_db.php');
+session_start();
+
+// ✅ Only run this if the Register form was submitted
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($_POST['pass1'])) {
+    require('connect_db.php');
 
     $errors = array();
 
     // Check username
     if (empty($_POST['username'])) {
-        $errors[] = 'Enter your name.'; 
+        $errors[] = 'Enter your name.';
     } else {
         $fn = mysqli_real_escape_string($link, trim($_POST['username']));
     }
 
     // Check email
     if (empty($_POST['email'])) {
-        $errors[] = 'Enter your email address.'; 
+        $errors[] = 'Enter your email address.';
     } else {
         $e = mysqli_real_escape_string($link, trim($_POST['email']));
     }
@@ -23,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Check password
     if (!empty($_POST['pass1'])) {
         if ($_POST['pass1'] != $_POST['pass2']) {
-            $errors[] = 'Passwords do not match.'; 
+            $errors[] = 'Passwords do not match.';
         } else {
             $p = mysqli_real_escape_string($link, trim($_POST['pass1']));
         }
@@ -37,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $r = @mysqli_query($link, $q);
         if (mysqli_num_rows($r) != 0) {
             $errors[] = 'Email address already registered. 
-            <a class="alert-link" href="Index.php">Sign In Now</a>';
+            <a class="alert-link" href="index.php">Sign In Now</a>';
         }
     }
 
@@ -48,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $r = @mysqli_query($link, $q);
 
         if ($r) {
-            // Redirect to the index page after successful registration
             mysqli_close($link);
             header("Location: index.php");
             exit();
@@ -66,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
+
 
 <header class="sticky-header">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">

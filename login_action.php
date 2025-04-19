@@ -1,5 +1,7 @@
 <?php # PROCESS LOGIN ATTEMPT.
 
+session_start();
+
 # Check form submitted.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     # Open database connection.
@@ -14,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         # On success set session data and redirect to home page.
         if ($check) {
-            session_start();
             $_SESSION['id'] = $data['id'];
             $_SESSION['username'] = $data['username'];
             $_SESSION['email'] = $data['email'];
@@ -43,5 +44,4 @@ if (!empty($errors)) {
 
 # Continue to display login page on failure.
 include('login.php');
-
 ?>

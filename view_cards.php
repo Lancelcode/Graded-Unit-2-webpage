@@ -2,6 +2,10 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
 
 # Redirect if not logged in.
 if (!isset($_SESSION['id'])) {

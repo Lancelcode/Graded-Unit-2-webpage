@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
 require('includes/connect_db.php');
 
 // Redirect to login if the user is not authenticated

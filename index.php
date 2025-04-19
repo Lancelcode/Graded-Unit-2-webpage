@@ -1,6 +1,12 @@
-<?php session_start(); ?>
+<?php session_start();
+require('includes/connect_db.php');
 
-<?php require('includes/connect_db.php'); ?>
+// Redirect to login if the user is not authenticated
+if (!isset($_SESSION['username'])) {
+header('Location: login.php');
+exit();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,11 +35,11 @@
 
 </div>
 
-<!-- Carousel Section -->
+<!-- Carousel Section
 <div id="movieCarousel" class="carousel slide mt-5" data-bs-ride="carousel" data-bs-interval="3000">
     <div class="carousel-inner">
         <?php
-        $query = "SELECT img, movie_title, genre FROM movie_listings LIMIT 5"; 
+        $query = "SELECT img, movie_title, genre FROM movie_listings LIMIT 5";
         $result = mysqli_query($link, $query);
 
         if ($result && mysqli_num_rows($result) > 0) {
@@ -55,7 +61,7 @@
         }
         ?>
     </div>
-</div>
+</div>-->
 
 <?php include('includes/footer.php'); ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

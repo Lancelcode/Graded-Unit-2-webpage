@@ -1,4 +1,9 @@
-<?php include('includes/nav.php'); ?>
+<?php session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+include('includes/nav.php'); ?>
 <?php require('includes/connect_db.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
