@@ -29,7 +29,6 @@ require('includes/connect_db.php');
 
 </div>
 
-<!-- Carousel Section
 <div id="movieCarousel" class="carousel slide mt-5" data-bs-ride="carousel" data-bs-interval="3000">
     <div class="carousel-inner">
         <?php
@@ -55,7 +54,7 @@ require('includes/connect_db.php');
         }
         ?>
     </div>
-</div>-->
+</div>
 
 <?php include('includes/footer.php'); ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

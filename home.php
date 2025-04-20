@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/includes/init.php';   // starts the session once
 if (!isset($_SESSION['username'])) { header('Location: login.php'); exit(); }
+require('includes/connect_db.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
