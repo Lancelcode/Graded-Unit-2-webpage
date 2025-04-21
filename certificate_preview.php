@@ -14,55 +14,45 @@ $date = date('F j, Y');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GreenScore Certificate</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <title>Green Certificate</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body { background-color: #f4f8f5; }
-        .card-custom {
-            border-radius: 15px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            padding: 30px;
+        body {
+            background: #fdf6e3;
+            font-family: 'Segoe UI', sans-serif;
         }
-        .award {
-            font-size: 1.5rem;
-            margin: 15px 0;
+        .certificate {
+            margin: 50px auto;
+            padding: 40px;
+            border: 10px double #4CAF50;
+            border-radius: 20px;
+            background: white;
+            text-align: center;
+            width: 80%;
+            max-width: 800px;
         }
-        .btn-group { margin-top: 20px; }
-        .award-icon {
-            font-size: 2rem;
+        h1 {
+            font-size: 3rem;
+            color: #4CAF50;
+        }
+        h2 {
+            margin: 20px 0;
+        }
+        .award-badge {
+            font-size: 2.5rem;
         }
     </style>
-
 </head>
-<body class="bg-light">
-
-<div class="container mt-5">
-    <div class="certificate-box text-center mx-auto">
-
-        <h1 class="mb-4 text-success">🌿 GreenScore Certificate</h1>
-        <h4>This certifies that</h4>
-        <h2 class="fw-bold"><?= htmlspecialchars($username) ?></h2>
-
-        <p class="my-3">has achieved the sustainability award level of</p>
-        <div class="award-badge text-success"><?= $award ?></div>
-
-        <p class="mt-3 text-muted">Issued on <?= $date ?></p>
-
-        <!-- Button Group -->
-        <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
-            <a href="download_certificate.php" class="btn btn-outline-success">📄 Download</a>
-            <a href="buy_points.php" class="btn btn-outline-primary">💰 Buy Points</a>
-            <a href="community.php" class="btn btn-outline-info">🌱 Community</a>
-            <a href="green_resources.php" class="btn btn-outline-dark">📚 Tips & Guides</a>
-        </div>
-    </div>
+<body>
+<div class="certificate">
+    <h1>🌿 Green Cinema Certificate</h1>
+    <h2>This certifies that</h2>
+    <h2><strong><?= htmlspecialchars($username) ?></strong></h2>
+    <p>has achieved the sustainability award level of</p>
+    <div class="award-badge"><strong><?= $award ?></strong></div>
+    <p>Issued on <?= $date ?></p>
+    <button class="btn btn-primary mt-4" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <a href="green_calculator.php" class="btn btn-outline-secondary mt-4">⬅ Back to Calculator</a>
 </div>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
