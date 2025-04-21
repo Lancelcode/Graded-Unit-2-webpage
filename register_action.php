@@ -1,39 +1,60 @@
 <?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($_POST['pass1'])) {
+    # Connect to the database.
+    require('includes/connect_db.php');
+    $errors = array();
 
-require_once __DIR__ . '/includes/init.php';
-if (isset($_SESSION['username'])) {
-    header('Location: index.php');
-    exit();
-}
+    if (empty($_POST['username'])) {
+        $errors[] = 'Enter your name.';
+    } else {
+        $fn = mysqli_real_escape_string($link, trim($_POST['username']));
+    }
 
+    if (empty($_POST['email'])) {
+        $errors[] = 'Enter your email address.';
+    } else {
+        $e = mysqli_real_escape_string($link, trim($_POST['email']));
+    }
 
-require('includes/connect_db.php');
-
-$errors = [];
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = mysqli_real_escape_string($link, $_POST['username']);
-    $email = mysqli_real_escape_string($link, $_POST['email']);
-    $password = mysqli_real_escape_string($link, $_POST['password']);
-    $confirm_password = mysqli_real_escape_string($link, $_POST['confirm_password']);
-
-    if ($password !== $confirm_password) {
-        $errors[] = 'Passwords do not match.';
+    if (!empty($_POST['pass1'])) {
+        if ($_POST['pass1'] != $_POST['pass2']) {
+            $errors[] = 'Passwords do not match.';
+        } else {
+            $p = mysqli_real_escape_string($link, trim($_POST['pass1']));
+        }
+    } else {
+        $errors[] = 'Enter your password.';
     }
 
     if (empty($errors)) {
-        $hashed_password = hash('sha256', $password);
-        $query = "INSERT INTO new_users (username, email, password) VALUES ('$username', '$email', '$hashed_password')";
-        $result = mysqli_query($link, $query);
-
-        if ($result) {
-            header('Location: index.php');
-            exit();
-        } else {
-            echo "Error: " . mysqli_error($link);
+        $q = "SELECT id FROM new_users WHERE email='$e'";
+        $r = @mysqli_query($link, $q);
+        if (mysqli_num_rows($r) != 0) {
+            $errors[] = 'Email address already registered. <a class="alert-link" href="index.php">Sign In Now</a>';
         }
     }
-}
 
-include('index.php');
+    if (empty($errors)) {
+        $q = "INSERT INTO new_users (username, email, password)
+              VALUES ('$fn', '$e', SHA2('$p',256))";
+        $r = @mysqli_query($link, $q);
+
+        if ($r) {
+            mysqli_close($link);
+            header("Location: index.php");
+            exit();
+        }
+
+        echo '<p>Something went wrong. Please try again.</p>';
+        mysqli_close($link);
+    } else {
+        echo '<div class="container mt-4">';
+        echo '<h4>The following error(s) occurred:</h4>';
+        foreach ($errors as $msg) {
+            echo " - $msg<br>";
+        }
+        echo '<p>Please try again.</p></div>';
+        mysqli_close($link);
+    }
+}
 ?>
