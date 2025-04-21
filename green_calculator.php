@@ -1,6 +1,18 @@
 <?php require_once 'includes/init.php'; ?>
 <?php include 'includes/nav.php'; ?>
-<link rel="stylesheet" href="assets/css/style.css">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Green Calculator | GreenScore</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap & Custom Styles -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
 <div class="container mt-5">
     <h1 class="mb-4 text-success">🌿 Green Calculator</h1>
@@ -22,9 +34,9 @@
         ];
 
         foreach ($questions as $index => $q) {
-            echo "<div class='mb-3'>";
-            echo "<label class='form-label fw-bold'>" . ($index + 1) . ". $q</label>";
-            echo "<select class='form-select' name='q$index' required>
+            echo "<div class='form-group'>";
+            echo "<label for='q$index' class='font-weight-bold'>" . ($index + 1) . ". $q</label>";
+            echo "<select class='form-control' id='q$index' name='q$index' required>
                     <option value=''>Choose an option</option>
                     <option value='green'>Green (Good Practice)</option>
                     <option value='amber'>Amber (Okay)</option>
@@ -33,10 +45,16 @@
             echo "</div>";
         }
         ?>
-        <div class="text-end">
+        <div class="text-right">
             <button type="submit" class="btn btn-primary mt-3">Calculate My Score</button>
         </div>
     </form>
 </div>
 
 <?php include 'includes/footer.php'; ?>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
