@@ -14,6 +14,14 @@ if (!isset($_SESSION['username'])) { header('Location: login.php'); exit(); }
 </head>
 <body>
 <?php include('includes/nav.php'); ?>
+<div class="container mt-5 text-center">
+    <h1 class="text-success mb-4">🌿 Welcome to GreenScore</h1>
+    <p class="lead">Your journey toward sustainability starts here.</p>
+
+    <a href="community.php" class="btn btn-outline-success btn-lg mt-3">
+        💬 Visit the Community Board
+    </a>
+</div>
 
 
 <?php include('includes/footer.php'); ?>

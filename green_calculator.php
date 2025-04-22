@@ -111,14 +111,15 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['id'])) {
                 echo "<p class='text-success'>✅ You’ve achieved a perfect 100! You're a green superstar!</p>";
             }
 
-            // Action buttons
-            echo "<div class='btn-group'>";
-            echo "<a href='certificate_preview.php?level=" . urlencode($award) . "' class='btn btn-outline-primary'>📄 Download Certificate</a>";
-
+            echo "<div class='d-flex flex-wrap gap-3 mt-4'>";
+            echo "<a href='certificate_preview.php?level=" . urlencode($award) . "' class='btn btn-outline-success'>📄 Download Certificate</a>";
             if ($total < 80) {
-                echo "<a href='buy_points.php?shortfall=$shortfall&cost=$cost' class='btn btn-outline-warning'>💸 Buy Points to Reach Gold</a>";
+                echo "<a href='buy_points.php?shortfall=$shortfall&cost=$cost' class='btn btn-outline-warning'>💸 Buy Points</a>";
             }
+            echo "<a href='community.php' class='btn btn-outline-info'>🌱 Visit Community</a>";
+            echo "<a href='green_resources.php' class='btn btn-outline-dark'>📚 Tips & Guides</a>";
             echo "</div></div>";
+
         }
 
         mysqli_close($link);
