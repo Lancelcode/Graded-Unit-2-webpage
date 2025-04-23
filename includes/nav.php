@@ -22,7 +22,7 @@ if (session_status() === PHP_SESSION_NONE) {
                            data-bs-toggle="dropdown" aria-expanded="false">🛠️ Tools</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="green_calculator.php">🧮 Green Calculator</a></li>
-                            <li><a class="dropdown-item" href="certificate_preview.php">📄 View Certificate</a></li>
+                            <li><a class="dropdown-item" href="certificate_history.php">📄 My Certificate History</a></li>
                             <li><a class="dropdown-item" href="buy_points.php">💸 Buy Points</a></li>
                             <li><a class="dropdown-item" href="my_impact.php">📊 My Impact</a></li>
                         </ul>
