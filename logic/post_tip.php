@@ -1,6 +1,6 @@
 <?php
-require 'includes/init.php';
-require 'includes/connect_db.php';
+require_once '../includes/init.php';
+require_once '../includes/connect_db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty(trim($_POST['message']))) {
     $msg = mysqli_real_escape_string($link, trim($_POST['message']));
@@ -10,5 +10,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty(trim($_POST['message']))) {
 }
 
 mysqli_close($link);
-header('Location:community.php');
+header('Location: ../community.php');
 exit();

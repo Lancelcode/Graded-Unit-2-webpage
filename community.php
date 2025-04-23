@@ -6,7 +6,7 @@ include 'includes/nav.php';
 $logged_in_user = $_SESSION['id'] ?? null;
 
 // Pagination setup
-$limit = 5;
+$limit = 100;
 $page = isset($_GET['page']) ? max((int)$_GET['page'], 1) : 1;
 $offset = ($page - 1) * $limit;
 
