@@ -2,15 +2,16 @@
 require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
 
-if (!isset($_GET['id']) || !isset($_SESSION['id'])) {
-    header('Location: community.php');
-    exit();
+if (isset($_GET['id'], $_SESSION['id'])) {
+    $tip_id = (int)$_GET['id'];
+    $user_id = $_SESSION['id'];
+
+    $stmt = $link->prepare("DELETE FROM community_tips WHERE id = ? AND user_id = ?");
+    $stmt->bind_param("ii", $tip_id, $user_id);
+    $stmt->execute();
+    $stmt->close();
 }
 
-$id = (int)$_GET['id'];
-$user_id = $_SESSION['id'];
-
-mysqli_query($link, "DELETE FROM community_tips WHERE id = $id AND user_id = $user_id");
-
-header('Location: community.php');
+mysqli_close($link);
+header("Location: community.php");
 exit();
