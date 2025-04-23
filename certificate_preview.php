@@ -47,7 +47,7 @@ $date = date('F j, Y');
 </head>
 <body>
 <div class="certificate">
-    <h1>🌿 Green Cinema Certificate</h1>
+    <h1>🌿 Green Score Certificate</h1>
     <h2>This certifies that</h2>
     <h2><strong><?= htmlspecialchars($username) ?></strong></h2>
     <p>has achieved the sustainability award level of</p>
