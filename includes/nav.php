@@ -37,6 +37,14 @@ if (session_status() === PHP_SESSION_NONE) {
                             <li><a class="dropdown-item" href="terms.php">📜 Terms & Conditions</a></li>
                         </ul>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">🛠️ Admin dashboard</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="admin_feedback.php">🧮 Admin Feedback Panel</a></li>
+                            <li><a class="dropdown-item" href="public_feedback.php">💸 Community Feedback</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="feedback.php">💬 Feedback</a></li>
                     <?php if (isset($_SESSION['username'])): ?>
                         <li class="nav-item"><a class="nav-link" href="user_account.php">👤 Profile</a></li>

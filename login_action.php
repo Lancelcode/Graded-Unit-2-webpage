@@ -2,7 +2,6 @@
 
 require_once __DIR__ . '/includes/init.php';   // starts / resumes the session
 
-
 # Check form submitted.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     # Open database connection.
@@ -12,21 +11,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require('login_tools.php');
 
     try {
-        # Check login.
-        list($check, $data) = validate($link, $_POST['email'], $_POST['password']);
+        # Check if admin login checkbox is ticked.
+        $is_admin_login = isset($_POST['admin_login']) && $_POST['admin_login'] == '1';
 
-        # On success set session data and redirect to home page.
+        # Check login with optional admin requirement.
+        list($check, $data) = validate($link, $_POST['email'], $_POST['password'], $is_admin_login);
+
+        # On success set session data and redirect.
         if ($check) {
             $_SESSION['id'] = $data['id'];
             $_SESSION['username'] = $data['username'];
             $_SESSION['email'] = $data['email'];
-            load('home.php');
+            $_SESSION['role'] = $data['role'];
+
+            if ($is_admin_login && $data['role'] === 'admin') {
+                load('admin_dashboard.php');
+            } else {
+                load('home.php');
+            }
         } else {
             # On failure, set errors.
             $errors = $data;
         }
     } catch (Exception $e) {
-        # Catch any unexpected errors and store a custom error message.
         $errors[] = "An unexpected error occurred. Please try again later.";
     }
 

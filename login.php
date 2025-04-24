@@ -37,6 +37,7 @@ include('includes/nav.php');
            name="email"
            required>
     <br><br>
+
     <h3 for="password">Password:</h3><br>
     <input type="password"
            class="form-control"
@@ -44,8 +45,16 @@ include('includes/nav.php');
            name="password"
            required>
     <br><br>
-    <input type="submit" value="Login" >
+
+    <label>
+        <input type="checkbox" name="admin_login" value="1">
+        Login as Admin
+    </label>
+    <br><br>
+
+    <input type="submit" value="Login">
 </form>
+
 <?php include('includes/footer.php'); ?>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
