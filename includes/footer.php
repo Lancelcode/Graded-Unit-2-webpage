@@ -1,77 +1,65 @@
-<!-- ========== FOOTER SECTION START ========== -->
-
-<!-- Bootstrap Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
-        crossorigin="anonymous"></script>
-
-<!-- Main Footer -->
-<footer class="bg-success text-white mt-auto">
-    <div class="container py-5">
-        <div class="row">
+<footer class="bg-success text-white pt-5 pb-3 mt-auto">
+    <div class="container">
+        <div class="row gy-4">
             <!-- Logo and About -->
-            <div class="col-12 col-md mb-4">
-                <h4 class="fw-bold">🌱 GreenScore</h4>
-                <p class="small mb-0">Building a Greener Future, Together.</p>
+            <div class="col-12 col-md-3">
+                <h4 class="fw-bold mb-2">🌱 GreenScore</h4>
+                <p class="small mb-1">Building a Greener Future, Together.</p>
                 <small class="d-block">&copy; <?= date('Y'); ?> GreenScore. All rights reserved.</small>
             </div>
 
             <!-- Features -->
-            <div class="col-6 col-md">
-                <h5>Features</h5>
-                <ul class="list-unstyled text-light small">
-                    <li><a class="text-white-50" href="green_calculator.php">Green Calculator</a></li>
-                    <li><a class="text-white-50" href="sustainability_snapshot.php">Insights Dashboard</a></li>
-                    <li><a class="text-white-50" href="certificate_preview.php">Certificate</a></li>
+            <div class="col-6 col-md-2">
+                <h6 class="text-uppercase fw-bold mb-3">Features</h6>
+                <ul class="list-unstyled small">
+                    <li><a class="text-white-50 text-decoration-none" href="green_calculator.php">Green Calculator</a></li>
+                    <li><a class="text-white-50 text-decoration-none" href="sustainability_snapshot.php">Insights Dashboard</a></li>
+                    <li><a class="text-white-50 text-decoration-none" href="certificate_preview.php">Certificate</a></li>
                 </ul>
             </div>
 
             <!-- Resources -->
-            <div class="col-6 col-md">
-                <h5>Resources</h5>
-                <ul class="list-unstyled text-light small">
-                    <li><a class="text-white-50" href="green_resources.php">Guides & Tips</a></li>
-                    <li><a class="text-white-50" href="https://sdgs.un.org/goals" target="_blank">UN SDGs</a></li>
+            <div class="col-6 col-md-2">
+                <h6 class="text-uppercase fw-bold mb-3">Resources</h6>
+                <ul class="list-unstyled small">
+                    <li><a class="text-white-50 text-decoration-none" href="green_resources.php">Guides & Tips</a></li>
+                    <li><a class="text-white-50 text-decoration-none" href="https://sdgs.un.org/goals" target="_blank">UN SDGs</a></li>
                 </ul>
             </div>
 
             <!-- Community -->
-            <div class="col-6 col-md">
-                <h5>Community</h5>
-                <ul class="list-unstyled text-light small">
-                    <li><a class="text-white-50" href="community.php">Community Board</a></li>
-                    <li><a class="text-white-50" href="my_impact.php">My Impact</a></li>
+            <div class="col-6 col-md-2">
+                <h6 class="text-uppercase fw-bold mb-3">Community</h6>
+                <ul class="list-unstyled small">
+                    <li><a class="text-white-50 text-decoration-none" href="community.php">Community Board</a></li>
+                    <li><a class="text-white-50 text-decoration-none" href="my_impact.php">My Impact</a></li>
                 </ul>
             </div>
 
             <!-- Legal -->
-            <div class="col-6 col-md">
-                <h5>Legal</h5>
-                <ul class="list-unstyled text-light small">
-                    <li><a class="text-white-50" href="#">Privacy Policy</a></li>
-                    <li><a class="text-white-50" href="#">Terms of Use</a></li>
+            <div class="col-6 col-md-3">
+                <h6 class="text-uppercase fw-bold mb-3">Legal</h6>
+                <ul class="list-unstyled small">
+                    <li><a class="text-white-50 text-decoration-none" href="privacy.php">Privacy Policy</a></li>
+                    <li><a class="text-white-50 text-decoration-none" href="terms.php">Terms of Use</a></li>
                 </ul>
             </div>
         </div>
 
-        <hr class="my-4 border-light">
+        <hr class="border-white-50 mt-4">
 
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-            <div class="text-center text-md-start mb-2 mb-md-0">
+            <div class="mb-2 mb-md-0">
                 <small class="text-white-50">Follow us on social media:</small>
             </div>
-            <div class="text-center text-md-end">
-                <a href="https://www.facebook.com" target="_blank" class="text-white me-3">
+            <div>
+                <a href="https://www.facebook.com" target="_blank" class="text-white text-decoration-none me-3">
                     <i class="fab fa-facebook-f"></i> Facebook
                 </a>
-                <a href="https://www.twitter.com" target="_blank" class="text-white me-3">
+                <a href="https://www.twitter.com" target="_blank" class="text-white text-decoration-none me-3">
                     <i class="fab fa-twitter"></i> Twitter
                 </a>
-                <a href="https://www.instagram.com" target="_blank" class="text-white">
+                <a href="https://www.instagram.com" target="_blank" class="text-white text-decoration-none">
                     <i class="fab fa-instagram"></i> Instagram
                 </a>
             </div>

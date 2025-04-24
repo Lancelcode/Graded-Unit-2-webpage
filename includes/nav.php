@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <header class="sticky-top shadow">
     <nav class="navbar navbar-expand-lg navbar-dark bg-success px-3">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="home.php">🌱 GreenScore</a>
+            <a class="navbar-brand fw-bold" href="index.php">🌱 GreenScore</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
                     aria-expanded="false" aria-label="Toggle navigation">
