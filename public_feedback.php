@@ -3,12 +3,12 @@ require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
 include 'includes/nav.php';
 
-// Query visible feedback entries
+// Show only feedback marked public by admin
 $query = "
-    SELECT f.name, f.email, f.message, f.created_at, f.admin_response
-    FROM feedback f
-    WHERE f.is_public = 1
-    ORDER BY f.created_at DESC
+    SELECT name, email, message, created_at, admin_response
+    FROM feedback
+    WHERE visible_to_public = 1
+    ORDER BY created_at DESC
 ";
 $result = mysqli_query($link, $query);
 ?>
@@ -31,9 +31,12 @@ $result = mysqli_query($link, $query);
         <?php while ($row = mysqli_fetch_assoc($result)): ?>
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title text-success"><?= htmlspecialchars($row['name']) ?> <small class="text-muted">(&lt;<?= htmlspecialchars($row['email']) ?>&gt;)</small></h5>
+                    <h5 class="card-title text-success"><?= htmlspecialchars($row['name']) ?>
+                        <small class="text-muted">(&lt;<?= htmlspecialchars($row['email']) ?>&gt;)</small>
+                    </h5>
                     <p class="card-text"><?= nl2br(htmlspecialchars($row['message'])) ?></p>
                     <p class="text-muted small mb-1">🕒 <?= date('F j, Y, g:i a', strtotime($row['created_at'])) ?></p>
+
                     <?php if (!empty($row['admin_response'])): ?>
                         <div class="alert alert-success mb-0">
                             <strong>Admin Response:</strong> <?= nl2br(htmlspecialchars($row['admin_response'])) ?>
@@ -45,7 +48,6 @@ $result = mysqli_query($link, $query);
     <?php else: ?>
         <div class="alert alert-info">No public feedback available yet.</div>
     <?php endif; ?>
-
 </div>
 
 <?php include 'includes/footer.php'; ?>

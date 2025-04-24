@@ -27,6 +27,10 @@ $result = mysqli_query($link, $query);
 <div class="container mt-5">
     <h2 class="mb-4 text-success">🛠 Admin Feedback Panel</h2>
 
+    <?php if (isset($_GET['updated'])): ?>
+        <div class="alert alert-success">✔ Feedback changes saved successfully!</div>
+    <?php endif; ?>
+
     <?php if (mysqli_num_rows($result) > 0): ?>
         <form action="process_feedback_admin.php" method="post">
             <?php while ($row = mysqli_fetch_assoc($result)): ?>
@@ -38,8 +42,8 @@ $result = mysqli_query($link, $query);
                         <p><strong>🖥 IP:</strong> <?= $row['ip_address'] ?> | <strong>Machine:</strong> <?= $row['machine_name'] ?> | <strong>UUID:</strong> <?= $row['machine_uuid'] ?></p>
 
                         <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" name="visible[<?= $row['id'] ?>]" id="visible<?= $row['id'] ?>" <?= $row['visible'] ? 'checked' : '' ?>>
-                            <label class="form-check-label" for="visible<?= $row['id'] ?>">Make Public</label>
+                            <input class="form-check-input" type="checkbox" name="visible_to_public[<?= $row['id'] ?>]" id="visible_to_public<?= $row['id'] ?>" <?= $row['visible_to_public'] ? 'checked' : '' ?>>
+                            <label class="form-check-label" for="visible_to_public<?= $row['id'] ?>">Make Public</label>
                         </div>
 
                         <div class="mt-2">
