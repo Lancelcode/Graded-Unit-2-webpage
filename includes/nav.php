@@ -1,9 +1,9 @@
+
 <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
-
 <header class="sticky-top shadow">
     <nav class="navbar navbar-expand-lg navbar-dark bg-success px-3">
         <div class="container-fluid">
