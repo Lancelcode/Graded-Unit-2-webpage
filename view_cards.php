@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/includes/init.php';
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['id'])) {
-    require('login_tools.php');
+    require('includes/login_tools.php');
     load();
 }
 

@@ -29,7 +29,7 @@ include('includes/nav.php');
 <body class="d-flex flex-column min-vh-100">
 
 <h1>Login</h1>
-<form action="login_action.php" method="post">
+<form action="includes/login_action.php" method="post">
     <h3 for="email">Email:</h3><br>
     <input type="text"
            class="form-control"

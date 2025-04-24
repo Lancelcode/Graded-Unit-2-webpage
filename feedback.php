@@ -4,7 +4,7 @@ require_once 'includes/connect_db.php';
 include 'includes/nav.php';
 
 if (!isset($_SESSION['id'])) {
-    require 'login_tools.php';
+    require 'includes/login_tools.php';
     load();
 }
 

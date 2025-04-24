@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     require('includes/connect_db.php');
 
     # Get connection, load, and validate functions.
-    require('login_tools.php');
+    require('includes/login_tools.php');
 
     try {
         # Check if admin login checkbox is ticked.
