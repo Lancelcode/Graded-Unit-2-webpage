@@ -1,55 +1,55 @@
 <?php # PROCESS LOGIN ATTEMPT.
 
-require_once __DIR__ . '/includes/init.php';   // starts / resumes the session
+require_once __DIR__ . '/init.php'; // session start
+require_once 'connect_db.php';
+require_once 'login_tools.php';
 
-# Check form submitted.
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    # Open database connection.
-    require('includes/connect_db.php');
+// Only process if POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $errors = [];
 
-    # Get connection, load, and validate functions.
-    require('includes/login_tools.php');
+    // CSRF check
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $errors[] = "Invalid CSRF token.";
+    }
 
     try {
-        # Check if admin login checkbox is ticked.
         $is_admin_login = isset($_POST['admin_login']) && $_POST['admin_login'] == '1';
 
-        # Check login with optional admin requirement.
+        // Validate credentials
         list($check, $data) = validate($link, $_POST['email'], $_POST['password'], $is_admin_login);
 
-        # On success set session data and redirect.
         if ($check) {
-            $_SESSION['id'] = $data['id'];
+            // Success: Set session variables
+            $_SESSION['id']       = $data['id'];
             $_SESSION['username'] = $data['username'];
-            $_SESSION['email'] = $data['email'];
-            $_SESSION['role'] = $data['role'];
+            $_SESSION['email']    = $data['email'];
+            $_SESSION['role']     = $data['role'];
 
+            // Admin redirection
             if ($is_admin_login && $data['role'] === 'admin') {
-                load('admin_dashboard.php');
+                load('admin_feedback.php');
             } else {
                 load('home.php');
             }
         } else {
-            # On failure, set errors.
             $errors = $data;
         }
     } catch (Exception $e) {
-        $errors[] = "An unexpected error occurred. Please try again later.";
+        $errors[] = "Unexpected error. Please try again.";
     }
 
-    # Close database connection.
     mysqli_close($link);
 }
 
-# If there are errors, display them.
+// If there are any errors, display them
 if (!empty($errors)) {
     echo '<div class="alert alert-danger" role="alert">';
     foreach ($errors as $error) {
         echo htmlspecialchars($error) . '<br>';
     }
     echo '</div>';
-}
 
-# Continue to display login page on failure.
-include('login.php');
+    include('../login.php');
+}
 ?>

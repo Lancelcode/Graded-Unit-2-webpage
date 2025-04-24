@@ -1,9 +1,9 @@
-
 <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
+
 <header class="sticky-top shadow">
     <nav class="navbar navbar-expand-lg navbar-dark bg-success px-3">
         <div class="container-fluid">
@@ -43,12 +43,16 @@ if (session_status() === PHP_SESSION_NONE) {
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">🛠️ Admin dashboard</a>
+                               data-bs-toggle="dropdown" aria-expanded="false">🛠 Admin Dashboard</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="admin_feedback.php">🧮 Admin Feedback Panel</a></li>
-                                <li><a class="dropdown-item" href="public_feedback.php">💸 Community Feedback</a></li>
+                                <li><a class="dropdown-item" href="admin_feedback.php">📝 Review User Feedback</a></li>
+                                <li><a class="dropdown-item" href="public_feedback.php">🌍 Public Feedback Submissions</a></li>
+                                <!-- Future admin tools -->
+                                <!-- <li><a class="dropdown-item" href="manage_users.php">👥 Manage Users</a></li> -->
+                                <!-- <li><a class="dropdown-item" href="site_config.php">⚙️ Site Configuration</a></li> -->
                             </ul>
                         </li>
+
                     <?php endif; ?>
 
                     <li class="nav-item"><a class="nav-link" href="feedback.php">💬 Feedback</a></li>
@@ -82,64 +86,3 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
     </nav>
 </header>
-
-
-<!-- Register Modal -->
-<div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <form class="modal-content" action="register_action.php" method="POST">
-            <div class="modal-header">
-                <h5 class="modal-title">Register</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <label>Username:</label>
-                <input type="text" name="username" class="form-control" required><br>
-
-                <label>Email:</label>
-                <input type="email" name="email" class="form-control" required><br>
-
-                <label>Password:</label>
-                <input type="password" name="pass1" class="form-control" required><br>
-
-                <label>Confirm Password:</label>
-                <input type="password" name="pass2" class="form-control" required><br>
-            </div>
-            <div class="modal-footer">
-                <input type="submit" class="btn btn-success" value="Submit">
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Login Modal (Optional) -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <form class="modal-content" action="login_action.php" method="POST">
-            <div class="modal-header">
-                <h5 class="modal-title">Login</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <label>Email:</label>
-                <input type="text" name="email" class="form-control" required><br>
-                <label>Password:</label>
-                <input type="password" name="password" class="form-control" required><br>
-            </div>
-            <div class="modal-footer">
-                <input type="submit" class="btn btn-success" value="Login">
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
-    if (localStorage.getItem('darkMode') === 'enabled') {
-        document.body.classList.add('bg-dark', 'text-light');
-    }
-    document.getElementById('darkToggle').addEventListener('click', function () {
-        document.body.classList.toggle('bg-dark');
-        document.body.classList.toggle('text-light');
-        localStorage.setItem('darkMode', document.body.classList.contains('bg-dark') ? 'enabled' : 'disabled');
-    });
-</script>

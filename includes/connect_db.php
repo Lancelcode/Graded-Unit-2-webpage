@@ -1,6 +1,16 @@
 <?php
-$link = mysqli_connect('localhost','root','','gradedunit');
-if (!$link) { 
-    die('Could not connect to MySQL: ' . mysqli_connect_error()); 
-} 
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "gradedunit";
 
+// Create connection
+$link = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($link->connect_error) {
+    die("Connection failed: " . $link->connect_error);
+}
+
+$link->set_charset("utf8mb4");
+?>

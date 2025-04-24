@@ -1,32 +1,13 @@
-<?php
-// includes/footer.php
-?>
 <!-- ========== FOOTER SECTION START ========== -->
 
-<!-- Bootstrap 5 bundle (includes Popper) -->
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeo0r4b7Qfu9PLFornYk8Pm0i+U5yYk0Y+Ao5rW5U5Gu5T8L"
-        crossorigin="anonymous"
-></script>
+<!-- Bootstrap Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
 
-<!-- Dark-mode toggle -->
-<script>
-    // Apply saved mode on load
-    if (localStorage.getItem('darkMode') === 'enabled') {
-        document.body.classList.add('bg-dark', 'text-light');
-    }
-
-    // Toggle handler
-    document.getElementById('darkToggle').addEventListener('click', function () {
-        document.body.classList.toggle('bg-dark');
-        document.body.classList.toggle('text-light');
-        localStorage.setItem(
-            'darkMode',
-            document.body.classList.contains('bg-dark') ? 'enabled' : 'disabled'
-        );
-    });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
 
 <!-- Main Footer -->
 <footer class="bg-success text-white mt-auto">
@@ -97,7 +78,3 @@
         </div>
     </div>
 </footer>
-</body>
-</html>
-
-

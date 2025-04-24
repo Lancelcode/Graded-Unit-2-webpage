@@ -23,10 +23,8 @@ if (mysqli_num_rows($r) > 0):
         <meta charset="UTF-8">
         <title>My Profile | GreenScore</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
-            /* Full-page forest background + overlay */
             body {
                 min-height: 100vh;
                 margin: 0;
@@ -40,7 +38,6 @@ if (mysqli_num_rows($r) > 0):
                 background: rgba(0,0,0,0.5);
                 z-index: 0;
             }
-            /* Everything in here floats above the overlay */
             .content-wrapper {
                 position: relative;
                 z-index: 1;
@@ -49,7 +46,6 @@ if (mysqli_num_rows($r) > 0):
             .card-bg {
                 background: rgba(255,255,255,0.85);
             }
-            /* Ensure footer text is legible */
             footer {
                 position: relative;
                 z-index: 1;
@@ -112,15 +108,14 @@ if (mysqli_num_rows($r) > 0):
                             </div>
                             <div class="col-md-3">
                                 <label for="cvv" class="form-label">CVV</label>
-                                <input type="password" class="form-control" name="cvv" id="cvv">
+                                <input type="text" class="form-control" name="cvv" id="cvv" required>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-12">
                                 <label for="cardHolder" class="form-label">Cardholder Name</label>
                                 <input type="text" class="form-control" name="cardHolder" id="cardHolder" required>
                             </div>
-                            <div class="col-12 d-flex justify-content-end">
-                                <button type="submit" class="btn btn-success me-2">💾 Save</button>
-                                <a href="view_cards.php" class="btn btn-outline-secondary">🔍 View Cards</a>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-success w-100">Add Card</button>
                             </div>
                         </form>
                     </div>
@@ -130,13 +125,9 @@ if (mysqli_num_rows($r) > 0):
     </div>
 
     <?php include 'includes/footer.php'; ?>
-
+    <script src="darkmode.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     </body>
     </html>
-
-<?php
-else:
-    echo '<div class="container mt-5"><div class="alert alert-warning">User not found.</div></div>';
-endif;
-mysqli_close($link);
+<?php endif; ?>

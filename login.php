@@ -1,64 +1,46 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+session_start();
 
-require_once __DIR__ . '/includes/init.php';   // starts / resumes the session
-
-// ── login‑required guard ─────────────────────
-if (isset($_SESSION['username'])) {           // <- use the key you store
-    header('Location: index.php');
-    exit();
+// Generate CSRF token if not already set
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-
-require('includes/connect_db.php');
-include('includes/nav.php');
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <?php include 'includes/head.php'; ?>
+    <title>Login | GreenScore</title>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body>
+<?php include 'includes/nav.php'; ?>
 
-<h1>Login</h1>
-<form action="includes/login_action.php" method="post">
-    <h3 for="email">Email:</h3><br>
-    <input type="text"
-           class="form-control"
-           placeholder="Email"
-           name="email"
-           required>
-    <br><br>
+<div class="container" style="max-width: 400px; margin: 60px auto;">
+    <h2 class="text-center">Login to GreenScore</h2>
 
-    <h3 for="password">Password:</h3><br>
-    <input type="password"
-           class="form-control"
-           placeholder="Password"
-           name="password"
-           required>
-    <br><br>
+    <?php if (isset($_SESSION['login_error'])): ?>
+        <div class="card" style="border-left: 5px solid red;">
+            <p style="color: red; margin: 0;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
+        </div>
+    <?php endif; ?>
 
-    <label>
-        <input type="checkbox" name="admin_login" value="1">
-        Login as Admin
-    </label>
-    <br><br>
+    <form action="includes/login_action.php" method="post" class="card">
+        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
-    <input type="submit" value="Login">
-</form>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-<?php include('includes/footer.php'); ?>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <label for="password" style="margin-top: 10px;">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <div style="margin-top: 20px;">
+            <button type="submit" class="btn-success" style="width: 100%;">Login</button>
+        </div>
+    </form>
+</div>
+
+<?php include 'includes/footer.php'; ?>
+<script src="darkmode.js"></script>
 </body>
 </html>
-

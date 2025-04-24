@@ -1,30 +1,38 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-session_start();
-if (!isset($_SESSION['username'])) {
+
+require_once 'includes/init.php';
+
+if (!isset($_SESSION['username']) || !isset($_SESSION['id'])) {
     header("Location: index.php");
     exit();
-};
+}
+
 require('includes/connect_db.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'];
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        die('CSRF token validation failed.');
+    }
+
+    $action = $_POST['action'] ?? null;
+
+    if (!$action) {
+        die('No action specified.');
+    }
 
     if ($action === 'add') {
-        // Add a new card
         $userId = $_SESSION['id'];
-        $cardNumber = $_POST['cardNumber'];
-        $expiryDate = $_POST['expiryDate'];
-        $cardHolder = $_POST['cardHolder'];
+        $cardNumber = $_POST['card_number'];
+        $expiryDate = $_POST['expiry_date'];
+        $cardHolder = $_POST['card_name'];
 
-        // Format expiry date (YYYY-MM-DD) for database storage
         $date = DateTime::createFromFormat('Y-m-d', $expiryDate);
-        if ($date) {
-            $expiryDateFormatted = $date->format('Y-m-d');
-        } else {
-            die('Invalid date format');
+        if (!$date) {
+            die('Invalid date format.');
         }
+        $expiryDateFormatted = $date->format('Y-m-d');
 
         $q = "INSERT INTO credit_cards (user_id, card_number, expiry_date, cardholder_name) VALUES (?, ?, ?, ?)";
         $stmt = mysqli_prepare($link, $q);
@@ -40,19 +48,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'update') {
-        // Update an existing card
         $cardId = $_POST['cardId'];
-        $cardNumber = $_POST['cardNumber'];
-        $expiryDate = $_POST['expiryDate'];
-        $cardHolder = $_POST['cardHolder'];
+        $cardNumber = $_POST['card_number'];
+        $expiryDate = $_POST['expiry_date'];
+        $cardHolder = $_POST['card_name'];
 
-        // Format expiry date (YYYY-MM-DD) for database storage
         $date = DateTime::createFromFormat('Y-m-d', $expiryDate);
-        if ($date) {
-            $expiryDateFormatted = $date->format('Y-m-d');
-        } else {
-            die('Invalid date format');
+        if (!$date) {
+            die('Invalid date format.');
         }
+        $expiryDateFormatted = $date->format('Y-m-d');
 
         $q = "UPDATE credit_cards SET card_number = ?, expiry_date = ?, cardholder_name = ? WHERE id = ?";
         $stmt = mysqli_prepare($link, $q);
@@ -68,8 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'delete') {
-        // Delete a card
         $cardId = $_POST['cardId'];
+
         $q = "DELETE FROM credit_cards WHERE id = ?";
         $stmt = mysqli_prepare($link, $q);
         mysqli_stmt_bind_param($stmt, 'i', $cardId);
@@ -85,4 +90,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 mysqli_close($link);
-?>

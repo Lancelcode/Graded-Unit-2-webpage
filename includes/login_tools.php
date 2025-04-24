@@ -1,6 +1,6 @@
 <?php
 
-function validate($link, $email = '', $pwd = '') {
+function validate($link, $email = '', $pwd = '', $adminCheck = false) {
     $errors = [];
 
     if (empty($email)) {
@@ -16,14 +16,18 @@ function validate($link, $email = '', $pwd = '') {
     }
 
     if (empty($errors)) {
-        $q = "SELECT id, username, email, password FROM new_users WHERE email='$e'";
+        $q = "SELECT id, username, email, password, role FROM new_users WHERE email='$e'";
         $r = mysqli_query($link, $q);
 
         if (mysqli_num_rows($r) === 1) {
             $row = mysqli_fetch_array($r, MYSQLI_ASSOC);
-            // ✅ SHA-256 password check (must match registration logic)
             if ($row['password'] === hash('sha256', $p)) {
-                return [true, $row];
+                // If admin checkbox was checked but user is not admin
+                if ($adminCheck && $row['role'] !== 'admin') {
+                    $errors[] = 'Admin access denied.';
+                } else {
+                    return [true, $row];
+                }
             } else {
                 $errors[] = 'Incorrect password.';
             }
@@ -35,9 +39,9 @@ function validate($link, $email = '', $pwd = '') {
     return [false, $errors];
 }
 
+// ✅ Fixed: always redirect to the root of your project
 function load($page = 'login.php') {
-    $url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
-    $url = rtrim($url, '/\\');
-    $url .= '/' . $page;
+    $url = 'http://localhost/Graded-Unit-2-webpage/' . ltrim($page, '/');
+    header("Location: $url");
     exit();
 }
