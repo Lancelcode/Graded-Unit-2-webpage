@@ -1,34 +1,86 @@
 <?php
-require_once __DIR__ . '/includes/init.php';   // starts the session once
-if (!isset($_SESSION['username'])) { header('Location: login.php'); exit(); }
+require_once __DIR__ . '/includes/init.php';
+require_once __DIR__ . '/includes/connect_db.php';
+include __DIR__ . '/includes/nav.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - I-Cinema</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Green Partnerships | GreenScore</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            position: relative;
+            color: #333;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 0;
+        }
+        .card-bg {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+        }
+        .logo-grid img {
+            max-height: 80px;
+            object-fit: contain;
+        }
+    </style>
 </head>
 <body>
-<?php include('includes/nav.php'); ?>
-<div class="container mt-5 text-center">
-    <h1 class="text-success mb-4">🌿 Welcome to GreenScore</h1>
-    <p class="lead">Your journey toward sustainability starts here.</p>
 
-    <a href="community.php" class="btn btn-outline-success btn-lg mt-3">
-        💬 Visit the Community Board
-    </a>
+<div class="container content-wrapper text-center">
+    <h1 class="text-white display-4 mb-4">🌍 GreenScore Partnerships</h1>
+    <p class="text-white fs-5 mb-5">We collaborate with some of the most trusted eco-leaders and institutions around the world.</p>
+
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-4 justify-content-center logo-grid mb-5">
+        <div class="col">
+            <img src="assets/images/logos/un.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="UN">
+        </div>
+        <div class="col">
+            <img src="assets/images/logos/greenpeace.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="Greenpeace">
+        </div>
+        <div class="col">
+            <img src="assets/images/logos/defra.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="DEFRA">
+        </div>
+        <div class="col">
+            <img src="assets/images/logos/wwf.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="WWF">
+        </div>
+        <div class="col">
+            <img src="assets/images/logos/ukgov.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="UK Government">
+        </div>
+        <div class="col">
+            <img src="assets/images/logos/oxfam.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="Oxfam">
+        </div>
+        <div class="col">
+            <img src="assets/images/logos/energy_saving_trust.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="Energy Saving Trust">
+        </div>
+    </div>
+
+    <div class="card card-bg shadow-sm p-4">
+        <h2 class="mb-3 text-success">Why Partner With GreenScore?</h2>
+        <p class="lead mb-3">We are building a cleaner future, together. Every logo above represents a verified sustainability effort and a shared mission to reduce carbon emissions globally.</p>
+        <a href="register_company.php" class="btn btn-success btn-lg mt-3">🌱 Join the Movement</a>
+    </div>
 </div>
 
-
-<?php include('includes/footer.php'); ?>
-
-<!-- Bootstrap JS and dependencies -->
+<?php include 'includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<?php mysqli_close($link); ?>
