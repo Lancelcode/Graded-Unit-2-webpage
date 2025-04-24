@@ -16,6 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Public Tools -->
                     <li class="nav-item"><a class="nav-link" href="home.php">🏠 Home</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button"
@@ -37,15 +38,21 @@ if (session_status() === PHP_SESSION_NONE) {
                             <li><a class="dropdown-item" href="terms.php">📜 Terms & Conditions</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">🛠️ Admin dashboard</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="admin_feedback.php">🧮 Admin Feedback Panel</a></li>
-                            <li><a class="dropdown-item" href="public_feedback.php">💸 Community Feedback</a></li>
-                        </ul>
-                    </li>
+
+                    <!-- Admin Dashboard: only for admins -->
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">🛠️ Admin dashboard</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="admin_feedback.php">🧮 Admin Feedback Panel</a></li>
+                                <li><a class="dropdown-item" href="public_feedback.php">💸 Community Feedback</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
+
                     <li class="nav-item"><a class="nav-link" href="feedback.php">💬 Feedback</a></li>
+
                     <?php if (isset($_SESSION['username'])): ?>
                         <li class="nav-item"><a class="nav-link" href="user_account.php">👤 Profile</a></li>
                     <?php endif; ?>
@@ -76,6 +83,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
     </nav>
 </header>
+
 
 <!-- Register Modal -->
 <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">

@@ -7,15 +7,9 @@ function load($page = 'login.php') {
     $url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
     $url = rtrim($url, '/\\');
     $url .= '/' . $page;
-    header("Location: $url");
     exit();
 }
 
-/**
- * Validates user login credentials.
- * Uses SHA2 hashing (MySQL side) for password.
- * Supports optional admin login.
- */
 function validate($link, $email = '', $pwd = '', $require_admin = false) {
     $errors = array();
 
