@@ -20,13 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $admin_user    = mysqli_real_escape_string($link, $_SESSION['username']);
 
         $sql = "
-          UPDATE feedback
-          SET visible_to_public  = $is_public,
-              is_public          = $is_public,
-              admin_response     = '$response_safe',
-              admin_username     = '$admin_user',
-              admin_response_at  = NOW()
-          WHERE id = $id
+            UPDATE feedback
+            SET visible_to_public  = $is_public,
+                admin_response     = '$response_safe',
+                admin_username     = '$admin_user',
+                admin_response_at  = NOW()
+            WHERE id = $id
         ";
         mysqli_query($link, $sql);
     }
