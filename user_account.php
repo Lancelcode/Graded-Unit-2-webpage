@@ -1,7 +1,6 @@
 <?php
 require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
-include 'includes/nav.php';
 
 if (!isset($_SESSION['id'])) {
     require 'login_tools.php';
@@ -9,8 +8,8 @@ if (!isset($_SESSION['id'])) {
 }
 
 $user_id = $_SESSION['id'];
-$q = "SELECT * FROM new_users WHERE id = $user_id";
-$r = mysqli_query($link, $q);
+$q       = "SELECT * FROM new_users WHERE id = $user_id";
+$r       = mysqli_query($link, $q);
 
 if (mysqli_num_rows($r) > 0):
     $row      = mysqli_fetch_array($r, MYSQLI_ASSOC);
@@ -27,13 +26,13 @@ if (mysqli_num_rows($r) > 0):
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
-            /* 1. Full-page forest background */
+            /* Full-page forest background + overlay */
             body {
                 min-height: 100vh;
+                margin: 0;
                 background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
                 position: relative;
             }
-            /* 2. Dark overlay across entire page */
             body::before {
                 content: '';
                 position: absolute;
@@ -41,27 +40,34 @@ if (mysqli_num_rows($r) > 0):
                 background: rgba(0,0,0,0.5);
                 z-index: 0;
             }
-            /* 3. Make all content sit above the overlay */
+            /* Everything in here floats above the overlay */
             .content-wrapper {
                 position: relative;
                 z-index: 1;
-                padding-top: 4rem;
-                padding-bottom: 4rem;
+                padding: 4rem 0;
             }
-            /* 4. Semi-transparent card background to boost legibility */
             .card-bg {
                 background: rgba(255,255,255,0.85);
+            }
+            /* Ensure footer text is legible */
+            footer {
+                position: relative;
+                z-index: 1;
+                color: #444;
+                padding: 2rem 0;
             }
         </style>
     </head>
     <body>
 
-    <div class="container content-wrapper">
+    <?php include 'includes/nav.php'; ?>
 
-        <h1 class="text-white text-center display-5 mb-5">👤 My Profile — Welcome, <span class="text-success"><?= $username ?></span>!</h1>
+    <div class="container content-wrapper">
+        <h1 class="text-white text-center display-5 mb-5">
+            👤 My Profile — Welcome, <span class="text-success"><?= $username ?></span>!
+        </h1>
 
         <div class="row gy-4">
-
             <!-- Account Details -->
             <div class="col-md-6">
                 <div class="card card-bg shadow-sm h-100">
@@ -120,17 +126,17 @@ if (mysqli_num_rows($r) > 0):
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <?php include 'includes/footer.php'; ?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
     </html>
+
 <?php
 else:
     echo '<div class="container mt-5"><div class="alert alert-warning">User not found.</div></div>';
 endif;
 mysqli_close($link);
-?>
