@@ -104,7 +104,7 @@ include __DIR__ . '/includes/nav.php';
     <div class="card card-bg shadow-sm p-4">
         <h2 class="mb-3 text-success">Why Partner With GreenScore?</h2>
         <p class="lead mb-3">We are building a cleaner future, together. Every logo above represents a verified sustainability effort and a shared mission to reduce carbon emissions globally.</p>
-        <a href="register_company.php" class="btn btn-success btn-lg mt-3">🌱 Join the Movement</a>
+        <a href="register.php" class="btn btn-success btn-lg mt-3">🌱 Join the Movement</a>
     </div>
 </div>
 
