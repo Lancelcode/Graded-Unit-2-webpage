@@ -14,11 +14,19 @@ include __DIR__ . '/includes/nav.php';
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
         body {
+            display: flex;
+            flex-direction: column;
             background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
             color: #333;
         }
+
         body::before {
             content: '';
             position: fixed;
@@ -26,18 +34,40 @@ include __DIR__ . '/includes/nav.php';
             background: rgba(0, 0, 0, 0.5);
             z-index: 0;
         }
+
         .content-wrapper {
+            flex: 1;
             position: relative;
             z-index: 1;
-            padding: 4rem 0;
+            padding: 4rem 1rem;
         }
+
         .card-bg {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 1rem;
         }
+
         .logo-grid img {
             max-height: 80px;
             object-fit: contain;
+        }
+
+        footer {
+            position: relative;
+            z-index: 1;
+            background-color: #fff;
+            padding: 2rem 0;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .lead {
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -79,6 +109,7 @@ include __DIR__ . '/includes/nav.php';
 </div>
 
 <?php include 'includes/footer.php'; ?>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
