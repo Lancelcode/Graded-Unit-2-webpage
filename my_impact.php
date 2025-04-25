@@ -8,15 +8,55 @@
     <meta charset="UTF-8">
     <title>My Impact Report | GreenScore</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <style>
+        /* Ensure the body takes full height and content is pushed to the bottom */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            position: relative;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-wrapper {
+            flex-grow: 1;
+            padding: 4rem 1rem;
+        }
+
+        .card-bg {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+
+        .progress {
+            height: 20px;
+        }
+
+        .badge-box {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container mt-5">
-    <h1 class="mb-4 text-success">👤 My Impact Report</h1>
+<div class="container content-wrapper">
+    <h1 class="text-white text-center mb-5">📊 My Sustainability Impact</h1>
 
     <?php
     if (!isset($_SESSION['id'])) {
@@ -27,7 +67,6 @@
 
     $user_id = $_SESSION['id'];
 
-    // Fetch user-specific stats
     $total_q     = "SELECT COUNT(*) AS total FROM green_calculator_results WHERE user_id = $user_id";
     $green_q     = "SELECT SUM(green_count) AS green FROM green_calculator_results WHERE user_id = $user_id";
     $donation_q  = "SELECT SUM(donation_cost) AS donation FROM green_calculator_results WHERE user_id = $user_id";
@@ -36,33 +75,48 @@
     $green     = mysqli_fetch_assoc(mysqli_query($link, $green_q))['green'] ?? 0;
     $donation  = mysqli_fetch_assoc(mysqli_query($link, $donation_q))['donation'] ?? 0;
 
-    // Assign badge based on green points
-    $badge = "Eco Newbie";
+    // Determine badge level
+    $badge = "🪴 Eco Newbie";
     if ($green >= 50) {
-        $badge = "Green Warrior";
+        $badge = "🌟 Green Warrior";
     } elseif ($green >= 30) {
-        $badge = "Eco Explorer";
+        $badge = "🌿 Eco Explorer";
     } elseif ($green >= 15) {
-        $badge = "Green Starter";
+        $badge = "🌱 Green Starter";
     }
+
+    $greenPercent = min(100, round(($green / 100) * 100));
     ?>
 
-    <div class="result-box">
-        <h4>📊 Total Submissions: <?= $total ?></h4>
-        <h4>🌱 Green Answers Earned: <?= $green ?></h4>
-        <h4>💸 Total Donations: £<?= number_format($donation, 2) ?></h4>
-        <h4 class="mt-3">🏅 Badge Earned: <span class="text-success"><?= $badge ?></span></h4>
+    <div class="card card-bg shadow mb-5">
+        <h3 class="mb-3 text-success">🧾 Report Summary</h3>
+        <p><strong>Total Submissions:</strong> <?= $total ?></p>
+        <p><strong>Green Answers Earned:</strong> <?= $green ?> / 100</p>
+        <p><strong>Total Donations:</strong> £<?= number_format($donation, 2) ?></p>
+
+        <div class="mb-3">
+            <label class="form-label">Your Green Journey Progress</label>
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width: <?= $greenPercent ?>%;" role="progressbar">
+                    <?= $greenPercent ?>%
+                </div>
+            </div>
+        </div>
+
+        <p class="badge-box">🏅 Current Badge: <span class="text-success"><?= $badge ?></span></p>
     </div>
 
-    <p class="mt-3 text-muted">
-        Thank you for helping create a greener world, <strong><?= htmlspecialchars($_SESSION['username']) ?></strong> 💚
-    </p>
+    <div class="text-center">
+        <a href="certificate_history.php" class="btn btn-outline-light me-2">📄 View Certificates</a>
+        <a href="green_calculator.php" class="btn btn-outline-success">🧮 Take the Calculator Again</a>
+    </div>
 </div>
 
+<!-- Footer will stay at the bottom -->
 <?php include 'includes/footer.php'; ?>
 
-<!-- Bootstrap Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<?php mysqli_close($link); ?>
