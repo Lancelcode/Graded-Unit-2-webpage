@@ -1,1 +1,1 @@
-{"version":1,"defects":{"LoginTest::testValidLogin":7,"LoginTest::testInvalidCsrfToken":5},"times":{"LoginTest::testValidLogin":0.032,"LoginTest::testInvalidCsrfToken":0.001}}
+{"version":1,"defects":{"LoginTest::testValidLogin":5,"LoginTest::testInvalidCsrfToken":5},"times":{"LoginTest::testValidLogin":0.006,"LoginTest::testInvalidCsrfToken":0.001}}

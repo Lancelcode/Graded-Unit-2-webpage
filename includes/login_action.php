@@ -2,7 +2,10 @@
 
 require_once __DIR__ . '/init.php'; // session start
 require_once 'connect_db.php';
-require_once 'login_tools.php';
+if (!function_exists('validate')) {
+    require_once 'login_tools.php';
+}
+
 
 // Only process if POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -39,7 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Unexpected error. Please try again.";
     }
 
-    mysqli_close($link);
+    if ($link instanceof mysqli) {
+        mysqli_close($link);
+    }
+
 }
 
 // If there are any errors, display them
