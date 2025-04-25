@@ -10,11 +10,31 @@
     <option name="highlightLevel" value="WARNING" />
     <option name="transferred" value="true" />
   </component>
+  <component name="PhpCodeSniffer">
+    <phpcs_settings>
+      <phpcs_by_interpreter asDefaultInterpreter="true" interpreter_id="ec3aa33d-299c-4ea4-a7f7-e440645f60c6" timeout="30000" />
+    </phpcs_settings>
+  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.0">
     <option name="suggestChangeDefaultLanguageLevel" value="false" />
   </component>
+  <component name="PhpStan">
+    <PhpStan_settings>
+      <phpstan_by_interpreter asDefaultInterpreter="true" interpreter_id="ec3aa33d-299c-4ea4-a7f7-e440645f60c6" timeout="60000" />
+    </PhpStan_settings>
+  </component>
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
+  </component>
+  <component name="PhpUnit">
+    <phpunit_settings>
+      <PhpUnitSettings bootstrap_file_path="$PROJECT_DIR$/vendor/autoload.php " configuration_file_path="$PROJECT_DIR$/phpunit.xml " custom_loader_path="$PROJECT_DIR$/vendor/autoload.php " phpunit_phar_path="$PROJECT_DIR$/phpunit.phar" use_bootstrap_file="true" use_configuration_file="true" />
+    </phpunit_settings>
+  </component>
+  <component name="Psalm">
+    <Psalm_settings>
+      <psalm_fixer_by_interpreter asDefaultInterpreter="true" interpreter_id="ec3aa33d-299c-4ea4-a7f7-e440645f60c6" timeout="60000" />
+    </Psalm_settings>
   </component>
   <component name="PsalmOptionsConfiguration">
     <option name="transferred" value="true" />
