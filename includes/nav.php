@@ -72,10 +72,10 @@ if (session_status() === PHP_SESSION_NONE) {
                         </li>
                     <?php else: ?>
                         <li class="nav-item me-2">
-                            <a class="btn btn-outline-light" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+                            <a class="btn btn-outline-light" href="login.php">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-light" href="#" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a>
+                            <a class="btn btn-light" href="register.php">Register</a>
                         </li>
                     <?php endif; ?>
                     <li class="nav-item ms-3">
