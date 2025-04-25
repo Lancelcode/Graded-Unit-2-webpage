@@ -1,133 +1,138 @@
 <?php
-require_once __DIR__ . '/includes/init.php';
-if (isset($_SESSION['username'])) {
-    header('Location: index.php');
-    exit();
-}
-# Check form submitted.
-if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' )
-{
-    # Connect to the database.
-    require('includes/connect_db.php');
+session_start();
 
-    # Initialize an error array.
-    $errors = array();
-
-    # Check for a first name.
-    if ( empty( $_POST[ 'username' ] ) )
-    { $errors[] = 'Enter your name.' ; }
-    else
-    { $fn = mysqli_real_escape_string( $link, trim( $_POST[ 'username' ] ) ) ; }
-
-
-    # Check for an email address:
-    if ( empty( $_POST[ 'email' ] ) )
-    { $errors[] = 'Enter your email address.'; }
-    else
-    { $e = mysqli_real_escape_string( $link, trim( $_POST[ 'email' ] ) ) ; }
-
-    # Check for a password and matching input passwords.
-    if ( !empty($_POST[ 'pass1' ] ) )
-    {
-        if ( $_POST[ 'pass1' ] != $_POST[ 'pass2' ] )
-        { $errors[] = 'Passwords do not match.' ; }
-        else
-        { $p = mysqli_real_escape_string( $link, trim( $_POST[ 'pass1' ] ) ) ; }
-    }
-    else { $errors[] = 'Enter your password.' ; }
-
-    # Check if email address already registered.
-    if ( empty( $errors ) )
-    {
-        $q = "SELECT id FROM new_users WHERE email='$e'" ;
-        $r = @mysqli_query ( $link, $q ) ;
-        if ( mysqli_num_rows( $r ) != 0 ) $errors[] =
-            'Email address already registered. 
-	<a class="alert-link" href="login.php">Sign In Now</a>' ;
-    }
-
-    # On success register user inserting into 'users' database table.
-    if ( empty( $errors ) )
-    {
-        $q = "INSERT INTO new_users (username, email, password) 
-	VALUES ('$fn', '$e', SHA2('$p',256))";
-        $r = @mysqli_query ( $link, $q ) ;
-        if ($r)
-        {
-            // Redirect to the index page after successful registration.
-            header("Location: index.php");
-            exit(); // Ensure the rest of the script doesn't execute
-        }
-
-        # Close database connection.
-        mysqli_close($link);
-
-        exit();
-    }
-    # Or report errors.
-    else
-    {
-        echo '
-	<h4>The following error(s) occurred:</h4>' ;
-        foreach ( $errors as $msg )
-        { echo " - $msg<br>" ; }
-        echo '<p>or please try again.</p><br>';
-        # Close database connection.
-        mysqli_close( $link );
-    }
+// Generate CSRF token if not already set
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <?php include('includes/head.php'); ?>
+    <title>User Registration | GreenScore</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            position: relative;
+            color: #fff;
+        }
+        .content-wrapper {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+            padding: 4rem 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .card-bg {
+            background: rgba(255,255,255,0.95);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+        .card-bg:hover {
+            transform: translateY(-4px);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-control {
+            border-radius: 0.5rem;
+            padding: 0.8rem;
+            font-size: 1rem;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
+        }
+        .btn-success {
+            font-size: 1.25rem;
+            padding: 1rem 2rem;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 2rem;
+            width: 100%;
+        }
+        .btn-success:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+        footer {
+            position: relative;
+            z-index: 1;
+            background-color: #fff;
+            padding: 2rem 0;
+            width: 100%;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
-<?php include('includes/nav.php'); ?>
-<h2>Register</h2>
-<form action="register.php" class="was-validated" method="post">
-    <label for="username">Username:</label><br>
-    <input 	type="text"
-              name="username"
-              placeholder="Username"
-              class="form-control"
-              value="<?php if (isset($_POST['username'])) echo $_POST['username']; ?>"
-              required>
-    <br><br>
-    <label for="email">Email:</label><br>
-    <input 	type="email"
-              name="email"
-              class="form-control"
-              placeholder="Email"
-              value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>"
-              required><br>
-    <small id="emailHelp" class="form-text text-muted">
-        We'll never share your email with anyone else.
-    </small>
-    <br><br>
-    <label for="password">Password:</label><br>
-    <input 	type="password"
-              name="pass1"
-              class="form-control"
-              placeholder="Create New Password"
-              value="<?php if (isset($_POST['pass1'])) echo $_POST['pass1']; ?>"
-              required>
-    <br><br>
-    <label for="password">Confirm Password:</label><br>
-    <input 	type="password"
-              name="pass2"
-              class="form-control"
-              placeholder="Confirm Password"
-              value="<?php if (isset($_POST['pass2'])) echo $_POST['pass2']; ?>"
-              required>
-    <br><br>
-    <input type="submit" value="Submit"></p>
-</form>
-<?php include('includes/footer.php'); ?>
+<body>
+<?php include 'includes/nav.php'; ?>
+
+<div class="container">
+    <h2 class="text-success section-title">Register to GreenScore</h2>
+
+    <?php if (isset($_SESSION['login_error'])): ?>
+        <div class="error-message">
+            <p><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
+        </div>
+    <?php endif; ?>
+
+    <form action="register.php" method="post">
+        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
+        <div class="form-group">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" id="username" name="username" class="form-control" required placeholder="Enter your username" value="<?php if (isset($_POST['username'])) echo htmlspecialchars($_POST['username']); ?>">
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" required placeholder="Enter your email" value="<?php if (isset($_POST['email'])) echo htmlspecialchars($_POST['email']); ?>">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" id="password" name="pass1" class="form-control" required placeholder="Create New Password" value="<?php if (isset($_POST['pass1'])) echo htmlspecialchars($_POST['pass1']); ?>">
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password" class="form-label">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="pass2" class="form-control" required placeholder="Confirm Password" value="<?php if (isset($_POST['pass2'])) echo htmlspecialchars($_POST['pass2']); ?>">
+        </div>
+
+        <button type="submit" class="btn btn-success">Register</button>
+    </form>
+</div>
+
+<?php include 'includes/footer.php'; ?>
+
+<script src="darkmode.js"></script>
 </body>
 </html>
