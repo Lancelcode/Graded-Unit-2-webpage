@@ -97,7 +97,7 @@ include __DIR__ . '/includes/nav.php';
             <img src="assets/images/logos/oxfam.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="Oxfam">
         </div>
         <div class="col">
-            <img src="assets/images/logos/energy_saving_trust.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="Energy Saving Trust">
+            <img src="assets/images/logos/edincol.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="edincol">
         </div>
     </div>
 
