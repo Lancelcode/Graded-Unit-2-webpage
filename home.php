@@ -43,7 +43,7 @@ include __DIR__ . '/includes/nav.php';
         }
 
         .card-bg {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 1rem;
         }
 
@@ -68,6 +68,15 @@ include __DIR__ . '/includes/nav.php';
 
         .lead {
             font-size: 1.1rem;
+        }
+
+        .list-group-item a {
+            text-decoration: none;
+            color: #28a745;
+            font-weight: bold;
+        }
+        .list-group-item a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -97,14 +106,38 @@ include __DIR__ . '/includes/nav.php';
             <img src="assets/images/logos/oxfam.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="Oxfam">
         </div>
         <div class="col">
-            <img src="assets/images/logos/edincol.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="edincol">
+            <img src="assets/images/logos/edincol.png" class="img-fluid p-2 bg-white shadow-sm rounded" alt="Edinburgh College">
         </div>
     </div>
 
     <div class="card card-bg shadow-sm p-4">
         <h2 class="mb-3 text-success">Why Partner With GreenScore?</h2>
         <p class="lead mb-3">We are building a cleaner future, together. Every logo above represents a verified sustainability effort and a shared mission to reduce carbon emissions globally.</p>
-        <a href="register.php" class="btn btn-success btn-lg mt-3">🌱 Join the Movement</a>
+
+        <?php
+        if (!empty($_SESSION['id'])) {
+            // Logged in: show supporter list
+            ?>
+            <div class="mt-4 text-start">
+                <h3 class="text-success mb-3">Our Supporters:</h3>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">🌍 <a href="https://www.un.org/" target="_blank">United Nations (UN)</a></li>
+                    <li class="list-group-item">🌿 <a href="https://www.greenpeace.org/" target="_blank">Greenpeace</a></li>
+                    <li class="list-group-item">🌳 <a href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs" target="_blank">DEFRA (Department for Environment, Food & Rural Affairs)</a></li>
+                    <li class="list-group-item">🐼 <a href="https://www.worldwildlife.org/" target="_blank">WWF (World Wildlife Fund)</a></li>
+                    <li class="list-group-item">🇬🇧 <a href="https://www.gov.uk/government/topical-events/the-uks-green-industrial-revolution" target="_blank">UK Government Initiatives</a></li>
+                    <li class="list-group-item">🤝 <a href="https://www.oxfam.org/" target="_blank">Oxfam</a></li>
+                    <li class="list-group-item">🎓 <a href="https://www.edinburghcollege.ac.uk/" target="_blank">Edinburgh College Sustainability Hub</a></li>
+                </ul>
+            </div>
+            <?php
+        } else {
+            // Not logged in: show button
+            ?>
+            <a href="register.php" class="btn btn-success btn-lg mt-3">🌱 Join the Movement</a>
+            <?php
+        }
+        ?>
     </div>
 </div>
 
