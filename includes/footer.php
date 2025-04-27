@@ -5,7 +5,11 @@
             <div class="col-12 col-md-3">
                 <h4 class="fw-bold mb-2">🌱 GreenScore</h4>
                 <p class="small mb-1">Building a Greener Future, Together.</p>
-                <small class="d-block">&copy; <?= date('Y'); ?> GreenScore. All rights reserved.</small>
+                <small class="d-block">
+                    &copy; <?= date('Y'); ?>
+                    <a href="greenscore_copyright.php" class="text-decoration-none">GreenScore</a>.
+                    All rights reserved.
+                </small>
             </div>
 
             <!-- Features -->
