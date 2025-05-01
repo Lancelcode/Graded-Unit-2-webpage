@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['pass1'] !== $_POST['pass2']) {
             $errors[] = 'Passwords do not match.';
         } else {
-            $p = mysqli_real_escape_string($link, trim($_POST['pass1']));
+            $p = password_hash(trim($_POST['pass1']), PASSWORD_DEFAULT);
         }
     } else {
         $errors[] = 'Enter your password.';
@@ -35,28 +35,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if the email is already registered
     if (empty($errors)) {
-        $q = "SELECT id FROM new_users WHERE email='$e'";
-        $r = @mysqli_query($link, $q);
-        if (mysqli_num_rows($r) != 0) {
+        $q = "SELECT id FROM new_users WHERE email=?";
+        $stmt = mysqli_prepare($link, $q);
+        mysqli_stmt_bind_param($stmt, 's', $e);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        if (mysqli_stmt_num_rows($stmt) != 0) {
             $errors[] = 'Email address already registered. <a class="alert-link" href="index.php">Sign In Now</a>';
         }
+
+        mysqli_stmt_close($stmt);
     }
 
-    // Insert user if no errors
+    // If no errors, register user
     if (empty($errors)) {
-        $q = "INSERT INTO new_users (username, email, password) 
-              VALUES ('$fn', '$e', SHA2('$p', 256))";
-        $r = @mysqli_query($link, $q);
+        $q = "INSERT INTO new_users (username, email, password) VALUES (?, ?, ?)";
+        $stmt = mysqli_prepare($link, $q);
+        mysqli_stmt_bind_param($stmt, 'sss', $fn, $e, $p);
+        $r = mysqli_stmt_execute($stmt);
 
         if ($r) {
+            // ✅ Success: Redirect to login page
+            mysqli_stmt_close($stmt);
             mysqli_close($link);
-            header("Location: index.php");
+            header("Location: login.php");
             exit();
+        } else {
+            // ❌ Insert failed
+            mysqli_stmt_close($stmt);
+            mysqli_close($link);
+            echo "<p>Registration failed. Please try again.</p>";
         }
-
-        echo '<p>Something went wrong. Please try again.</p>';
-        mysqli_close($link);
     } else {
+        // ❌ Show validation errors
         echo '<div class="container mt-4">';
         echo '<h4>The following error(s) occurred:</h4>';
         foreach ($errors as $msg) {
