@@ -3,15 +3,19 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 require_once __DIR__ . '/includes/init.php';
 
-if (!isset($_SESSION['username']) || !isset($_SESSION['id'])) {
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])) {
     require('includes/login_tools.php');
     load();
 }
 
 require_once __DIR__ . '/includes/connect_db.php';
-$userId = $_SESSION['id'];
-$q      = "SELECT * FROM credit_cards WHERE user_id='$userId'";
-$r      = mysqli_query($link, $q);
+$userId = $_SESSION['user_id'];
+
+$q = "SELECT * FROM credit_cards WHERE user_id = ?";
+$stmt = mysqli_prepare($link, $q);
+mysqli_stmt_bind_param($stmt, 'i', $userId);
+mysqli_stmt_execute($stmt);
+$r = mysqli_stmt_get_result($stmt);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,17 +23,10 @@ $r      = mysqli_query($link, $q);
     <meta charset="UTF-8">
     <title>View Credit Cards | GreenScore</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
     <style>
-        /* 1. Make body a column flex container for sticky footer */
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
+        html, body { height: 100%; margin: 0; }
         body {
             display: flex;
             flex-direction: column;
@@ -37,26 +34,23 @@ $r      = mysqli_query($link, $q);
             position: relative;
             color: #333;
         }
-        /* 2. Dark overlay across entire page */
         body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.5);
             z-index: 0;
+            pointer-events: none;
         }
-        /* 3. Main content grows to fill available space */
         .content-wrapper {
             flex: 1;
             position: relative;
-            z-index: 1;
+            z-index: auto;
             padding: 4rem 0;
         }
-        /* 4. Semi-transparent card backgrounds */
         .card-bg {
             background: rgba(255,255,255,0.85);
         }
-        /* 5. Ensure footer sits above overlay and spans full width */
         footer {
             position: relative;
             z-index: 1;
@@ -81,6 +75,7 @@ $r      = mysqli_query($link, $q);
                     <tr>
                         <th>Card Number</th>
                         <th>Expiry Date</th>
+                        <th>CVV</th>
                         <th>Cardholder Name</th>
                         <th>Actions</th>
                     </tr>
@@ -90,14 +85,38 @@ $r      = mysqli_query($link, $q);
                         <tr>
                             <td>**** **** **** <?= substr($row['card_number'], -4); ?></td>
                             <td><?= date("d/m/Y", strtotime($row['expiry_date'])); ?></td>
+                            <td><?= htmlspecialchars($row['cvv']); ?></td>
                             <td><?= htmlspecialchars($row['cardholder_name']); ?></td>
                             <td class="d-flex gap-2">
-                                <form action="manage_credit_card.php" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="cardId" value="<?= $row['id']; ?>">
-                                    <button type="submit" class="btn btn-sm btn-danger">🗑 Delete</button>
-                                </form>
+                                <!-- Delete Button triggers confirmation modal -->
+                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal<?= $row['id']; ?>">🗑 Delete</button>
+
+                                <!-- Edit Button -->
                                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['id']; ?>">✏️ Edit</button>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="confirmDeleteModal<?= $row['id']; ?>" tabindex="-1" aria-labelledby="confirmDeleteLabel<?= $row['id']; ?>" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form action="manage_credit_card.php" method="post">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confirmDeleteLabel<?= $row['id']; ?>">Confirm Deletion</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
+                                                    <input type="hidden" name="action" value="delete">
+                                                    <input type="hidden" name="card_id" value="<?= $row['id']; ?>">
+                                                    Are you sure you want to delete this card ending in <?= substr($row['card_number'], -4); ?>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Edit Modal -->
                                 <div class="modal fade" id="editModal<?= $row['id']; ?>" tabindex="-1" aria-labelledby="editModalLabel<?= $row['id']; ?>" aria-hidden="true">
@@ -109,25 +128,24 @@ $r      = mysqli_query($link, $q);
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
+                                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token']; ?>">
                                                     <input type="hidden" name="action" value="update">
-                                                    <input type="hidden" name="cardId" value="<?= $row['id']; ?>">
+                                                    <input type="hidden" name="card_id" value="<?= $row['id']; ?>">
                                                     <div class="mb-3">
                                                         <label for="cardNumber<?= $row['id']; ?>" class="form-label">Card Number</label>
-                                                        <input type="text" class="form-control" name="cardNumber"
-                                                               id="cardNumber<?= $row['id']; ?>"
-                                                               value="<?= htmlspecialchars($row['card_number']); ?>" required>
+                                                        <input type="text" class="form-control" name="card_number" id="cardNumber<?= $row['id']; ?>" value="<?= htmlspecialchars($row['card_number']); ?>" required>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="expiryDate<?= $row['id']; ?>" class="form-label">Expiry Date</label>
-                                                        <input type="date" class="form-control" name="expiryDate"
-                                                               id="expiryDate<?= $row['id']; ?>"
-                                                               value="<?= htmlspecialchars($row['expiry_date']); ?>" required>
+                                                        <input type="date" class="form-control" name="expiry_date" id="expiryDate<?= $row['id']; ?>" value="<?= htmlspecialchars($row['expiry_date']); ?>" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="cvv<?= $row['id']; ?>" class="form-label">CVV</label>
+                                                        <input type="text" class="form-control" name="cvv" id="cvv<?= $row['id']; ?>" value="<?= htmlspecialchars($row['cvv']); ?>" required>
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="cardHolder<?= $row['id']; ?>" class="form-label">Cardholder Name</label>
-                                                        <input type="text" class="form-control" name="cardHolder"
-                                                               id="cardHolder<?= $row['id']; ?>"
-                                                               value="<?= htmlspecialchars($row['cardholder_name']); ?>" required>
+                                                        <input type="text" class="form-control" name="card_name" id="cardHolder<?= $row['id']; ?>" value="<?= htmlspecialchars($row['cardholder_name']); ?>" required>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -138,8 +156,6 @@ $r      = mysqli_query($link, $q);
                                         </div>
                                     </div>
                                 </div>
-                                <!-- End Edit Modal -->
-
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -157,9 +173,10 @@ $r      = mysqli_query($link, $q);
 </div>
 
 <?php include 'includes/footer.php'; ?>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-<?php mysqli_close($link); ?>
+<?php
+mysqli_stmt_close($stmt);
+mysqli_close($link);
+?>
