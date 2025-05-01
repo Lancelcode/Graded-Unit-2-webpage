@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         }
     }
 
-    $user_id = $_SESSION['id'];
+    $user_id = $_SESSION['user_id']; // ✅ Fixed key here
     $stmt = mysqli_prepare($link, "INSERT INTO green_calculator_results (user_id, total_score, green_count, amber_count, red_count, award_level, emoji, feedback_message, shortfall, donation_cost, submitted_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
     mysqli_stmt_bind_param($stmt, 'iiiissssis', $user_id, $total, $green, $amber, $red, $award, $emoji, $message, $shortfall, $cost);
     mysqli_stmt_execute($stmt);
@@ -104,43 +104,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     <?php
                     $explanations = [
 
-"Waste Reduction" => "Waste reduction assesses how actively a company minimizes its total waste output through operational improvements, material efficiency, recycling programs, and waste prevention strategies. 
+                        "Waste Reduction" => "Waste reduction assesses how actively a company minimizes its total waste output through operational improvements, material efficiency, recycling programs, and waste prevention strategies. 
 Examples: Conducting annual waste audits, setting formal waste reduction targets (e.g., 5%-10% per year), composting organic waste, eliminating single-use plastics, transitioning to digital documentation. 
 Impact: Reduces landfill methane emissions, decreases environmental contamination, and lowers the demand for raw material extraction and manufacturing energy.",
 
-"Renewable Energy Usage" => "Renewable energy usage evaluates the proportion of a company’s energy supply that comes from sustainable sources such as solar, wind, hydro, or biomass. 
+                        "Renewable Energy Usage" => "Renewable energy usage evaluates the proportion of a company’s energy supply that comes from sustainable sources such as solar, wind, hydro, or biomass. 
 Examples: Installing solar panels on company buildings, purchasing certified green electricity from suppliers, entering renewable energy power purchase agreements (PPAs). 
 Impact: Cuts carbon dioxide emissions associated with fossil fuel combustion, contributing to climate change mitigation.",
 
-"Water Conservation" => "Water conservation measures how effectively a company reduces its freshwater usage and improves water stewardship through technology upgrades, behavior changes, and reuse initiatives. 
+                        "Water Conservation" => "Water conservation measures how effectively a company reduces its freshwater usage and improves water stewardship through technology upgrades, behavior changes, and reuse initiatives. 
 Examples: Installing low-flow faucets and toilets, implementing rainwater harvesting systems, recycling greywater for landscaping, fixing leaks promptly. 
 Impact: Reduces the energy and chemicals required for water treatment and delivery, preserving natural water ecosystems and lowering indirect carbon emissions.",
 
-"Sustainable Supply Chain" => "Sustainable supply chain evaluates how a company integrates environmental responsibility into supplier selection, purchasing policies, and logistics. 
+                        "Sustainable Supply Chain" => "Sustainable supply chain evaluates how a company integrates environmental responsibility into supplier selection, purchasing policies, and logistics. 
 Examples: Preferring local suppliers to reduce transport emissions, sourcing certified sustainable raw materials, conducting supplier environmental audits, requiring supplier sustainability certifications (e.g., FSC, Fairtrade). 
 Impact: Reduces environmental impact across the entire product lifecycle, from raw material extraction to delivery.",
 
-"Eco-friendly Products/Services" => "Eco-friendly products/services measure the extent to which a company designs and offers products or services with reduced environmental impacts across their life cycles. 
+                        "Eco-friendly Products/Services" => "Eco-friendly products/services measure the extent to which a company designs and offers products or services with reduced environmental impacts across their life cycles. 
 Examples: Creating biodegradable packaging, developing energy-efficient devices, offering carbon-neutral services, designing for recyclability or modular repair. 
 Impact: Lowers the total resource footprint, reduces end-of-life environmental harm, and encourages responsible consumer choices.",
 
-"Energy-Efficient Infrastructure" => "Energy-efficient infrastructure assesses the extent to which company buildings and facilities are optimized to minimize energy use while maintaining productivity. 
+                        "Energy-Efficient Infrastructure" => "Energy-efficient infrastructure assesses the extent to which company buildings and facilities are optimized to minimize energy use while maintaining productivity. 
 Examples: Installing LED lighting, upgrading insulation and windows for better thermal performance, implementing energy management systems, and achieving green building certifications (e.g., LEED, BREEAM). 
 Impact: Reduces operational carbon emissions, lowers utility costs, and supports net-zero building targets.",
 
-"Transportation Sustainability" => "Transportation sustainability measures a company's efforts to minimize emissions associated with employee commuting, business travel, and logistics operations. 
+                        "Transportation Sustainability" => "Transportation sustainability measures a company's efforts to minimize emissions associated with employee commuting, business travel, and logistics operations. 
 Examples: Electrifying vehicle fleets, promoting public transport or cycling, offering telecommuting options, using carbon-neutral freight shipping. 
 Impact: Reduces emissions from fossil fuel use in transportation — a major source of greenhouse gases.",
 
-"Community Engagement" => "Community engagement evaluates a company's efforts to raise environmental awareness, support local sustainability initiatives, and foster collective climate action. 
+                        "Community Engagement" => "Community engagement evaluates a company's efforts to raise environmental awareness, support local sustainability initiatives, and foster collective climate action. 
 Examples: Sponsoring local tree-planting drives, offering employee volunteer days for environmental causes, running public education campaigns on sustainability. 
 Impact: Multiplies positive environmental impacts beyond the company itself and builds goodwill with stakeholders.",
 
-"Carbon Offsetting" => "Carbon offsetting assesses a company's commitment to compensate for its unavoidable greenhouse gas emissions by supporting certified climate projects. 
+                        "Carbon Offsetting" => "Carbon offsetting assesses a company's commitment to compensate for its unavoidable greenhouse gas emissions by supporting certified climate projects. 
 Examples: Purchasing carbon credits from reforestation projects, investing in renewable energy farms, supporting verified carbon capture technologies. 
 Impact: Balances out emissions while financing global climate mitigation initiatives and helping achieve net-zero targets.",
 
-"Transparency and Reporting" => "Transparency and reporting evaluate how openly a company communicates its environmental impact, targets, and progress towards sustainability. 
+                        "Transparency and Reporting" => "Transparency and reporting evaluate how openly a company communicates its environmental impact, targets, and progress towards sustainability. 
 Examples: Publishing annual sustainability reports aligned with standards (e.g., GRI, CDP), disclosing greenhouse gas inventories, setting science-based targets, providing third-party verification. 
 Impact: Builds stakeholder trust, drives internal accountability, and strengthens continuous improvement toward emissions reduction goals."
 
@@ -151,34 +151,30 @@ Impact: Builds stakeholder trust, drives internal accountability, and strengthen
                         $modalId = "info" . preg_replace('/[^A-Za-z0-9]/', '', $measure);
                         echo "<div class='form-group mb-3'>";
                         echo "<label><strong>$measure</strong>
-            <button type='button' class='btn btn-link p-0 ms-2' data-bs-toggle='modal' data-bs-target='#$modalId'>
-                <i class='fas fa-eye'></i>
-            </button>
-          </label>";
+                            <button type='button' class='btn btn-link p-0 ms-2' data-bs-toggle='modal' data-bs-target='#$modalId'>
+                                <i class='fas fa-eye'></i>
+                            </button></label>";
                         echo "<select class='form-control' name='measure_$index' required>
-            <option value=''>-- Select Level --</option>
-            <option value='10'>🟢 Green (Excellent)</option>
-            <option value='5'>🟠 Amber (Moderate)</option>
-            <option value='0'>🔴 Red (Not Implemented)</option>
-          </select>";
+                            <option value=''>-- Select Level --</option>
+                            <option value='10'>🟢 Green (Excellent)</option>
+                            <option value='5'>🟠 Amber (Moderate)</option>
+                            <option value='0'>🔴 Red (Not Implemented)</option>
+                          </select>";
                         echo "</div>";
 
-                        // Modal for each explanation
-                        echo "
-    <div class='modal fade' id='$modalId' tabindex='-1' aria-labelledby='{$modalId}Label' aria-hidden='true'>
-      <div class='modal-dialog'>
-        <div class='modal-content'>
-          <div class='modal-header'>
-            <h5 class='modal-title' id='{$modalId}Label'>$measure</h5>
-            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-          </div>
-          <div class='modal-body'>
-            {$explanations[$measure]}
-          </div>
-        </div>
-      </div>
-    </div>
-    ";
+                        echo "<div class='modal fade' id='$modalId' tabindex='-1' aria-labelledby='{$modalId}Label' aria-hidden='true'>
+                              <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                  <div class='modal-header'>
+                                    <h5 class='modal-title' id='{$modalId}Label'>$measure</h5>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                  </div>
+                                  <div class='modal-body'>
+                                    {$explanations[$measure]}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>";
                     }
                     ?>
                     <button class="btn btn-success btn-block mt-3" name="submit">Calculate My Score 🌍</button>
@@ -221,26 +217,26 @@ Impact: Builds stakeholder trust, drives internal accountability, and strengthen
                     <div class="mb-3">
                         <label>🟢 Green</label>
                         <div class="progress">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: <?= $green * 10 ?>%;" aria-valuenow="<?= $green ?>" aria-valuemin="0" aria-valuemax="10"><?= $green ?></div>
+                            <div class="progress-bar bg-success" style="width: <?= $green * 10 ?>%"><?= $green ?></div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label>🟠 Amber</label>
                         <div class="progress">
-                            <div class="progress-bar bg-warning text-dark" role="progressbar" style="width: <?= $amber * 10 ?>%;" aria-valuenow="<?= $amber ?>" aria-valuemin="0" aria-valuemax="10"><?= $amber ?></div>
+                            <div class="progress-bar bg-warning text-dark" style="width: <?= $amber * 10 ?>%"><?= $amber ?></div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label>🔴 Red</label>
                         <div class="progress">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: <?= $red * 10 ?>%;" aria-valuenow="<?= $red ?>" aria-valuemin="0" aria-valuemax="10"><?= $red ?></div>
+                            <div class="progress-bar bg-danger" style="width: <?= $red * 10 ?>%"><?= $red ?></div>
                         </div>
                     </div>
 
                     <?php if ($shortfall > 0): ?>
-                        <p class="text-danger">You're <strong><?= $shortfall ?> points</strong> short of 100. Consider donating <strong>£<?= $cost ?></strong> to offset.</p>
+                        <p class="text-danger"><?= $emoji ?> <strong><?= $message ?></strong><br>You’re <strong><?= $shortfall ?> points</strong> short. Consider donating <strong>£<?= $cost ?></strong>.</p>
                     <?php else: ?>
-                        <p class="text-success">✅ Perfect score! You're a green superstar!</p>
+                        <p class="text-success">✅ Perfect score! You’re a green superstar!</p>
                     <?php endif; ?>
                 </div>
                 <div class="modal-footer d-flex flex-wrap justify-content-between gap-2">
@@ -264,3 +260,4 @@ Impact: Builds stakeholder trust, drives internal accountability, and strengthen
 </html>
 
 <?php mysqli_close($link); ?>
+

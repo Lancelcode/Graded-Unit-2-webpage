@@ -3,12 +3,12 @@ require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
 include 'includes/nav.php';
 
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 
-$user_id = $_SESSION['id'];
+$user_id = $_SESSION['user_id'];
 
 // Pagination setup
 $entries_per_page = 8;
