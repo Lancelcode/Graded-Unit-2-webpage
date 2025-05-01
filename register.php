@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'includes/init.php';
 
 // Generate CSRF token if not already set
 if (empty($_SESSION['csrf_token'])) {
@@ -10,8 +10,9 @@ if (empty($_SESSION['csrf_token'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php include('includes/head.php'); ?>
-    <title>User Registration | GreenScore</title>
+    <?php include 'includes/head.php'; ?>
+    <meta charset="UTF-8">
+    <title>Register | GreenScore</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,7 +37,7 @@ if (empty($_SESSION['csrf_token'])) {
             margin: 0 auto;
         }
         .card-bg {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 1rem;
             padding: 2rem;
             box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
@@ -56,24 +57,16 @@ if (empty($_SESSION['csrf_token'])) {
         .form-control:focus {
             box-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
         }
-        .btn-success {
+        .btn-primary {
             font-size: 1.25rem;
             padding: 1rem 2rem;
-            background-color: #4CAF50;
+            background-color: #007bff;
             border: none;
             border-radius: 2rem;
             width: 100%;
         }
-        .btn-success:hover {
-            background-color: #45a049;
-        }
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
+        .btn-primary:hover {
+            background-color: #0056b3;
         }
         footer {
             position: relative;
@@ -94,45 +87,40 @@ if (empty($_SESSION['csrf_token'])) {
 <body>
 <?php include 'includes/nav.php'; ?>
 
-<div class="container">
-    <h2 class="text-success section-title">Register to GreenScore</h2>
+<div class="container content-wrapper">
+    <div class="card-bg">
+        <h2 class="text-success section-title">Create Your Account</h2>
+        <form action="register_action.php" method="POST">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
 
-    <?php if (isset($_SESSION['login_error'])): ?>
-        <div class="error-message">
-            <p><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
-        </div>
-    <?php endif; ?>
+            <div class="form-group">
+                <label for="username" class="form-label">Name:</label>
+                <input type="text" name="username" id="username" class="form-control" required>
+            </div>
 
-    <form action="register.php" method="post">
-        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <div class="form-group">
+                <label for="email" class="form-label">Email address:</label>
+                <input type="email" name="email" id="email" class="form-control" required>
+            </div>
 
-        <div class="form-group">
-            <label for="username" class="form-label">Username:</label>
-            <input type="text" id="username" name="username" class="form-control" required placeholder="Enter your username" value="<?php if (isset($_POST['username'])) echo htmlspecialchars($_POST['username']); ?>">
-        </div>
+            <div class="form-group">
+                <label for="pass1" class="form-label">Password:</label>
+                <input type="password" name="pass1" id="pass1" class="form-control" required>
+            </div>
 
-        <div class="form-group">
-            <label for="email" class="form-label">Email:</label>
-            <input type="email" id="email" name="email" class="form-control" required placeholder="Enter your email" value="<?php if (isset($_POST['email'])) echo htmlspecialchars($_POST['email']); ?>">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
+            <div class="form-group">
+                <label for="pass2" class="form-label">Confirm Password:</label>
+                <input type="password" name="pass2" id="pass2" class="form-control" required>
+            </div>
 
-        <div class="form-group">
-            <label for="password" class="form-label">Password:</label>
-            <input type="password" id="password" name="pass1" class="form-control" required placeholder="Create New Password" value="<?php if (isset($_POST['pass1'])) echo htmlspecialchars($_POST['pass1']); ?>">
-        </div>
-
-        <div class="form-group">
-            <label for="confirm_password" class="form-label">Confirm Password:</label>
-            <input type="password" id="confirm_password" name="pass2" class="form-control" required placeholder="Confirm Password" value="<?php if (isset($_POST['pass2'])) echo htmlspecialchars($_POST['pass2']); ?>">
-        </div>
-
-        <button type="submit" class="btn btn-success">Register</button>
-    </form>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>
-
 <script src="darkmode.js"></script>
 </body>
 </html>

@@ -1,61 +1,40 @@
-<?php # PROCESS LOGIN ATTEMPT.
-
-require_once __DIR__ . '/init.php'; // session start
+<?php
+require_once __DIR__ . '/init.php';
 require_once 'connect_db.php';
-if (!function_exists('validate')) {
-    require_once 'login_tools.php';
-}
+require_once 'login_tools.php';
 
+$errors = [];
 
-// Only process if POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $errors = [];
-
-    // CSRF check
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $errors[] = "Invalid CSRF token.";
     }
 
-    try {
-        $is_admin_login = isset($_POST['admin_login']) && $_POST['admin_login'] == '1';
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
 
-        // Validate credentials
-        list($check, $data) = validate($link, $_POST['email'], $_POST['password'], $is_admin_login);
+    if (empty($email)) $errors[] = "Email is required.";
+    if (empty($password)) $errors[] = "Password is required.";
 
-        if ($check) {
-            // Success: Set session variables
-            $_SESSION['id']       = $data['id'];
-            $_SESSION['username'] = $data['username'];
-            $_SESSION['email']    = $data['email'];
-            $_SESSION['role']     = $data['role'];
+    if (empty($errors)) {
+        list($is_valid, $user_data) = validate($link, $email, $password);
 
-            // Admin redirection
-            if ($is_admin_login && $data['role'] === 'admin') {
-                load('admin_feedback.php');
-            } else {
-                load('home.php');
-            }
+        if ($is_valid) {
+            $_SESSION['user_id']   = $user_data['id'];
+            $_SESSION['username']  = $user_data['username'];
+            $_SESSION['email']     = $user_data['email'];
+            $_SESSION['role']      = $user_data['role'];
+
+            load('home.php');
         } else {
-            $errors = $data;
+            $errors = $user_data; // returns error messages
         }
-    } catch (Exception $e) {
-        $errors[] = "Unexpected error. Please try again.";
     }
 
-    if ($link instanceof mysqli) {
-        mysqli_close($link);
+    if (!empty($errors)) {
+        $_SESSION['login_error'] = implode("<br>", $errors);
+        header("Location: ../login.php");
+        exit();
     }
-
-}
-
-// If there are any errors, display them
-if (!empty($errors)) {
-    echo '<div class="alert alert-danger" role="alert">';
-    foreach ($errors as $error) {
-        echo htmlspecialchars($error) . '<br>';
-    }
-    echo '</div>';
-
-    include('../login.php');
 }
 ?>
