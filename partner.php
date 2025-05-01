@@ -114,10 +114,7 @@ include __DIR__ . '/includes/nav.php';
         <h2 class="mb-3 text-success">Why Partner With GreenScore?</h2>
         <p class="lead mb-3">We are building a cleaner future, together. Every logo above represents a verified sustainability effort and a shared mission to reduce carbon emissions globally.</p>
 
-        <?php
-        if (!empty($_SESSION['id'])) {
-            // Logged in: show supporter list
-            ?>
+
             <div class="mt-4 text-start">
                 <h3 class="text-success mb-3">Our Supporters:</h3>
                 <ul class="list-group list-group-flush">
@@ -130,14 +127,7 @@ include __DIR__ . '/includes/nav.php';
                     <li class="list-group-item">🎓 <a href="https://www.edinburghcollege.ac.uk/" target="_blank">Edinburgh College Sustainability Hub</a></li>
                 </ul>
             </div>
-            <?php
-        } else {
-            // Not logged in: show button
-            ?>
-            <a href="register.php" class="btn btn-success btn-lg mt-3">🌱 Join the Movement</a>
-            <?php
-        }
-        ?>
+
     </div>
 </div>
 
