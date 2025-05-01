@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['email']     = $user_data['email'];
             $_SESSION['role']      = $user_data['role'];
 
-            load('home.php');
+            load('index.php');
         } else {
             $errors = $user_data; // returns error messages
         }
