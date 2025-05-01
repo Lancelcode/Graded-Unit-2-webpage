@@ -2,8 +2,8 @@
 require_once 'includes/init.php';
 require('includes/connect_db.php');
 
-if (!isset($_SESSION['username']) || !isset($_SESSION['id'])) {
-    header('Location: login.php');
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
     exit();
 }
 
