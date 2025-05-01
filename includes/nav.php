@@ -47,9 +47,8 @@ if (session_status() === PHP_SESSION_NONE) {
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="admin_feedback.php">📝 Review User Feedback</a></li>
                                 <li><a class="dropdown-item" href="public_feedback.php">🌍 Public Feedback Submissions</a></li>
-                                <!-- Future admin tools -->
-                                <!-- <li><a class="dropdown-item" href="manage_users.php">👥 Manage Users</a></li> -->
-                                <!-- <li><a class="dropdown-item" href="site_config.php">⚙️ Site Configuration</a></li> -->
+                                <!-- Future admin tools still to be implemented-->
+                                <li><a class="dropdown-item" href="manage_users.php">👥 Manage Users</a></li>
                             </ul>
                         </li>
 
