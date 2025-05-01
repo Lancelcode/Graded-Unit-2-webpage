@@ -3,12 +3,12 @@ require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
 include 'includes/nav.php';
 
-if (!isset($_SESSION['id'])) {
-    require 'includes/login_tools.php';
-    load();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
 }
 
-$user_id    = $_SESSION['id'];
+$user_id    = $_SESSION['user_id'];
 $user_name  = $_SESSION['username'];
 $user_email = $_SESSION['email'];
 
