@@ -1,15 +1,7 @@
-<?php # DISPLAY COMPLETE LOGGED OUT PAGE.
-
-# Access session
+<?php
 session_start();
-
-# Clear all session variables
 $_SESSION = array();
-
-# Destroy the session
 session_destroy();
-
-# Redirect to homepage
 header('Location: index.php');
 exit();
 ?>
