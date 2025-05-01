@@ -59,13 +59,13 @@
     <h1 class="text-white text-center mb-5">📊 My Sustainability Impact</h1>
 
     <?php
-    if (!isset($_SESSION['id'])) {
+    if (!isset($_SESSION['user_id'])) {
         echo "<div class='alert alert-warning'>Please <a href='login.php'>log in</a> to view your impact report.</div>";
         include 'includes/footer.php';
         exit();
     }
 
-    $user_id = $_SESSION['id'];
+    $user_id = $_SESSION['user_id'];
 
     $total_q     = "SELECT COUNT(*) AS total FROM green_calculator_results WHERE user_id = $user_id";
     $green_q     = "SELECT SUM(green_count) AS green FROM green_calculator_results WHERE user_id = $user_id";

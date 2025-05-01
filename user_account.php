@@ -2,12 +2,17 @@
 require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
 
-if (!isset($_SESSION['id'])) {
+// Generate CSRF token if not already set
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+if (!isset($_SESSION['user_id'])) {
     require 'includes/login_tools.php';
     load();
 }
 
-$user_id = $_SESSION['id'];
+$user_id = $_SESSION['user_id'];
 $q       = "SELECT * FROM new_users WHERE id = $user_id";
 $r       = mysqli_query($link, $q);
 
@@ -99,14 +104,16 @@ if (mysqli_num_rows($r) > 0):
                     <div class="card-body">
                         <h5 class="card-title">💳 Add Credit Card</h5>
                         <form action="manage_credit_card.php" method="POST" class="row g-3">
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                             <input type="hidden" name="action" value="add">
+
                             <div class="col-md-6">
                                 <label for="cardNumber" class="form-label">Card Number</label>
-                                <input type="text" class="form-control" name="cardNumber" id="cardNumber" required>
+                                <input type="text" class="form-control" name="card_number" id="cardNumber" required>
                             </div>
                             <div class="col-md-3">
                                 <label for="expiryDate" class="form-label">Expiry Date</label>
-                                <input type="date" class="form-control" name="expiryDate" id="expiryDate" required>
+                                <input type="date" class="form-control" name="expiry_date" id="expiryDate" required>
                             </div>
                             <div class="col-md-3">
                                 <label for="cvv" class="form-label">CVV</label>
@@ -114,17 +121,16 @@ if (mysqli_num_rows($r) > 0):
                             </div>
                             <div class="col-12">
                                 <label for="cardHolder" class="form-label">Cardholder Name</label>
-                                <input type="text" class="form-control" name="cardHolder" id="cardHolder" required>
+                                <input type="text" class="form-control" name="card_name" id="cardHolder" required>
                             </div>
                             <div class="row g-3 mt-3">
                                 <div class="col-md-6">
-                                    <button type="submit" name="action" value="add" class="btn btn-success w-100">
+                                    <button type="submit" class="btn btn-success w-100">
                                         💾 Add Card
                                     </button>
                                 </div>
                                 <div class="col-md-6">
                                     <a href="view_cards.php" class="btn btn-outline-dark w-100">📄 View Cards</a>
-                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -141,3 +147,4 @@ if (mysqli_num_rows($r) > 0):
     </body>
     </html>
 <?php endif; ?>
+
