@@ -60,8 +60,14 @@ include __DIR__ . '/includes/nav.php';
     <div class="container content-wrapper text-center">
         <h1 class="text-white display-4 mb-4">🌿 Welcome to GreenScore</h1>
         <p class="text-white fs-5 mb-4">Track, reduce, and showcase your sustainability progress.</p>
-        <a href="register.php" class="btn btn-success btn-lg me-2">🌱 Get Started</a>
-        <a href="login.php" class="btn btn-outline-light btn-lg">🔐 Login</a>
+        <?php if (!isset($_SESSION['user_id'])): ?>
+            <a href="register.php" class="btn btn-success btn-lg px-4">🌱 Join the Movement</a>
+            <a href="login.php" class="btn btn-outline-light btn-lg px-4">🔐 Member Login</a>
+        <?php endif; ?>
+        <div class="text-center mt-3">
+            <a href="about.php" class="btn btn-light btn-sm px-4">🌍 Our Mission</a>
+        </div>
+
     </div>
 
     <!-- Features Section -->
