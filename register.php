@@ -65,6 +65,11 @@ if (empty($_SESSION['csrf_token'])) {
             border-radius: 2rem;
             width: 100%;
         }
+        .form-label {
+            color: #222;
+            font-weight: 500;
+        }
+
         .btn-primary:hover {
             background-color: #0056b3;
         }
@@ -104,6 +109,21 @@ if (empty($_SESSION['csrf_token'])) {
             </div>
 
             <div class="form-group">
+                <label for="company_name" class="form-label">Company Name :</label>
+                <input type="text" name="company_name" id="company_name" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="contact_person" class="form-label">Contact Person :</label>
+                <input type="text" name="contact_person" id="contact_person" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone_number" class="form-label">Phone Number :</label>
+                <input type="text" name="phone_number" id="phone_number" class="form-control" required>
+            </div>
+
+            <div class="form-group">
                 <label for="pass1" class="form-label">Password:</label>
                 <input type="password" name="pass1" id="pass1" class="form-control" required>
             </div>
@@ -121,6 +141,5 @@ if (empty($_SESSION['csrf_token'])) {
 </div>
 
 <?php include 'includes/footer.php'; ?>
-
 </body>
 </html>
