@@ -105,17 +105,27 @@
             <div class="card card-bg">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <img src="assets/images/sdg.jpg" alt="UN Sustainable Development Goals" class="img-fluid mb-3 mb-md-0">
+                        <img src="assets/images/sdg.jpg" alt="Sustainable Development Goals" class="img-fluid mb-3 mb-md-0">
                     </div>
                     <div class="col-md-6">
-                        <h3 class="section-title">📚 Aligned with Global Frameworks</h3>
+                        <h3 class="section-title">📚 Backed by Global Goals</h3>
                         <p>
-                            GreenScore draws inspiration from the <a href="https://sdgs.un.org/goals" target="_blank">United Nations Sustainable Development Goals (SDGs)</a> and UK net zero policies. By integrating environmental performance into your strategy, your organization takes measurable steps toward climate action, responsible consumption, and sustainable infrastructure.
+                            GreenScore is inspired by the <a href="https://sdgs.un.org/goals" target="_blank">UN Sustainable Development Goals</a> and the core pillars of sustainability as outlined by <strong>UNESCO</strong>:
+                        </p>
+                        <ul>
+                            <li><strong>🌿 Environmental Sustainability</strong> | Promote eco-friendly habits, reduce emissions, and protect natural resources.</li>
+                            <li><strong>💼 Economic Sustainability</strong> | Encourage responsible consumption and sustainable business practices.</li>
+                            <li><strong>🤝 Social Sustainability</strong> | Support inclusivity, equity, and the well-being of communities through shared action.</li>
+                            <li><strong>🎭 Cultural Sustainability</strong> | Respect cultural diversity, traditional knowledge, and local values.</li>
+                        </ul>
+                        <p>
+                            By aligning with these global principles, GreenScore goes beyond tracking, it empowers meaningful, holistic progress.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <div class="col-12 text-center">
             <div class="card card-bg">
