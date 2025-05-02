@@ -108,12 +108,12 @@ include __DIR__ . '/includes/nav.php';
 
 
     <!-- Success Stories Carousel -->
-    <div class="container content-wrapper">
+    <!--<div class="container content-wrapper">
         <h2 class="text-white text-center mb-4">🌟 Success Stories</h2>
         <div id="successCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <?php
-                $sql = "SELECT img, company_name, reduction_percentage FROM success_stories ORDER BY reduction_percentage DESC LIMIT 5";
+/*                $sql = "SELECT img, company_name, reduction_percentage FROM success_stories ORDER BY reduction_percentage DESC LIMIT 5";
                 $res = mysqli_query($link, $sql);
                 $first = true;
                 while ($story = mysqli_fetch_assoc($res)) {
@@ -129,7 +129,7 @@ include __DIR__ . '/includes/nav.php';
                 if (mysqli_num_rows($res) === 0) {
                     echo '<div class="carousel-item active"><p class="text-center py-5 text-white">No success stories yet. Be the first to make an impact!</p></div>';
                 }
-                ?>
+                */?>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#successCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -140,7 +140,7 @@ include __DIR__ . '/includes/nav.php';
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-    </div>
+    </div>-->
 
     <?php include 'includes/footer.php'; ?>
 </div>
