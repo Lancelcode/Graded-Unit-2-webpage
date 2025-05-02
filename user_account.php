@@ -107,6 +107,7 @@ if (mysqli_num_rows($result) > 0):
                         <a href="my_impact.php" class="btn btn-success mb-3">📈 View My Impact</a>
                         <a href="certificate_history.php" class="btn btn-success mb-3">🏅 Certificate History</a>
                         <a href="green_calculator.php" class="btn btn-success mb-3">🧮 Take Green Calculator</a>
+                        <a href="community.php" class="btn btn-success mb-3">🌱 Visit Community</a>
                         <?php
                         $btnClass = 'btn-info';
                         if ($status === 'inactive') $btnClass = 'btn-warning';
