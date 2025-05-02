@@ -76,26 +76,36 @@ include __DIR__ . '/includes/nav.php';
             <div class="col">
                 <div class="card card-bg shadow-sm h-100 text-center p-4">
                     <div class="icon-circle"><i class="fa fa-leaf fa-2x text-success"></i></div>
-                    <h5>Calculate Footprint</h5>
-                    <p>Use our calculator to estimate your environmental impact.</p>
+                    <h5>🌍 Measure Your Impact</h5>
+                    <p>
+                        Use our Green Calculator to evaluate your organization’s sustainability practices.
+                        Identify where you stand and discover areas for improvement based on global standards.
+                    </p>
                 </div>
             </div>
             <div class="col">
                 <div class="card card-bg shadow-sm h-100 text-center p-4">
                     <div class="icon-circle"><i class="fa fa-medal fa-2x text-warning"></i></div>
-                    <h5>Earn Certificates</h5>
-                    <p>Get recognized for reducing emissions with official awards.</p>
+                    <h5>🏅 Earn Recognition</h5>
+                    <p>
+                        Gain certification levels — Gold, Silver, Bronze — and download official digital certificates
+                        that show your progress and commitment toward sustainability goals.
+                    </p>
                 </div>
             </div>
             <div class="col">
                 <div class="card card-bg shadow-sm h-100 text-center p-4">
                     <div class="icon-circle"><i class="fa fa-users fa-2x text-primary"></i></div>
-                    <h5>Join a Movement</h5>
-                    <p>Be part of a growing network of green-focused organizations.</p>
+                    <h5>🤝 Join the Green Community</h5>
+                    <p>
+                        Connect with like-minded organizations, share tips in the community space,
+                        and contribute to a collective movement aligned with the UN’s sustainability goals.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Success Stories Carousel -->
     <div class="container content-wrapper">
