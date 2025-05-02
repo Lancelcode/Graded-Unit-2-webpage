@@ -70,6 +70,12 @@ $results = mysqli_query($link, $query);
                     <textarea name="message" rows="3" class="form-control" placeholder="E.g. I switched to bamboo toothbrushes!" required></textarea>
                     <button type="submit" class="btn btn-success mt-3">✅ Post Tip</button>
                 </form>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <form method="POST" action="clear_tips.php" onsubmit="return confirm('⚠️ Are you sure you want to clear all your tips? This cannot be undone.')">
+                        <button type="submit" class="btn btn-danger">🧹 Clear My Tips</button>
+                    </form>
+                </div>
+
             </div>
         </div>
 
