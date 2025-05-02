@@ -17,7 +17,6 @@
                 <h6 class="text-uppercase fw-bold mb-3">Features</h6>
                 <ul class="list-unstyled small">
                     <li><a class="text-white-50 text-decoration-none" href="green_calculator.php">Green Calculator</a></li>
-                    <li><a class="text-white-50 text-decoration-none" href="sustainability_snapshot.php">Insights Dashboard</a></li>
                     <li><a class="text-white-50 text-decoration-none" href="certificate_preview.php">Certificate</a></li>
                 </ul>
             </div>
