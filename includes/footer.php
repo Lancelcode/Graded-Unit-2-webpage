@@ -8,7 +8,7 @@
                 <small class="d-block">
                     &copy; <?= date('Y'); ?>
                     <a href="greenscore_copyright.php" class="text-decoration-none">GreenScore</a>.
-                    All rights reserved.
+                    All rights reserved.(this is a clickable link to a copyright page)
                 </small>
             </div>
 
