@@ -59,8 +59,8 @@
 <div class="container content-wrapper">
     <div class="card card-bg mb-5">
         <div class="text-center">
-            <h1 class="text-success mb-3">💚 Why GreenScore?</h1>
-            <p class="lead">A mission born from passion for the planet.</p>
+            <h1 class="text-success mb-3">💼 Why GreenScore?</h1>
+            <p class="lead">Empowering organizations to measure, track, and improve sustainability efforts.</p>
         </div>
     </div>
 
@@ -69,13 +69,12 @@
             <div class="card card-bg">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <img src="assets/images/earth-hands.jpg" alt="Protecting Earth" class="img-fluid mb-3 mb-md-0">
+                        <img src="assets/images/earth-hands.jpg" alt="Sustainable Responsibility" class="img-fluid mb-3 mb-md-0">
                     </div>
                     <div class="col-md-6">
-                        <h3 class="section-title">🌱 Small Actions, Big Impact</h3>
+                        <h3 class="section-title">🌍 Purpose-Built for Corporate Sustainability</h3>
                         <p>
-                            Climate change is real, and it affects all of us. But we believe that change doesn't always start with governments or corporations — it starts with <strong>you</strong>.<br><br>
-                            GreenScore was created as a fun, accessible, and data-driven tool to help you reflect on your habits, learn new ways to be sustainable, and celebrate progress at every step.
+                            GreenScore is designed to support educational institutions, businesses, and public organizations in meeting their environmental responsibilities. Through a structured evaluation of sustainability measures, organizations gain insight into how their actions align with best practices in waste reduction, energy efficiency, water conservation, and more.
                         </p>
                     </div>
                 </div>
@@ -86,29 +85,32 @@
             <div class="card card-bg">
                 <div class="row align-items-center">
                     <div class="col-md-6 order-md-2">
-                        <img src="assets/images/team-green.jpg" alt="Green Team" class="img-fluid mb-3 mb-md-0">
+                        <img src="assets/images/team-green.jpg" alt="Collaborative Sustainability" class="img-fluid mb-3 mb-md-0">
                     </div>
                     <div class="col-md-6 order-md-1">
-                        <h3 class="section-title">👥 Built for Real People</h3>
+                        <h3 class="section-title">📈 Track, Learn, Grow</h3>
                         <p>
-                            We designed this platform with <strong>accessibility</strong> and <strong>inclusivity</strong> in mind. Whether you're new to sustainability or already a green champion, GreenScore helps you track, learn, and grow.
+                            With GreenScore, your organization can quantify environmental efforts, set benchmarks, and receive recognition through a point-based certification model. Data is stored securely and can be used to generate detailed reports or download digital certificates, promoting transparency and internal accountability.
+                        </p>
+                        <p>
+                            More importantly, everyone gets to play a part, from leadership to frontline teams, fostering a shared sense of purpose and belonging in your sustainability journey. GreenScore helps build an inclusive green team where every contribution counts.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
 
+
         <div class="col-lg-12">
             <div class="card card-bg">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <img src="assets/images/sdg.jpg" alt="Sustainable Development Goals" class="img-fluid mb-3 mb-md-0">
+                        <img src="assets/images/sdg.jpg" alt="UN Sustainable Development Goals" class="img-fluid mb-3 mb-md-0">
                     </div>
                     <div class="col-md-6">
-                        <h3 class="section-title">📚 Backed by Global Goals</h3>
+                        <h3 class="section-title">📚 Aligned with Global Frameworks</h3>
                         <p>
-                            Our framework aligns with the <a href="https://sdgs.un.org/goals" target="_blank">UN Sustainable Development Goals</a>, particularly those focusing on responsible consumption, climate action, and quality education.<br><br>
-                            We're not just helping you score green points — we're helping the world move forward.
+                            GreenScore draws inspiration from the <a href="https://sdgs.un.org/goals" target="_blank">United Nations Sustainable Development Goals (SDGs)</a> and UK net zero policies. By integrating environmental performance into your strategy, your organization takes measurable steps toward climate action, responsible consumption, and sustainable infrastructure.
                         </p>
                     </div>
                 </div>
@@ -117,11 +119,12 @@
 
         <div class="col-12 text-center">
             <div class="card card-bg">
-                <h2 class="text-success mb-3">🚀 The Journey Starts Here</h2>
+                <h2 class="text-success mb-3">🚀 Start Your Green Transformation</h2>
                 <p>
-                    We hope GreenScore inspires action — not perfection.<br>Let's grow together, one habit at a time. 🌍💚
+                    Whether you're a college campus, a non-profit, or a forward-thinking enterprise, GreenScore provides a practical and engaging way to take environmental action.<br>
+                    Track your progress, share your achievements, and lead by example. 🌿
                 </p>
-                <a href="green_calculator.php" class="btn btn-success mt-3">Get Started</a>
+                <a href="green_calculator.php" class="btn btn-success mt-3">Begin Assessment</a>
             </div>
         </div>
     </div>
