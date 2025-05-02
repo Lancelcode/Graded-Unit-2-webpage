@@ -75,7 +75,11 @@ $results = mysqli_query($link, $query);
                         <button type="submit" class="btn btn-danger">🧹 Clear My Tips</button>
                     </form>
                 </div>
-
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <a href="user_account.php" class="btn btn-outline-dark">
+                        👤 Back to My Profile
+                    </a>
+                </div>
             </div>
         </div>
 
