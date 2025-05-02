@@ -121,6 +121,6 @@ if (empty($_SESSION['csrf_token'])) {
 </div>
 
 <?php include 'includes/footer.php'; ?>
-<script src="darkmode.js"></script>
+
 </body>
 </html>

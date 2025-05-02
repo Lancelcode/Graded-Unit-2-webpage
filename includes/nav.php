@@ -77,9 +77,7 @@ if (session_status() === PHP_SESSION_NONE) {
                             <a class="btn btn-light" href="register.php">Register</a>
                         </li>
                     <?php endif; ?>
-                    <li class="nav-item ms-3">
-                        <button id="darkToggle" class="btn btn-sm btn-outline-light" title="Toggle Dark Mode">🌓</button>
-                    </li>
+
                 </ul>
             </div>
         </div>

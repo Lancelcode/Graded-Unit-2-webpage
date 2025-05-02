@@ -160,7 +160,6 @@ if (mysqli_num_rows($result) > 0):
 </div>
 
 <?php include 'includes/footer.php'; ?>
-<script src="darkmode.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
