@@ -83,6 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <style>
+        html {
+            overflow-y: scroll;
+        }
         body {
             background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             margin: 0;
@@ -131,6 +134,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             font-size: 14px;
             font-weight: bold;
         }
+
+        body.modal-open {
+            padding-right: 0 !important;
+        }
+
+        .modal-title {
+            color: #00ff66 !important; /* Bright green */
+        }
+
     </style>
 
 </head>
