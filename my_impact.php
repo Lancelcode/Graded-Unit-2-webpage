@@ -1,6 +1,8 @@
-<?php require_once 'includes/init.php'; ?>
-<?php require_once 'includes/connect_db.php'; ?>
-<?php include 'includes/nav.php'; ?>
+<?php
+require_once 'includes/init.php';
+require_once 'includes/connect_db.php';
+include 'includes/nav.php';
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +15,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <style>
-        /* Ensure the body takes full height and content is pushed to the bottom */
         html, body {
             height: 100%;
             margin: 0;
@@ -27,16 +28,25 @@
             flex-direction: column;
         }
 
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
         .content-wrapper {
             flex-grow: 1;
             padding: 4rem 1rem;
         }
 
         .card-bg {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             color: #333;
             padding: 2rem;
             border-radius: 1rem;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
         }
 
         .progress {
@@ -48,8 +58,14 @@
             font-weight: bold;
         }
 
-        .footer {
-            margin-top: auto;
+        .btn-outline-light:hover {
+            background-color: #fff;
+            color: #198754;
+        }
+
+        footer {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
@@ -67,15 +83,10 @@
 
     $user_id = $_SESSION['user_id'];
 
-    $total_q     = "SELECT COUNT(*) AS total FROM green_calculator_results WHERE user_id = $user_id";
-    $green_q     = "SELECT SUM(green_count) AS green FROM green_calculator_results WHERE user_id = $user_id";
-    $donation_q  = "SELECT SUM(donation_cost) AS donation FROM green_calculator_results WHERE user_id = $user_id";
+    $total     = mysqli_fetch_assoc(mysqli_query($link, "SELECT COUNT(*) AS total FROM green_calculator_results WHERE user_id = $user_id"))['total'] ?? 0;
+    $green     = mysqli_fetch_assoc(mysqli_query($link, "SELECT SUM(green_count) AS green FROM green_calculator_results WHERE user_id = $user_id"))['green'] ?? 0;
+    $donation  = mysqli_fetch_assoc(mysqli_query($link, "SELECT SUM(donation_cost) AS donation FROM green_calculator_results WHERE user_id = $user_id"))['donation'] ?? 0;
 
-    $total     = mysqli_fetch_assoc(mysqli_query($link, $total_q))['total'] ?? 0;
-    $green     = mysqli_fetch_assoc(mysqli_query($link, $green_q))['green'] ?? 0;
-    $donation  = mysqli_fetch_assoc(mysqli_query($link, $donation_q))['donation'] ?? 0;
-
-    // Determine badge level
     $badge = "🪴 Eco Newbie";
     if ($green >= 50) {
         $badge = "🌟 Green Warrior";
@@ -112,9 +123,7 @@
     </div>
 </div>
 
-<!-- Footer will stay at the bottom -->
 <?php include 'includes/footer.php'; ?>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

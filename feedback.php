@@ -34,19 +34,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Feedback | GreenScore</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            margin: 0;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding: 4rem 1rem;
+        }
+        .card-bg {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1rem;
+        }
+        footer {
+            background-color: #fff;
+            padding: 2rem 0;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="text-success mb-4">💬 We Value Your Feedback</h2>
+<div class="page-wrapper container">
+    <h2 class="text-white text-center mb-4">💬 We Value Your Feedback</h2>
 
     <?php if ($success): ?>
-        <div class="alert alert-success">
-            ✅ Thank you! Your feedback has been submitted.
-        </div>
+        <div class="alert alert-success shadow-sm">✅ Thank you! Your feedback has been submitted.</div>
     <?php endif; ?>
 
-    <form method="POST" class="card p-4 shadow-sm mb-5">
+    <form method="POST" class="card card-bg p-4 shadow-sm mb-5">
         <div class="form-group mb-3">
             <label>Your Name:</label>
             <input type="text" class="form-control" value="<?= htmlspecialchars($user_name) ?>" disabled>
@@ -59,10 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label>Your Feedback:</label>
             <textarea class="form-control" name="message" rows="4" required></textarea>
         </div>
-        <button type="submit" class="btn btn-success w-100">Submit Feedback</button>
+        <button type="submit" class="btn btn-success w-100">✅ Submit Feedback</button>
     </form>
 
-    <h4 class="mb-4">🗃 Public Feedback</h4>
+    <h4 class="text-white mb-4">🗃 Public Feedback</h4>
+
     <?php
     $sql = "
       SELECT name, email, created_at, message,
@@ -75,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (mysqli_num_rows($res) > 0):
         while ($row = mysqli_fetch_assoc($res)): ?>
-            <div class="card card-body mb-4 shadow-sm">
+            <div class="card card-bg card-body mb-4 shadow-sm">
                 <p class="mb-1">
                     <strong><?= htmlspecialchars($row['name']) ?></strong>
                     (<?= htmlspecialchars($row['email']) ?>)
@@ -93,14 +121,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?= date('F j, Y, g:i a', strtotime($row['admin_response_at'])) ?>
                         </small>
                     </p>
-                    <div class="alert alert-secondary">
+                    <div class="alert alert-secondary mb-0">
                         <?= nl2br(htmlspecialchars($row['admin_response'])) ?>
                     </div>
                 <?php endif; ?>
             </div>
         <?php endwhile;
     else: ?>
-        <div class="alert alert-info">No public feedback yet.</div>
+        <div class="alert alert-info card-bg">No public feedback yet.</div>
     <?php endif;
 
     mysqli_close($link);

@@ -83,13 +83,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <style>
+        body {
+            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-content {
+            background-color: rgba(255, 255, 255, 0.97);
+            border-radius: 0.75rem;
+        }
+
         .modal-header {
             background-color: #198754;
             color: white;
-            box-shadow: 0 0 20px rgba(40,167,69,0.6);
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.6);
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        .btn-link i {
+            color: #198754;
+        }
+
+        .progress {
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            font-size: 14px;
+            font-weight: bold;
         }
     </style>
+
 </head>
 <body>
 <?php include 'includes/nav.php'; ?>

@@ -1,15 +1,12 @@
 <?php
-// forgot_password.php
 require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
 
-// If already logged in, send back
 if (isset($_SESSION['user_id'])) {
     header('Location: green_calculator.php');
     exit();
 }
 
-// CSRF token
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -18,28 +15,25 @@ $errors = [];
 $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // CSRF check
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token');
     }
 
-    $email    = trim($_POST['email'] ?? '');
-    $pass1    = $_POST['new_password'] ?? '';
-    $pass2    = $_POST['confirm_password'] ?? '';
+    $email  = trim($_POST['email'] ?? '');
+    $pass1  = $_POST['new_password'] ?? '';
+    $pass2  = $_POST['confirm_password'] ?? '';
 
-    // Validation
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'Please enter a valid email address.';
+    if (!preg_match('/^[^@]+@[^@]+$/', $email)) {
+        $errors[] = 'Email must be in the format name@name (no domain).';
     }
-    if (strlen($pass1) < 6) {
-        $errors[] = 'Password must be at least 6 characters.';
+    if (strlen($pass1) < 1) {
+        $errors[] = 'Password must be at least 1 character.';
     }
     if ($pass1 !== $pass2) {
         $errors[] = 'Passwords do not match.';
     }
 
     if (empty($errors)) {
-        // Look up user
         $stmt = mysqli_prepare($link, "SELECT id FROM new_users WHERE email = ?");
         mysqli_stmt_bind_param($stmt, 's', $email);
         mysqli_stmt_execute($stmt);
@@ -48,13 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_close($stmt);
 
         if ($uid) {
-            // Update password column (was `pass`, now `password`)
             $hash = password_hash($pass1, PASSWORD_DEFAULT);
-            $u    = mysqli_prepare($link, "UPDATE new_users SET `password` = ? WHERE id = ?");
+            $u = mysqli_prepare($link, "UPDATE new_users SET `password` = ? WHERE id = ?");
             mysqli_stmt_bind_param($u, 'si', $hash, $uid);
             mysqli_stmt_execute($u);
             mysqli_stmt_close($u);
-
             $success = true;
         } else {
             $errors[] = 'No account found with that email.';
@@ -67,13 +59,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Reset Password | GreenScore</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>body { padding-top:2rem; }</style>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            position: relative;
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 450px;
+            margin: 5rem auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+        h3 {
+            text-align: center;
+            color: #2e7d32;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+    </style>
 </head>
 <body>
-<div class="container" style="max-width:400px;">
-    <h3 class="mb-4 text-center">🔄 Reset Your Password</h3>
+<div class="content-wrapper">
+    <h3>🔄 Reset Your Password</h3>
 
     <?php if ($success): ?>
         <div class="alert alert-success">
@@ -94,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input type="email"
+                <input type="text"
                        name="email"
                        class="form-control"
                        value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
@@ -102,25 +126,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="mb-3">
                 <label class="form-label">New Password</label>
-                <input type="password"
-                       name="new_password"
-                       class="form-control"
-                       required>
+                <input type="password" name="new_password" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Confirm Password</label>
-                <input type="password"
-                       name="confirm_password"
-                       class="form-control"
-                       required>
+                <input type="password" name="confirm_password" class="form-control" required>
             </div>
-            <button class="btn btn-primary w-100">Reset Password</button>
-            <div class="text-center mt-2">
-                <a href="login.php">← Back to Login</a>
+            <button class="btn btn-success w-100">Reset Password</button>
+            <div class="text-center mt-3">
+                <a href="login.php" class="text-decoration-none">← Back to Login</a>
             </div>
         </form>
     <?php endif; ?>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
