@@ -59,7 +59,7 @@ Update DB credentials in includes/connect_db.php if needed
 
 Run Locally Open your browser and go to:
 
-http://localhost/green-score
+(http://localhost/Graded-Unit-2-webpage/index.php)
 
 🧪 Testing Approach
 White-box testing was used to validate backend logic and session handling
