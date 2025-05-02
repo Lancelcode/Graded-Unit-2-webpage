@@ -13,16 +13,26 @@ $user_name  = $_SESSION['username'];
 $user_email = $_SESSION['email'];
 
 $success = false;
+$error = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $message = trim($_POST['message']);
-    if ($message !== '') {
+    try {
+        $message = trim($_POST['message']);
+
+        if (empty($message)) {
+            throw new Exception("⚠️ Please enter your feedback before submitting.");
+        }
+
         $stmt = mysqli_prepare($link,
             "INSERT INTO feedback (user_id, name, email, message) VALUES (?, ?, ?, ?)"
         );
         mysqli_stmt_bind_param($stmt, 'isss', $user_id, $user_name, $user_email, $message);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
+
         $success = true;
+    } catch (Exception $e) {
+        $error = $e->getMessage();
     }
 }
 ?>
@@ -70,7 +80,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h2 class="text-white text-center mb-4">💬 We Value Your Feedback</h2>
 
     <?php if ($success): ?>
-        <div class="alert alert-success shadow-sm">✅ Thank you! Your feedback has been submitted.</div>
+        <div class="alert alert-success shadow-sm">
+            ✅ Thank you! Your feedback has been submitted and would be promptly answered by one of our admins. Thank you for your patience.
+        </div>
+    <?php endif; ?>
+
+    <?php if ($error): ?>
+        <div class="alert alert-warning shadow-sm"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
     <form method="POST" class="card card-bg p-4 shadow-sm mb-5">
@@ -84,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="form-group mb-3">
             <label>Your Feedback:</label>
-            <textarea class="form-control" name="message" rows="4" required></textarea>
+            <textarea class="form-control" name="message" rows="4" ></textarea>
         </div>
         <button type="submit" class="btn btn-success w-100">✅ Submit Feedback</button>
     </form>

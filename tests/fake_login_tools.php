@@ -1,15 +1,36 @@
 <?php
-// Fake validate() for testing
-function validate($link, $email, $password, $is_admin_login = false) {
-    return [true, [
-        'id' => 1,
-        'username' => 'Test User',
-        'email' => $email,
-        'role' => $is_admin_login ? 'admin' : 'user'
-    ]];
+// Mock login_tools functions for PHPUnit
+function validate($link, $email = '', $pwd = '') {
+    $errors = [];
+
+    if (empty($email)) {
+        $errors[] = 'Enter your email address.';
+    }
+
+    if (empty($pwd)) {
+        $errors[] = 'Enter your password.';
+    }
+
+    $test_users = [
+        'admin@example.com' => ['password' => 'adminpass', 'id' => 1, 'username' => 'Admin User', 'role' => 'admin'],
+        'user@example.com' => ['password' => 'userpass', 'id' => 2, 'username' => 'Test User', 'role' => 'user']
+    ];
+
+    if (empty($errors)) {
+        if (isset($test_users[$email])) {
+            if ($pwd === $test_users[$email]['password']) {
+                return [true, $test_users[$email]];
+            } else {
+                $errors[] = 'Incorrect password.';
+            }
+        } else {
+            $errors[] = 'Email address and password not found.';
+        }
+    }
+
+    return [false, $errors];
 }
 
-// ✅ Fake load() for testing
 function load($page = 'index.php') {
-    // In test mode, just do nothing — prevent real redirect
+    // Prevent redirect during test
 }

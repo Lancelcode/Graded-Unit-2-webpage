@@ -42,6 +42,17 @@ if (mysqli_num_rows($result) > 0):
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content-wrapper {
+                flex: 1;
+            }
+
             body {
                 min-height: 100vh;
                 margin: 0;
