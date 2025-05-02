@@ -41,7 +41,11 @@ if (empty($_SESSION['csrf_token'])) {
 
         <button type="submit" class="btn btn-success w-100">Login</button>
     </form>
+    <div class="text-center mt-2">
+        <a href="forgot_password.php">Forgot your password?</a>
+    </div>
 </div>
+
 
 <?php include 'includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
