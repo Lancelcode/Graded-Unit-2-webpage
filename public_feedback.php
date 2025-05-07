@@ -22,14 +22,49 @@ $result = mysqli_query($link, $sql);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            position: relative;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+        .content-wrapper {
+            flex-grow: 1;
+            padding: 4rem 1rem;
+        }
+        .card-bg {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+        }
+        footer {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 </head>
-<body>
-<div class="container mt-5">
-    <h2 class="text-success mb-4">💬 Community Feedback</h2>
+<body class="d-flex flex-column min-vh-100">
+<div class="container content-wrapper flex-grow-1">
+    <h2 class="text-white text-center mb-5">💬 Community Feedback</h2>
 
     <?php if (mysqli_num_rows($result) > 0): ?>
         <?php while ($row = mysqli_fetch_assoc($result)): ?>
-            <div class="border p-3 mb-4 rounded">
+            <div class="card card-bg mb-4">
                 <p class="mb-1">
                     <strong><?= htmlspecialchars($row['name']) ?></strong>
                     (<?= htmlspecialchars($row['email']) ?>)
@@ -54,7 +89,7 @@ $result = mysqli_query($link, $sql);
             </div>
         <?php endwhile; ?>
     <?php else: ?>
-        <div class="alert alert-info">
+        <div class="alert alert-info card-bg">
             No public feedback available yet.
         </div>
     <?php endif; ?>
@@ -63,8 +98,6 @@ $result = mysqli_query($link, $sql);
 </div>
 
 <?php include 'includes/footer.php'; ?>
-<script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
