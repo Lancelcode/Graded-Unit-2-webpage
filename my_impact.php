@@ -69,6 +69,7 @@ include 'includes/nav.php';
         include 'includes/footer.php';
         exit();
     }
+
     $user_id = $_SESSION['user_id'];
     $total     = mysqli_fetch_assoc(mysqli_query($link, "SELECT COUNT(*) AS total FROM green_calculator_results WHERE user_id = $user_id"))['total'] ?? 0;
     $green     = mysqli_fetch_assoc(mysqli_query($link, "SELECT SUM(green_count) AS green FROM green_calculator_results WHERE user_id = $user_id"))['green'] ?? 0;
@@ -91,16 +92,21 @@ include 'includes/nav.php';
         100 => ['champion_of_sustainability', '🏆 Champion of Sustainability']
     ];
 
-    ksort($levels);
+    // Set defaults in case green = 0
+    $badgeSlug = 'green_starter';
+    $badge = '🌱 Green Starter';
     $badgeLevel = 1;
+
+    // Assign based on level
+    ksort($levels);
     foreach ($levels as $threshold => [$slug, $label]) {
         if ($green >= $threshold) {
             $badgeSlug = $slug;
             $badge = $label;
+            $badgeLevel++;
         } else {
             break;
         }
-        $badgeLevel++;
     }
 
     $greenPercent = min(100, round(($green / 100) * 100));
@@ -149,10 +155,15 @@ include 'includes/nav.php';
                 'green_starter' => "Great start — keep growing green habits! 🌱",
                 default => "Welcome to your green journey! Let’s grow together. 🌱✨"
             };
+
+            if (file_exists($badgeImage)) {
+                echo "<div class='d-flex justify-content-center'>
+                        <img src='$badgeImage' alt='$badge image' class='img-fluid my-4' style='max-width: 600px; border-radius: 1rem; box-shadow: 0 0 16px rgba(0,0,0,0.3);'>
+                      </div>";
+            } else {
+                echo "<div class='alert alert-warning'>Image not found: <code>$badgeImage</code></div>";
+            }
             ?>
-            <div class="d-flex justify-content-center">
-                <img src="<?= $badgeImage ?>" alt="<?= $badge ?> image" class="img-fluid my-4" style="max-width: 600px; border-radius: 1rem; box-shadow: 0 0 16px rgba(0,0,0,0.3);">
-            </div>
             <p class="lead"><em><?= $badgeText ?></em></p>
         </div>
     </div>
