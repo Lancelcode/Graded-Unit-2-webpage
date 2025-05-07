@@ -126,10 +126,16 @@ include 'includes/nav.php';
         </div>
         <p class="badge-box">🏅 Current Badge: <span class="text-success">Level <?= $badgeLevel ?> - <?= $badge ?></span></p>
     </div>
-    <div class="text-center">
-        <a href="certificate_history.php" class="btn btn-outline-light me-2">📄 View Certificates</a>
-        <a href="green_calculator.php" class="btn btn-outline-success">🧮 Take the Calculator Again</a>
-        <a href="user_account.php" class="btn btn-outline-light">👤 Back to My Profile</a>
+    <div class="text-center mt-4 d-flex flex-wrap justify-content-center gap-3">
+        <a href="certificate_history.php" class="btn btn-lg btn-outline-light fw-bold px-4 py-2 shadow-sm border-2">
+            📄 View Certificates
+        </a>
+        <a href="green_calculator.php" class="btn btn-lg btn-success fw-bold px-4 py-2 shadow-sm border-2">
+            🧮 Take the Calculator Again
+        </a>
+        <a href="user_account.php" class="btn btn-lg btn-outline-light fw-bold px-4 py-2 shadow-sm border-2">
+            👤 Back to My Profile
+        </a>
     </div>
     <div class="card card-bg shadow mb-5 mt-4">
         <div class="card-body text-center px-4">
