@@ -35,27 +35,45 @@ $results = mysqli_query($link, $query);
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <style>
-        body {
-            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+        html, body {
+            height: 100%;
             margin: 0;
-            position: relative;
+            padding: 0;
         }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+        }
+
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         .content-wrapper {
             flex: 1;
             padding: 4rem 1rem;
         }
+
         .card-bg {
             background: rgba(255,255,255,0.95);
             border-radius: 1rem;
         }
+
         footer {
             background-color: #fff;
             color: #444;
             padding: 2rem 0;
+            margin-top: auto;
         }
+
         .fade-out {
             animation: fadeOut 1s ease-out forwards;
         }
+
         @keyframes fadeOut {
             to {
                 opacity: 0;
@@ -72,7 +90,7 @@ $results = mysqli_query($link, $query);
 <div class="page-wrapper">
     <div class="container content-wrapper">
         <h1 class="text-white text-center mb-4">📝 Sustainability Community Board</h1>
-        <p class="lead text-center text-white mb-5">Share your eco-friendly tips anonymously 💚</p>
+        <p class="lead text-center text-white mb-5">Share your eco-friendly tips 💚</p>
 
         <!-- Tip Form -->
         <div class="card card-bg shadow-sm mb-4">
@@ -147,26 +165,27 @@ $results = mysqli_query($link, $query);
         <?php endif; ?>
     </div>
 
-    <!-- Edit Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" action="edit_tip.php" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Tip</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="tip_id" id="editTipId">
-                    <textarea class="form-control" name="message" id="editTipMessage" rows="4" required></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">📏 Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
+    <!-- Footer always at bottom -->
     <?php include 'includes/footer.php'; ?>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" action="edit_tip.php" method="POST">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Tip</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="tip_id" id="editTipId">
+                <textarea class="form-control" name="message" id="editTipMessage" rows="4" required></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">📏 Save Changes</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

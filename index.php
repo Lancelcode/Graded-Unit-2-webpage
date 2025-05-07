@@ -132,7 +132,7 @@ include __DIR__ . '/includes/nav.php';
                         <div class="icon-circle"><i class="fa fa-medal fa-2x text-warning"></i></div>
                         <h5>🏅 Earn Recognition</h5>
                         <p>
-                            Gain certification levels — Gold, Silver, Bronze — and download official digital certificates
+                            Gain certification levels | Gold, Silver, Bronze | and download official digital certificates
                             that show your progress and commitment toward sustainability goals.
                         </p>
                     </div>

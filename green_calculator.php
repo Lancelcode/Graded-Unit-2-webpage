@@ -233,6 +233,11 @@ Impact: Builds stakeholder trust, drives internal accountability, and strengthen
                     }
                     ?>
                     <button class="btn btn-success btn-block mt-3" name="submit">Calculate My Score 🌍</button>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <a href="user_account.php" class="btn btn-outline-dark">
+                            👤 Back to My Profile
+                        </a>
+                    </div>
                 </form>
             </div>
 
