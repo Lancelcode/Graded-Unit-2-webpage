@@ -99,11 +99,26 @@ if (!$result) {
             box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
             margin-top: 4rem;
         }
-        h2 {
+        h2, h3 {
             color: #198754;
         }
         .inline {
             display: inline-block;
+        }
+        .fade-out {
+            animation: fadeOut 1s ease-out forwards;
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                height: 0;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+        }
+        .deactivated-table, .inactive-table {
+            margin-top: 3rem;
         }
     </style>
 </head>
@@ -132,65 +147,153 @@ if (!$result) {
             </tr>
             </thead>
             <tbody>
-            <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                <tr>
-                    <td><?= htmlspecialchars($row['username']) ?></td>
-                    <td><?= htmlspecialchars($row['email']) ?></td>
-                    <td><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
+            <?php mysqli_data_seek($result, 0); while ($row = mysqli_fetch_assoc($result)): ?>
+                <?php if ($row['status'] === 'active'): ?>
+                    <tr id="user-row-<?= $row['id'] ?>">
+                        <td><?= htmlspecialchars($row['username']) ?></td>
+                        <td><?= htmlspecialchars($row['email']) ?></td>
+                        <td><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
+                        <td>
+                            <form method="post" class="inline">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                <input type="hidden" name="action" value="update_role">
+                                <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
+                                <select name="role" class="form-select form-select-sm d-inline-block">
+                                    <option value="user" <?= $row['role'] === 'user' ? 'selected' : '' ?>>User</option>
+                                    <option value="admin" <?= $row['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
+                                </select>
+                                <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" class="inline">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                <input type="hidden" name="action" value="update_status">
+                                <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
+                                <select name="status" class="form-select form-select-sm d-inline-block">
+                                    <option value="active" <?= $row['status'] === 'active' ? 'selected' : '' ?>>Active</option>
+                                    <option value="inactive" <?= $row['status'] === 'inactive' ? 'selected' : '' ?>>Inactive</option>
+                                    <option value="deactivated" <?= $row['status'] === 'deactivated' ? 'selected' : '' ?>>Deactivated</option>
+                                </select>
+                                <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" class="inline" onsubmit="return deleteUser(this, <?= $row['id'] ?>);">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
+                                <button class="btn btn-sm btn-danger" type="submit" <?= $row['id'] === (int)$_SESSION['user_id'] ? 'disabled' : '' ?>>Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
 
-                    <!-- Role form -->
-                    <td>
-                        <form method="post" class="inline">
-                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                            <input type="hidden" name="action" value="update_role">
-                            <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
-                            <select name="role" class="form-select form-select-sm d-inline-block">
-                                <option value="user" <?= $row['role'] === 'user' ? 'selected' : '' ?>>User</option>
-                                <option value="admin" <?= $row['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
-                            </select>
-                            <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
-                        </form>
-                    </td>
+    <!-- Inactive Users Section -->
+    <h3 class="mt-5 text-warning">🕓 Inactive Users</h3>
+    <div class="table-responsive inactive-table">
+        <table class="table table-hover align-middle bg-white rounded shadow-sm">
+            <thead class="table-warning">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Registered</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php mysqli_data_seek($result, 0); while ($row = mysqli_fetch_assoc($result)): ?>
+                <?php if ($row['status'] === 'inactive'): ?>
+                    <tr id="user-row-<?= $row['id'] ?>">
+                        <td><?= htmlspecialchars($row['username']) ?></td>
+                        <td><?= htmlspecialchars($row['email']) ?></td>
+                        <td><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
+                        <td>
+                            <form method="post" class="inline">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                <input type="hidden" name="action" value="update_status">
+                                <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
+                                <select name="status" class="form-select form-select-sm d-inline-block">
+                                    <option value="active">Active</option>
+                                    <option value="inactive" selected>Inactive</option>
+                                    <option value="deactivated">Deactivated</option>
+                                </select>
+                                <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
 
-                    <!-- Status form -->
-                    <td>
-                        <form method="post" class="inline">
-                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                            <input type="hidden" name="action" value="update_status">
-                            <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
-                            <select name="status" class="form-select form-select-sm d-inline-block">
-                                <option value="active" <?= $row['status'] === 'active' ? 'selected' : '' ?>>Active</option>
-                                <option value="inactive" <?= $row['status'] === 'inactive' ? 'selected' : '' ?>>Inactive</option>
-                                <option value="deactivated" <?= $row['status'] === 'deactivated' ? 'selected' : '' ?>>Deactivated</option>
-                            </select>
-                            <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
-                        </form>
-                    </td>
-
-                    <!-- Delete button -->
-                    <td>
-                        <form method="post" class="inline">
-                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
-                            <button
-                                    class="btn btn-sm btn-danger"
-                                    type="submit"
-                                <?= $row['id'] === (int)$_SESSION['user_id'] ? 'disabled' : '' ?>
-                            >Delete</button>
-                        </form>
-                    </td>
-                </tr>
+    <!-- Deactivated Users Section -->
+    <h3 class="mt-5 text-danger">🗑️ Users Marked for Deletion</h3>
+    <div class="table-responsive deactivated-table">
+        <table class="table table-hover align-middle bg-white rounded shadow-sm">
+            <thead class="table-danger">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Registered</th>
+                <th>Status</th>
+                <th>Delete Permanently</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php mysqli_data_seek($result, 0); while ($row = mysqli_fetch_assoc($result)): ?>
+                <?php if ($row['status'] === 'deactivated'): ?>
+                    <tr id="user-row-<?= $row['id'] ?>">
+                        <td><?= htmlspecialchars($row['username']) ?></td>
+                        <td><?= htmlspecialchars($row['email']) ?></td>
+                        <td><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
+                        <td>
+                            <form method="post" class="inline">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                <input type="hidden" name="action" value="update_status">
+                                <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
+                                <select name="status" class="form-select form-select-sm d-inline-block">
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="deactivated" selected>Deactivated</option>
+                                </select>
+                                <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" class="inline" onsubmit="return deleteUser(this, <?= $row['id'] ?>);">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
+                                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endif; ?>
             <?php endwhile; ?>
             </tbody>
         </table>
     </div>
 </div>
 
-<?php
-mysqli_free_result($result);
-mysqli_close($link);
-?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function deleteUser(form, id) {
+        fetch(window.location.href, {
+            method: 'POST',
+            body: new FormData(form)
+        }).then(() => {
+            const row = document.getElementById('user-row-' + id);
+            row.classList.add('fade-out');
+            setTimeout(() => row.remove(), 1000);
+        });
+        return false;
+    }
+</script>
 </body>
 </html>
