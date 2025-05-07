@@ -253,6 +253,16 @@ Impact: Builds stakeholder trust, drives internal accountability, and strengthen
                         <li>👏 Certificate: 0–50 pts</li>
                     </ul>
                 </div>
+
+                <!-- NEW ETHICAL REMINDER -->
+                <div class="card shadow-sm p-3 mt-4">
+                    <h5 class="mb-3 text-center text-success">🌍 Ethical Reminder</h5>
+                    <p class="mb-0 text-center">
+                        We encourage all companies to answer these questions truthfully. Honest reflection is the first step toward meaningful change.
+                        Your commitment to transparency and sustainability helps build a greener, fairer future for everyone.
+                        Together, we can shape better business practices and responsible citizenship. 🌱🤝
+                    </p>
+                </div>
             </div>
         </div>
     </div>
