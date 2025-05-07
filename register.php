@@ -134,7 +134,7 @@ if (empty($_SESSION['csrf_token'])) {
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-primary">
+                <input type="submit" value="Subscribe for just £99 a year!" class="btn btn-primary">
             </div>
         </form>
     </div>

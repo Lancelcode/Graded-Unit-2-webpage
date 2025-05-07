@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $phone_number = mysqli_real_escape_string($link, trim($_POST['phone_number']));
     }
 
-    // Check if email exists
+    // Check if email already exists
     if (empty($errors)) {
         $q = "SELECT id FROM new_users WHERE email=?";
         $stmt = mysqli_prepare($link, $q);
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_close($stmt);
     }
 
-    // Register
+    // Register the user
     if (empty($errors)) {
         $q = "INSERT INTO new_users (username, email, password, company_name, contact_person, phone_number)
               VALUES (?, ?, ?, ?, ?, ?)";
@@ -79,9 +79,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $r = mysqli_stmt_execute($stmt);
 
         if ($r) {
+            $user_id = mysqli_insert_id($link);
             mysqli_stmt_close($stmt);
+
+            // ✅ Add £99 registration donation
+            $insert_donation = "
+                INSERT INTO green_calculator_results (
+                    user_id, total_score, green_count, amber_count, red_count,
+                    award_level, emoji, feedback_message, shortfall, donation_cost
+                ) VALUES (?, 0, 0, 0, 0, 'Initial Registration 🎟️', '🎟️', 'Thank you for joining GreenScore!', 0, 99.00)
+            ";
+            $stmt2 = mysqli_prepare($link, $insert_donation);
+            mysqli_stmt_bind_param($stmt2, 'i', $user_id);
+            mysqli_stmt_execute($stmt2);
+            mysqli_stmt_close($stmt2);
+
             mysqli_close($link);
-            header("Location: login.php");
+            header("Location: login.php?msg=Registered+and+Charged+£99");
             exit();
         } else {
             mysqli_stmt_close($stmt);
@@ -89,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<p>Registration failed. Please try again.</p>";
         }
     } else {
-        // Show validation errors
         echo '<div class="container mt-4">';
         echo '<h4>The following error(s) occurred:</h4>';
         foreach ($errors as $msg) {
