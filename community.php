@@ -40,7 +40,6 @@ $results = mysqli_query($link, $query);
             margin: 0;
             position: relative;
         }
-
         .content-wrapper {
             flex: 1;
             padding: 4rem 1rem;
@@ -53,6 +52,18 @@ $results = mysqli_query($link, $query);
             background-color: #fff;
             color: #444;
             padding: 2rem 0;
+        }
+        .fade-out {
+            animation: fadeOut 1s ease-out forwards;
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                height: 0;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+            }
         }
     </style>
 </head>
@@ -90,7 +101,7 @@ $results = mysqli_query($link, $query);
 
                 <?php if (mysqli_num_rows($results) > 0): ?>
                     <?php while ($row = mysqli_fetch_assoc($results)): ?>
-                        <div class="mb-4 border-bottom pb-3">
+                        <div class="mb-4 border-bottom pb-3" id="tip-<?= $row['id'] ?>">
                             <p class="mb-1">🟢 <?= htmlspecialchars($row['message']) ?></p>
                             <small class="text-muted">
                                 By <?= htmlspecialchars($row['username']) ?> (<?= htmlspecialchars($row['email']) ?>)
@@ -106,11 +117,12 @@ $results = mysqli_query($link, $query);
                                             data-message="<?= htmlspecialchars($row['message'], ENT_QUOTES) ?>">
                                         ✏️ Edit
                                     </button>
-                                    <a href="delete_tip.php?id=<?= $row['id'] ?>"
-                                       class="btn btn-sm btn-outline-danger"
-                                       onclick="return confirm('Are you sure you want to delete this tip?')">
-                                        🗑 Delete
-                                    </a>
+                                    <form method="POST" onsubmit="return deleteTip(this, <?= $row['id'] ?>);" class="d-inline">
+                                        <input type="hidden" name="delete_id" value="<?= $row['id'] ?>">
+                                        <button type="submit" name="delete_tip" class="btn btn-sm btn-outline-danger">
+                                            🗑 Delete
+                                        </button>
+                                    </form>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -167,6 +179,26 @@ $results = mysqli_query($link, $query);
         document.getElementById('editTipId').value = tipId;
         document.getElementById('editTipMessage').value = message;
     });
+
+    function deleteTip(form, id) {
+        fetch(window.location.href, {
+            method: 'POST',
+            body: new FormData(form)
+        }).then(() => {
+            const card = document.getElementById('tip-' + id);
+            card.classList.add('fade-out');
+            setTimeout(() => card.remove(), 1000);
+        });
+        return false;
+    }
 </script>
 </body>
 </html>
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_tip']) && is_numeric($_POST['delete_id'])) {
+    $deleteId = intval($_POST['delete_id']);
+    mysqli_query($link, "DELETE FROM community_tips WHERE id = $deleteId AND user_id = $logged_in_user LIMIT 1");
+    exit();
+}
+mysqli_close($link);
+?>
