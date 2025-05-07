@@ -85,6 +85,8 @@ $results = mysqli_query($link, $query);
         html, body {
             height: 100%;
             margin: 0;
+            display: flex;
+            flex-direction: column;
         }
         body {
             background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
@@ -95,28 +97,25 @@ $results = mysqli_query($link, $query);
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 0;
+            z-index: -1;
         }
         .page-wrapper {
+            flex: 1;
             position: relative;
             z-index: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin-top: 10rem;
-
+            padding-top: 4rem;
         }
-
-
         .card-bg {
             background: rgba(255,255,255,0.95);
             border-radius: 1rem;
         }
         footer {
-            background-color: #fff;
+            background-color: rgba(255,255,255,0.95);
             color: #444;
             padding: 2rem 0;
-            width: 100%;
+            text-align: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1;
         }
     </style>
 </head>
