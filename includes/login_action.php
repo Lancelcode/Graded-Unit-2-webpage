@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!empty($errors)) {
         $_SESSION['login_error'] = implode("<br>", $errors);
-        header("Location: ../login.php");
+        header("Location: " . BASE_URL . "/pages/auth/login.php");
         exit();
     }
 }
