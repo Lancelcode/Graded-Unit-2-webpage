@@ -2,10 +2,8 @@
 require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
 
-$logged_in_user     = $_SESSION['user_id']  ?? null;
-$logged_in_username = $_SESSION['username'] ?? '';
-$logged_in_email    = $_SESSION['email']    ?? '';
-$b                  = BASE_URL;
+$logged_in_user = $_SESSION['user_id'] ?? null;
+$b              = BASE_URL;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_tip'])) {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
@@ -52,22 +50,11 @@ $results = mysqli_stmt_get_result($stmt);
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Community Board | GreenScore</title>
     <style>
-        html, body { height: 100%; margin: 0; padding: 0; }
-        body {
-            display: flex; flex-direction: column;
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-        }
-        .page-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
-        .content-wrapper { flex: 1; padding: 4rem 1rem; }
-        .card-bg { background: rgba(255,255,255,0.95); border-radius: 1rem; }
-        footer { background-color: #fff; color: #444; padding: 2rem 0; margin-top: auto; }
-        .fade-out { animation: fadeOut 0.6s ease-out forwards; }
-        @keyframes fadeOut {
-            to { opacity:0; height:0; padding:0; margin:0; overflow:hidden; }
-        }
+        footer { background-color: #fff; color: #444; }
     </style>
 </head>
-<body>
+<body class="bg-page overlay-50"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
 <div class="page-wrapper">
     <div class="container content-wrapper">
         <h1 class="text-white text-center mb-4">📝 Sustainability Community Board</h1>
