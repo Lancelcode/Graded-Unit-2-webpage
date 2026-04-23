@@ -1,148 +1,306 @@
-/* === GreenScore Desktop Style === */
+/* ============================================================
+   GreenScore — Global Stylesheet
+   ============================================================ */
 
+/* ── Variables ─────────────────────────────────────────────── */
 :root {
-    --green-primary: #198754;
-    --green-light: #d4edda;
-    --green-dark: #14532d;
-    --gray-light: #f8f9fa;
-    --gray-dark: #343a40;
-    --text-dark: #212529;
-    --white: #ffffff;
+    --green-primary:  #198754;
+    --green-light:    #d4edda;
+    --green-dark:     #14532d;
+    --gray-light:     #f8f9fa;
+    --text-dark:      #212529;
+    --white:          #ffffff;
+    --card-bg:        rgba(255, 255, 255, 0.95);
+    --card-radius:    1rem;
+    --transition:     0.2s ease;
 }
 
-/* Base Layout */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: var(--gray-light);
-    color: var(--text-dark);
+/* ── Base ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
 }
 
-.dark-mode {
-    background-color: #121212;
-    color: var(--white);
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--gray-light);
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
 }
 
-/* Navbar */
+/* ── Background pages ───────────────────────────────────────── */
+/*
+ * Pages with a full-screen background image add class="bg-page"
+ * to <body> and set the image via style="background-image: url(...)"
+ * The PHP URL (BASE_URL) can't go in a static CSS file, so we split:
+ *   - visual properties (size, position, attachment) → here
+ *   - the actual image URL → inline style on <body>
+ */
+body.bg-page {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+}
+
+/* Dark overlay — two strengths used across the app */
+body.overlay-50::before,
+body.overlay-60::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+body.overlay-50::before { background: rgba(0, 0, 0, 0.5); }
+body.overlay-60::before { background: rgba(0, 0, 0, 0.6); }
+
+/* ── Page structure ─────────────────────────────────────────── */
+.page-wrapper {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    flex: 1;
+    padding: 4rem 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Navbar ─────────────────────────────────────────────────── */
+header {
+    position: relative;
+    z-index: 10;
+}
+
 .navbar {
     background-color: var(--green-primary);
 }
+
 .navbar .nav-link,
 .navbar .navbar-brand {
     color: var(--white) !important;
-}
-.navbar .nav-link:hover {
-    color: var(--gray-light) !important;
+    transition: opacity var(--transition);
 }
 
-/* Buttons */
+.navbar .nav-link:hover,
+.navbar .navbar-brand:hover {
+    opacity: 0.85;
+}
+
+/* ── Cards ──────────────────────────────────────────────────── */
+.card-bg {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.card {
+    border-radius: var(--card-radius);
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
 .btn-success {
     background-color: var(--green-primary);
     border-color: var(--green-primary);
+    transition: background var(--transition), border-color var(--transition), transform var(--transition);
 }
+
 .btn-success:hover {
     background-color: var(--green-dark);
     border-color: var(--green-dark);
+    transform: translateY(-1px);
 }
 
 .btn-outline-success {
     color: var(--green-primary);
     border-color: var(--green-primary);
 }
+
 .btn-outline-success:hover {
     background-color: var(--green-primary);
     color: var(--white);
+    transform: translateY(-1px);
 }
 
-/* Cards & Containers */
-.card,
-.result-box,
-.certificate-box {
-    background-color: var(--white);
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
+/* ── Forms ──────────────────────────────────────────────────── */
+.form-control,
+.form-select {
+    border-radius: 0.5rem;
+    border: 1px solid #ced4da;
+    transition: border-color var(--transition), box-shadow var(--transition);
 }
 
-.dark-mode .card,
-.dark-mode .result-box,
-.dark-mode .certificate-box {
-    background-color: #1e1e1e;
-    border-color: #444;
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--green-primary);
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.2);
 }
 
-/* Footer */
+/* ── Auth pages (login, register, forgot) ───────────────────── */
+.auth-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.auth-card {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    padding: 2.5rem 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
 footer {
     background-color: var(--green-primary);
     color: var(--white);
-    padding: 1rem;
-    text-align: center;
+    padding: 3rem 0 2rem;
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
 }
 
-/* Forms */
-textarea,
-select,
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="date"],
-input[type="number"] {
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    padding: 8px;
-    width: 100%;
+footer a {
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: color var(--transition);
 }
 
-.dark-mode input,
-.dark-mode select,
-.dark-mode textarea {
-    background-color: #333;
+footer a:hover {
     color: var(--white);
-    border-color: #555;
+    text-decoration: underline;
 }
 
-/* Headings */
-h1, h2, h3, h4, h5 {
-    color: var(--green-dark);
+/* ── Progress bars ──────────────────────────────────────────── */
+.progress {
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #e9ecef;
 }
 
-.dark-mode h1,
-.dark-mode h2,
-.dark-mode h3,
-.dark-mode h4,
-.dark-mode h5 {
-    color: var(--green-light);
+.progress-bar {
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 20px;
 }
 
-/* Utility */
-.text-center {
+/* ── Certificate ────────────────────────────────────────────── */
+.certificate {
+    background: var(--white);
+    padding: 4rem 2rem;
+    max-width: 900px;
+    width: 100%;
+    border: 12px double #4CAF50;
+    border-radius: 20px;
     text-align: center;
-}
-.mt-4 {
-    margin-top: 2rem;
-}
-.mb-0 {
-    margin-bottom: 0;
-}
-.py-3 {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
 }
 
-/* Desktop-Specific Tweaks */
-@media (max-width: 992px) {
-    body {
-        overflow-x: hidden;
+.certificate h1 {
+    font-size: 3.5rem;
+    color: var(--green-dark);
+    font-weight: 700;
+}
+
+.certificate h2 {
+    font-size: 2.5rem;
+    color: var(--text-dark);
+}
+
+.award-badge {
+    font-size: 2rem;
+    background-color: #e8f5e9;
+    color: #388e3c;
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 700;
+}
+
+/* ── Animations ─────────────────────────────────────────────── */
+.fade-out {
+    animation: fadeOut 0.6s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        height: 0;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+}
+
+/* ── Tables ─────────────────────────────────────────────────── */
+.table {
+    border-radius: var(--card-radius);
+    overflow: hidden;
+}
+
+.table thead th {
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+/* ── Content boxes shared across admin/manage pages ─────────── */
+.content-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--card-radius);
+    padding: 2rem;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    margin-top: 4rem;
+}
+
+/* ── Headings ───────────────────────────────────────────────── */
+h2.admin-title,
+h3.admin-title {
+    color: #198754;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .content-wrapper { padding: 2rem 0.75rem; }
+
+    .auth-card { padding: 1.75rem 1.25rem; }
+
+    .certificate {
+        padding: 2rem 1rem;
+        border-width: 6px;
     }
 
-    /* Optional: warn user this app is desktop-only */
-    .desktop-warning {
-        display: block;
-        background-color: #ffc107;
-        color: #212529;
-        text-align: center;
-        padding: 1rem;
+    .certificate h1 { font-size: 2rem; }
+    .certificate h2 { font-size: 1.5rem; }
+
+    .btn-lg {
+        padding: 0.6rem 1.2rem;
+        font-size: 1rem;
     }
+}
+
+@media (max-width: 480px) {
+    .content-wrapper { padding: 1.5rem 0.5rem; }
+    h1.display-4 { font-size: 2rem; }
+    .certificate h1 { font-size: 1.6rem; }
+}
+
+/* ── Print (certificate page) ───────────────────────────────── */
+@media print {
+    header, footer, .btn, nav { display: none !important; }
+    body { background: var(--white) !important; }
+    body::before { display: none !important; }
+    .certificate { box-shadow: none; }
 }
