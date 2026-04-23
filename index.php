@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/init.php';
 require_once __DIR__ . '/includes/connect_db.php';
 include __DIR__ . '/includes/nav.php';
+$b = BASE_URL;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +12,7 @@ include __DIR__ . '/includes/nav.php';
     <style>
         html, body { height: 100%; }
         body {
-            background: url('/assets/images/earth-bg.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/earth-bg.jpg') center/cover no-repeat fixed;
             position: relative;
             color: #fff;
             font-size: 1.1rem;
@@ -19,7 +20,8 @@ include __DIR__ . '/includes/nav.php';
         body::before {
             content: '';
             position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.6); z-index: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 0;
         }
         .page-wrapper {
             position: relative; z-index: 1;
@@ -49,16 +51,18 @@ include __DIR__ . '/includes/nav.php';
         <p class="text-white fs-5 mb-4">Track, reduce, and showcase your sustainability progress.</p>
 
         <?php if (!isset($_SESSION['user_id'])): ?>
-            <a href="/pages/auth/register.php" class="btn btn-success btn-lg px-4">
+            <a href="<?= $b ?>/pages/auth/register.php" class="btn btn-success btn-lg px-4">
                 🌱 Join the Movement
             </a>
-            <a href="/pages/auth/login.php" class="btn btn-outline-light btn-lg px-4">
+            <a href="<?= $b ?>/pages/auth/login.php" class="btn btn-outline-light btn-lg px-4">
                 🔐 Member Login
             </a>
         <?php endif; ?>
 
         <div class="text-center mt-3">
-            <a href="/pages/info/about.php" class="btn btn-light btn-sm px-4">🌍 Our Mission</a>
+            <a href="<?= $b ?>/pages/info/about.php" class="btn btn-light btn-sm px-4">
+                🌍 Our Mission
+            </a>
         </div>
 
         <div class="mt-4 p-4 bg-light bg-opacity-75 rounded text-dark shadow fs-6">
@@ -128,26 +132,26 @@ include __DIR__ . '/includes/nav.php';
             <div class="carousel-inner">
                 <?php
                 $badges = [
-                    ['slug' => 'green_starter',            'label' => '🌱 Green Starter'],
-                    ['slug' => 'eco_explorer',             'label' => '🌿 Eco Explorer'],
-                    ['slug' => 'climate_cadet',            'label' => '🎖 Climate Cadet'],
-                    ['slug' => 'forest_friend',            'label' => '🌳 Forest Friend'],
-                    ['slug' => 'carbon_cutter',            'label' => '✂️ Carbon Cutter'],
-                    ['slug' => 'renewable_rookie',         'label' => '⚡ Renewable Rookie'],
-                    ['slug' => 'sustainability_scout',     'label' => '🧭 Sustainability Scout'],
-                    ['slug' => 'leaf_leader',              'label' => '🍃 Leaf Leader'],
-                    ['slug' => 'green_visionary',          'label' => '👁 Green Visionary'],
-                    ['slug' => 'eco_hero',                 'label' => '🦸 Eco Hero'],
-                    ['slug' => 'planet_paladin',           'label' => '🪐 Planet Paladin'],
-                    ['slug' => 'guardian_of_earth',        'label' => '🛡 Guardian of Earth'],
-                    ['slug' => 'green_warrior',            'label' => '🌟 Green Warrior'],
+                    ['slug' => 'green_starter',             'label' => '🌱 Green Starter'],
+                    ['slug' => 'eco_explorer',              'label' => '🌿 Eco Explorer'],
+                    ['slug' => 'climate_cadet',             'label' => '🎖 Climate Cadet'],
+                    ['slug' => 'forest_friend',             'label' => '🌳 Forest Friend'],
+                    ['slug' => 'carbon_cutter',             'label' => '✂️ Carbon Cutter'],
+                    ['slug' => 'renewable_rookie',          'label' => '⚡ Renewable Rookie'],
+                    ['slug' => 'sustainability_scout',      'label' => '🧭 Sustainability Scout'],
+                    ['slug' => 'leaf_leader',               'label' => '🍃 Leaf Leader'],
+                    ['slug' => 'green_visionary',           'label' => '👁 Green Visionary'],
+                    ['slug' => 'eco_hero',                  'label' => '🦸 Eco Hero'],
+                    ['slug' => 'planet_paladin',            'label' => '🪐 Planet Paladin'],
+                    ['slug' => 'guardian_of_earth',         'label' => '🛡 Guardian of Earth'],
+                    ['slug' => 'green_warrior',             'label' => '🌟 Green Warrior'],
                     ['slug' => 'champion_of_sustainability','label' => '🏆 Champion of Sustainability'],
                 ];
                 $first = true;
                 foreach ($badges as $badge):
                 ?>
                     <div class="carousel-item <?= $first ? 'active' : '' ?>">
-                        <img src="/assets/images/illustrations/<?= $badge['slug'] ?>.jpg"
+                        <img src="<?= $b ?>/assets/images/illustrations/<?= $badge['slug'] ?>.jpg"
                              class="d-block rounded shadow"
                              alt="<?= htmlspecialchars($badge['label']) ?>">
                         <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
