@@ -75,30 +75,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Edit User | GreenScore</title>
-    <style>
-        html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
-        body {
-            flex: 1;
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative;
-        }
-        body::before {
-            content: ''; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.6); z-index: -1;
-        }
-        .content-wrapper {
-            background: rgba(255,255,255,0.95); border-radius: 1rem;
-            padding: 2rem; box-shadow: 0 0 12px rgba(0,0,0,0.2); margin-top: 4rem;
-        }
-        h2 { color: #198754; }
-    </style>
 </head>
-<body>
+<body class="bg-page overlay-60"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
 <?php include ROOT_PATH . '/includes/nav.php'; ?>
 
-<div class="container mt-5">
-    <div class="content-wrapper">
-        <h2>Edit User</h2>
+<div class="container">
+    <div class="content-box">
+        <h2 class="admin-title">Edit User</h2>
 
         <?php if ($error): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
@@ -152,7 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="d-flex justify-content-between">
-                <a href="<?= $b ?>/pages/admin/manage_users.php" class="btn btn-secondary">Back</a>
+                <a href="<?= $b ?>/pages/admin/manage_users.php"
+                   class="btn btn-secondary">Back</a>
                 <button type="submit" class="btn btn-success">Update User</button>
             </div>
         </form>

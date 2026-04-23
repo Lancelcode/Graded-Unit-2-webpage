@@ -42,34 +42,15 @@ $result = mysqli_query($link,
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Community Feedback | GreenScore</title>
-    <style>
-        html, body { height: 100%; margin: 0; }
-        body {
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative; color: #fff; display: flex; flex-direction: column;
-        }
-        body::before {
-            content: ''; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.6); z-index: -1;
-        }
-        .content-wrapper { flex-grow: 1; padding: 4rem 1rem; }
-        .card-bg {
-            background: rgba(255,255,255,0.95); color: #333;
-            padding: 2rem; border-radius: 1rem;
-            box-shadow: 0 0 12px rgba(0,0,0,0.2);
-        }
-        .fade-out { animation: fadeOut 0.6s ease-out forwards; }
-        @keyframes fadeOut {
-            to { opacity:0; height:0; padding:0; margin:0; overflow:hidden; }
-        }
-    </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="bg-page overlay-60 d-flex flex-column min-vh-100"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg'); color: #fff;">
+
 <div class="container content-wrapper flex-grow-1">
     <h2 class="text-white text-center mb-5">💬 Community Feedback</h2>
     <div id="feedback-list">
         <?php while ($row = mysqli_fetch_assoc($result)): ?>
-            <div class="card card-bg mb-4" id="feedback-<?= (int) $row['id'] ?>">
+            <div class="card-bg p-3 mb-4" id="feedback-<?= (int) $row['id'] ?>">
                 <p class="mb-1">
                     <strong><?= htmlspecialchars($row['name']) ?></strong>
                     (<?= htmlspecialchars($row['email']) ?>)

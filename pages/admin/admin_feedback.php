@@ -4,6 +4,7 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 include ROOT_PATH . '/includes/nav.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    http_response_code(403);
     echo "<div class='container mt-5'>
             <div class='alert alert-danger'>Access denied. Admins only.</div>
           </div>";
@@ -19,20 +20,10 @@ $result = mysqli_query($link, "SELECT * FROM feedback ORDER BY created_at DESC")
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Admin Feedback Panel | GreenScore</title>
-    <style>
-        body {
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative; min-height: 100vh; margin: 0;
-        }
-        body::before {
-            content: ''; position: absolute; inset: 0;
-            background: rgba(0,0,0,0.5); z-index: 0;
-        }
-        .content-wrapper { position: relative; z-index: 1; padding: 4rem 1rem; }
-        .card-bg { background: rgba(255,255,255,0.95); border-radius: 1rem; }
-    </style>
 </head>
-<body>
+<body class="bg-page overlay-50"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg'); min-height: 100vh;">
+
 <div class="container content-wrapper">
     <div class="card card-bg shadow-sm mb-4 p-4">
         <h2 class="mb-4 text-success text-center">🛠 Admin Feedback Panel</h2>
