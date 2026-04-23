@@ -1,10 +1,10 @@
 <?php
-require_once 'includes/init.php';
-require_once 'includes/connect_db.php';
-include 'includes/nav.php';
+require_once __DIR__ . '/../../includes/init.php';
+require_once ROOT_PATH . '/includes/connect_db.php';
+include ROOT_PATH . '/includes/nav.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header('Location: /pages/auth/login.php');
     exit();
 }
 
@@ -13,23 +13,23 @@ $user_name  = $_SESSION['username'];
 $user_email = $_SESSION['email'];
 
 $success = false;
-$error = '';
+$error   = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
+        die('Invalid CSRF token.');
+    }
     try {
         $message = trim($_POST['message']);
-
         if (empty($message)) {
             throw new Exception("⚠️ Please enter your feedback before submitting.");
         }
-
         $stmt = mysqli_prepare($link,
             "INSERT INTO feedback (user_id, name, email, message) VALUES (?, ?, ?, ?)"
         );
         mysqli_stmt_bind_param($stmt, 'isss', $user_id, $user_name, $user_email, $message);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
-
         $success = true;
     } catch (Exception $e) {
         $error = $e->getMessage();
@@ -39,56 +39,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Feedback | GreenScore</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
+        html, body { height: 100%; margin: 0; padding: 0; }
         body {
-            display: flex;
-            flex-direction: column;
-            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            display: flex; flex-direction: column;
+            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
         }
-
         body::before {
             content: '';
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 0;
+            position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.5); z-index: 0;
         }
-
         .page-wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            position: relative;
-            z-index: 1;
+            display: flex; flex-direction: column;
+            min-height: 100vh; position: relative; z-index: 1;
         }
-
-        .content-wrapper {
-            flex: 1;
-            padding: 4rem 1rem;
-        }
-
-        .card-bg {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem;
-        }
-
-        footer {
-            background-color: #fff;
-            padding: 2rem 0;
-            margin-top: auto;
-        }
+        .content-wrapper { flex: 1; padding: 4rem 1rem; }
+        .card-bg { background: rgba(255, 255, 255, 0.95); border-radius: 1rem; }
+        footer { background-color: #fff; padding: 2rem 0; margin-top: auto; }
     </style>
 </head>
 <body>
@@ -98,22 +68,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if ($success): ?>
             <div class="alert alert-success shadow-sm">
-                ✅ Thank you! Your feedback has been submitted and would be promptly answered by one of our admins. Thank you for your patience.
+                ✅ Thank you! Your feedback has been submitted and will be answered by one of our admins.
             </div>
         <?php endif; ?>
-
         <?php if ($error): ?>
             <div class="alert alert-warning shadow-sm"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
         <form method="POST" class="card card-bg p-4 shadow-sm mb-5">
+            <input type="hidden" name="csrf_token"
+                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <div class="form-group mb-3">
                 <label>Your Name:</label>
-                <input type="text" class="form-control" value="<?= htmlspecialchars($user_name) ?>" disabled>
+                <input type="text" class="form-control"
+                       value="<?= htmlspecialchars($user_name) ?>" disabled>
             </div>
             <div class="form-group mb-3">
                 <label>Your Email:</label>
-                <input type="email" class="form-control" value="<?= htmlspecialchars($user_email) ?>" disabled>
+                <input type="email" class="form-control"
+                       value="<?= htmlspecialchars($user_email) ?>" disabled>
             </div>
             <div class="form-group mb-3">
                 <label>Your Feedback:</label>
@@ -125,13 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h4 class="text-white mb-4">🗃 Public Feedback</h4>
 
         <?php
-        $sql = "
-          SELECT name, email, created_at, message,
-                 admin_response, admin_username, admin_response_at
-          FROM feedback
-          WHERE visible_to_public = 1
-          ORDER BY created_at DESC
-        ";
+        $sql = "SELECT name, email, created_at, message,
+                       admin_response, admin_username, admin_response_at
+                FROM feedback
+                WHERE visible_to_public = 1
+                ORDER BY created_at DESC";
         $res = mysqli_query($link, $sql);
 
         if (mysqli_num_rows($res) > 0):
@@ -163,14 +134,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         else: ?>
             <div class="alert alert-info card-bg">No public feedback yet.</div>
         <?php endif;
-
         mysqli_close($link);
         ?>
     </div>
 
-    <?php include 'includes/footer.php'; ?>
+    <?php include ROOT_PATH . '/includes/footer.php'; ?>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
