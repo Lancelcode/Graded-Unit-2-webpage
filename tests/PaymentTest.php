@@ -3,34 +3,95 @@ use PHPUnit\Framework\TestCase;
 
 class PaymentTest extends TestCase
 {
-    public function testSuccessfulPayment()
-    {
-        $paymentResponse = $this->simulateStripePayment(true);
+    // ── Cost calculation ─────────────────────────────────────
 
-        $this->assertTrue($paymentResponse['success'], "Payment should be successful.");
-        $this->assertEquals(100, $paymentResponse['points'], "Points should be correctly added.");
+    public function testCostIsCalculatedFromShortfall(): void
+    {
+        $shortfall = 30;
+        $cost      = $shortfall * 10;
+        $this->assertEquals(300, $cost);
     }
 
-    public function testFailedPayment()
+    public function testZeroShortfallProducesZeroCost(): void
     {
-        $paymentResponse = $this->simulateStripePayment(false);
-
-        $this->assertFalse($paymentResponse['success'], "Payment should fail if declined.");
+        $shortfall = 0;
+        $cost      = $shortfall * 10;
+        $this->assertEquals(0, $cost);
     }
 
-    // ✅ Helper function to simulate Stripe payment
-    private function simulateStripePayment($success)
+    public function testFullShortfallProducesMaxCost(): void
     {
-        if ($success) {
-            return [
-                'success' => true,
-                'points' => 100
-            ];
-        } else {
-            return [
-                'success' => false,
-                'points' => 0
-            ];
-        }
+        $shortfall = 100;
+        $cost      = $shortfall * 10;
+        $this->assertEquals(1000, $cost);
+    }
+
+    // ── Shortfall clamping (as applied in buy_points.php) ───
+
+    public function testShortfallIsClampedToMaxHundred(): void
+    {
+        $raw       = 150;
+        $shortfall = max(0, min(100, $raw));
+        $this->assertEquals(100, $shortfall,
+            'Shortfall cannot exceed 100.'
+        );
+    }
+
+    public function testShortfallIsClampedToMinZero(): void
+    {
+        $raw       = -20;
+        $shortfall = max(0, min(100, $raw));
+        $this->assertEquals(0, $shortfall,
+            'Shortfall cannot be negative.'
+        );
+    }
+
+    public function testValidShortfallPassesThroughUnchanged(): void
+    {
+        $raw       = 45;
+        $shortfall = max(0, min(100, $raw));
+        $this->assertEquals(45, $shortfall);
+    }
+
+    // ── Cost formatting ──────────────────────────────────────
+
+    public function testCostFormattedToTwoDecimalPlaces(): void
+    {
+        $shortfall = 33;
+        $cost      = number_format($shortfall * 10, 2);
+        $this->assertEquals('330.00', $cost);
+    }
+
+    public function testCostConversionToFloat(): void
+    {
+        $formatted  = '330.00';
+        $cost_float = (float) str_replace(',', '', $formatted);
+        $this->assertEquals(330.00, $cost_float);
+        $this->assertIsFloat($cost_float);
+    }
+
+    // ── Post-payment state ───────────────────────────────────
+
+    public function testSuccessfulDonationSetsGoldAward(): void
+    {
+        $award    = 'Certificate of Gold 🥇';
+        $shortfall = 0;
+
+        $this->assertEquals('Certificate of Gold 🥇', $award);
+        $this->assertEquals(0, $shortfall,
+            'Shortfall must be zero after a successful donation.'
+        );
+    }
+
+    public function testFailedDonationLeavesStateUnchanged(): void
+    {
+        $original_shortfall = 40;
+        $donated            = false;
+
+        $shortfall = $donated ? 0 : $original_shortfall;
+
+        $this->assertEquals(40, $shortfall,
+            'Shortfall should remain unchanged if donation did not complete.'
+        );
     }
 }

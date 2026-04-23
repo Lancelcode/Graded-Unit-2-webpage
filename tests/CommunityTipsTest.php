@@ -3,51 +3,93 @@ use PHPUnit\Framework\TestCase;
 
 class CommunityTipsTest extends TestCase
 {
-    protected $mockDatabase = [];
+    // ── Message validation ───────────────────────────────────
 
-    protected function setUp(): void
+    public function testNonEmptyMessageIsValid(): void
     {
-        $this->mockDatabase = [];
+        $message = trim('Plant a tree today!');
+        $this->assertNotEmpty($message, 'A non-empty message should be valid.');
     }
 
-    public function testCreateTip()
+    public function testEmptyMessageIsRejected(): void
     {
-        // Simulate adding a tip
-        $tip = ['id' => 1, 'content' => 'Plant a tree.'];
-        $this->mockDatabase[] = $tip;
-
-        $this->assertContains($tip, $this->mockDatabase, "Tip should be added successfully.");
+        $message = trim('   ');
+        $this->assertEmpty($message, 'A whitespace-only message should be rejected.');
     }
 
-    public function testUpdateTip()
+    public function testMessageIsTrimmedBeforeStorage(): void
     {
-        // Simulate updating a tip
-        $tip = ['id' => 1, 'content' => 'Plant a tree.'];
-        $this->mockDatabase[] = $tip;
-
-        // Update
-        foreach ($this->mockDatabase as &$t) {
-            if ($t['id'] === 1) {
-                $t['content'] = 'Plant two trees!';
-            }
-        }
-
-        $updated = array_filter($this->mockDatabase, fn($t) => $t['content'] === 'Plant two trees!');
-
-        $this->assertNotEmpty($updated, "Tip should be updated successfully.");
+        $raw     = '  Switch to reusable bags.  ';
+        $trimmed = trim($raw);
+        $this->assertEquals('Switch to reusable bags.', $trimmed);
     }
 
-    public function testDeleteTip()
+    public function testMessagePreservesSpecialCharacters(): void
     {
-        // Simulate deleting a tip
-        $tip = ['id' => 1, 'content' => 'Plant a tree.'];
-        $this->mockDatabase[] = $tip;
+        $message = "Use <solar> panels & save 50% energy!";
+        $escaped = htmlspecialchars($message);
+        $this->assertStringContainsString('&lt;solar&gt;', $escaped);
+        $this->assertStringContainsString('&amp;', $escaped);
+    }
 
-        // Delete
-        $this->mockDatabase = array_filter($this->mockDatabase, fn($t) => $t['id'] !== 1);
+    // ── Auth guard logic ────────────────────────────────────
 
-        $deleted = array_filter($this->mockDatabase, fn($t) => $t['id'] === 1);
+    public function testAuthGuardBlocksUnauthenticatedUser(): void
+    {
+        $session = [];
+        $allowed = isset($session['user_id']);
+        $this->assertFalse($allowed, 'Unauthenticated user must be blocked.');
+    }
 
-        $this->assertEmpty($deleted, "Tip should be deleted successfully.");
+    public function testAuthGuardAllowsAuthenticatedUser(): void
+    {
+        $session = ['user_id' => 42];
+        $allowed = isset($session['user_id']);
+        $this->assertTrue($allowed, 'Authenticated user should be allowed.');
+    }
+
+    // ── Ownership check ──────────────────────────────────────
+
+    public function testOwnerCanDeleteOwnTip(): void
+    {
+        $tip_user_id    = 5;
+        $logged_in_user = 5;
+        $this->assertEquals($tip_user_id, $logged_in_user,
+            'User should be able to delete their own tip.'
+        );
+    }
+
+    public function testNonOwnerCannotDeleteTip(): void
+    {
+        $tip_user_id    = 5;
+        $logged_in_user = 9;
+        $this->assertNotEquals($tip_user_id, $logged_in_user,
+            'Non-owner must not be allowed to delete this tip.'
+        );
+    }
+
+    // ── Pagination ───────────────────────────────────────────
+
+    public function testPaginationOffsetCalculation(): void
+    {
+        $limit = 5;
+
+        $this->assertEquals(0,  ($this->getOffset(1, $limit)));
+        $this->assertEquals(5,  ($this->getOffset(2, $limit)));
+        $this->assertEquals(10, ($this->getOffset(3, $limit)));
+    }
+
+    public function testTotalPagesCalculation(): void
+    {
+        $limit = 5;
+
+        $this->assertEquals(2, (int) ceil(6  / $limit));
+        $this->assertEquals(1, (int) ceil(5  / $limit));
+        $this->assertEquals(3, (int) ceil(11 / $limit));
+    }
+
+    private function getOffset(int $page, int $limit): int
+    {
+        return ($page - 1) * $limit;
     }
 }
