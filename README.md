@@ -1,84 +1,164 @@
-# 🌱 Green Score – Sustainability Tracking Web App
+# 🌱 GreenScore — Sustainability Tracking Web App
 
-**Green Score** is a web-based application developed to help users track and improve their environmental impact through a points-based reward system. By logging eco-friendly actions, users earn points, achieve badge levels, and unlock downloadable certificates. The platform also allows users to purchase additional Green Points and engage with a community board to share sustainability ideas.
+GreenScore is a full-stack web application that enables organisations to measure, track, and improve their environmental impact through a structured scoring and certification system. Users complete a sustainability assessment across ten key categories, earn badge levels based on their cumulative performance, and receive downloadable certificates reflecting their achievement level. The platform additionally supports community engagement, user feedback, and an administrative management panel.
 
-This project was developed as part of the Graded Unit 2 Software Development assessment at Edinburgh College.
+Developed as part of the **Graded Unit 2 Software Development** assessment at **Edinburgh College**.
 
 ---
 
 ## 🌍 Key Features
 
-- 🔐 Secure user registration and login with session tracking
-- 🧮 Green Calculator for scoring sustainable actions (RED/AMBER/GREEN)
-- 🏅 Badge awarding system and XP-style progress tracker (My Impact)
-- 📄 Certificate generation and download based on achievements
-- 💳 Buy Points page with Stripe-based payment simulation
-- 📝 Community Tips feature (Create, Read, Update, Delete)
-- 📬 Feedback system with admin responses and visibility control
-- 🌙 Dark mode toggle and consistent UI with responsive layout
-- 🧪 Automated testing using PHPUnit
+| Feature | Description |
+|---|---|
+| 🔐 Authentication | User registration, login, logout and password reset with role-based session management |
+| 🧮 Green Calculator | Sustainability assessment across 10 categories rated RED / AMBER / GREEN, producing a score out of 100 |
+| 🏅 Badge System | 14 progressive badge levels unlocked by cumulative green answers across all submissions |
+| 📄 Certificates | Auto-generated award certificates — Gold, Silver, Bronze, or Participation — with print and PDF export |
+| 💳 Buy Points | Contribution page allowing users to close their score gap and upgrade their certificate level |
+| 📝 Community Board | Paginated tip-sharing board with full create, read, update and delete functionality per user |
+| 📬 Feedback System | User feedback submission with admin response panel and public visibility control |
+| 👥 Admin Dashboard | User management (roles, statuses, deletion), feedback moderation, and public submission review |
+| 📊 My Impact | Personal dashboard showing submission history, total green answers, donations, and current badge level |
 
 ---
 
-## 🧩 Technologies Used
+## 🧩 Technologies
 
-- **PHP 8.2.12**
-- **MySQL/MariaDB**
-- **HTML, CSS, JavaScript**
-- **PHPUnit 11.5.18**
-- **Font Awesome**
-- **Bootstrap 5.3**
-- **Animate.css**
-- **Stripe API** (mocked for simulation)
-- **XAMPP / phpMyAdmin**
-- **PHPStorm IDE**
+| Layer | Technology |
+|---|---|
+| Backend | PHP 8.2 |
+| Database | MySQL / MariaDB (via XAMPP) |
+| Frontend | HTML5, CSS3, JavaScript |
+| UI Framework | Bootstrap 5.3 |
+| Icons | Font Awesome 6.4 |
+| Animations | Animate.css |
+| Testing | PHPUnit 11.5 |
+| Development Environment | XAMPP, phpMyAdmin, PHPStorm |
 
 ---
 
-## ⚙️ Installation Instructions
+## 📁 Project Structure
 
-1. **Clone or Download the Repository**
-   ```bash
-   git clone https://github.com/Lancelcode/Graded-Unit-2-webpage.git
+/
+├── index.php                        ← Home page
+├── style.css                        ← Global stylesheet
+│
+├── includes/                        ← Shared PHP components
+│   ├── init.php                     ← Session bootstrap and ROOT_PATH constant
+│   ├── connect_db.php               ← Database connection
+│   ├── nav.php                      ← Navigation bar
+│   ├── footer.php                   ← Footer
+│   ├── head.php                     ← Common <head> meta and stylesheet links
+│   ├── login_tools.php              ← Authentication helpers
+│   ├── login_action.php             ← Login POST handler
+│   └── modals.php                   ← Reusable modal components
+│
+├── pages/
+│   ├── auth/                        ← login, logout, register, forgot_password
+│   ├── admin/                       ← admin_feedback, manage_users, edit_user, public_feedback
+│   ├── calculator/                  ← green_calculator, certificate_history, certificate_preview, buy_points
+│   ├── community/                   ← community, post_tip, edit_tip, delete_tip, clear_tips
+│   ├── user/                        ← user_account, my_impact, view_cards, manage_credit_card
+│   └── info/                        ← about, partner, privacy, terms, green_resources, feedback, copyright
+│
+├── assets/
+│   ├── images/                      ← Photos, badge illustrations, partner logos
+│   └── documents/                   ← Downloadable PDF guides
+│
+├── database/
+│   └── gradedunit.sql               ← Full database schema and seed data
+│
+└── tests/                           ← PHPUnit test suite
+├── LoginTest.php
+├── GreenCalculatorTest.php
+├── CommunityTipsTest.php
+├── PaymentTest.php
+└── fake_login_tools.php         ← Session simulation helper for protected route testing
+/
+---
 
-Set Up Your Environment
+## ⚙️ Installation
 
-Launch Apache and MySQL via XAMPP
+### 1. Clone the repository
 
-Copy the project folder into htdocs (or your web directory)
+```bash
+git clone https://github.com/Lancelcode/Graded-Unit-2-webpage.git
+```
 
-Database Setup
+### 2. Set up XAMPP
 
-Open phpMyAdmin
+- Start **Apache** and **MySQL** in the XAMPP control panel
+- Copy the project folder into your `htdocs` directory
 
-Create a database called greenscore
+### 3. Set up the database
 
-Import the SQL file: greenscore.sql
+- Open **phpMyAdmin** at `http://localhost/phpmyadmin`
+- Create a new database named `gradedunit`
+- Import `database/gradedunit.sql`
+- Update database credentials in `includes/connect_db.php` if needed
 
-Update DB credentials in includes/connect_db.php if needed
+### 4. Open the application
+http://localhost/Graded-Unit-2-webpage/
 
-Run Locally Open your browser and go to:
+---
 
-(http://localhost/Graded-Unit-2-webpage/index.php)
+## 🧪 Testing
 
-🧪 Testing Approach
-White-box testing was used to validate backend logic and session handling
+The project uses both automated and manual testing strategies.
 
-PHPUnit was used to test login, calculator scoring, CRUD operations, and payment simulation
+### Automated — PHPUnit
 
-A fake login tool was implemented to simulate session data for protected features
+**✅ 10 tests, 11 assertions — all passing**
 
-Manual testing was performed for all user flows, including form validation, navigation, and UI consistency
+| Test Class | Coverage |
+|---|---|
+| `LoginTest` | Valid login flow, CSRF token rejection |
+| `GreenCalculatorTest` | All-green scoring, mixed selections, all-red scoring |
+| `CommunityTipsTest` | Create, update and delete tip operations |
+| `PaymentTest` | Successful payment simulation, declined payment handling |
 
-✅ 10 automated tests passed with 11 assertions
-📸 Evidence included in /tests/ and screenshots
+A `fake_login_tools.php` helper simulates authenticated session state for testing protected routes without a live database connection.
 
-🛡️ Security Measures
-Password hashing and input validation
+Run the full test suite from the project root:
 
-CSRF token protection for forms
+```bash
+php phpunit.phar --testdox
+```
 
-SQL injection prevention using prepared statements
+### Manual
 
-Session-based access control for restricted features
+All user-facing flows were tested end to end, including registration, login, calculator submission, certificate generation, community interaction, feedback submission, and the full admin panel. Form validation, navigation, and responsive layout were verified across multiple screen sizes.
 
+---
+
+## 🛡️ Security
+
+- **Password hashing** — all passwords stored using `password_hash()` with `PASSWORD_DEFAULT` (bcrypt)
+- **SQL injection prevention** — all database interactions use MySQLi prepared statements with bound parameters
+- **CSRF protection** — tokens generated per session and validated on every state-changing form submission
+- **Role-based access control** — admin routes return HTTP 403 if accessed without the correct session role
+- **Output sanitisation** — all user-supplied data escaped with `htmlspecialchars()` before rendering
+- **Authentication enforcement** — protected pages redirect to login if no valid session is present
+
+---
+
+## 🗄️ Database Schema
+
+The application uses six tables:
+
+| Table | Purpose |
+|---|---|
+| `new_users` | User accounts, roles, statuses and company details |
+| `green_calculator_results` | Assessment submissions, scores, award levels and donation records |
+| `community_tips` | User-submitted sustainability tips |
+| `feedback` | User feedback messages and admin responses |
+| `credit_cards` | Saved payment card details per user |
+| `success_stories` | Reserved for future community success story submissions |
+
+---
+
+## 👤 Author
+
+**Djiby Sow Rebollo** ([@Lancelcode](https://github.com/Lancelcode))  
+Edinburgh College — Software Development  
+Graded Unit 2 — Academic Year 2024/2025
