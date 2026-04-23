@@ -35,6 +35,12 @@ $b = BASE_URL;
             </div>
         <?php endif; ?>
 
+        <?php if (isset($_SESSION['register_success'])): ?>
+            <div class="alert alert-success">
+                ✅ <?= htmlspecialchars($_SESSION['register_success']); unset($_SESSION['register_success']); ?>
+            </div>
+        <?php endif; ?>
+
         <form action="<?= $b ?>/includes/login_action.php" method="post">
             <input type="hidden" name="csrf_token"
                    value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
