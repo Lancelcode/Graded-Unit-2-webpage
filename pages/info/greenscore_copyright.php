@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../includes/init.php';
+$b = BASE_URL;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,19 +10,16 @@ require_once __DIR__ . '/../../includes/init.php';
     <style>
         html, body { height: 100%; margin: 0; }
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative; color: #333;
         }
         body::before {
-            content: '';
-            position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1; pointer-events: none;
+            content: ''; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: -1; pointer-events: none;
         }
         .content-wrapper {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem; padding: 3rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: rgba(255,255,255,0.95); border-radius: 1rem; padding: 3rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
         footer { background-color: #fff; z-index: 2; }
         a.text-success:hover { text-decoration: underline; }
@@ -35,13 +33,17 @@ require_once __DIR__ . '/../../includes/init.php';
         <div class="content-wrapper">
             <h1 class="mb-4">🌱 GreenScore Copyright</h1>
             <p>&copy; <?= date('Y') ?> <strong>GreenScore</strong>. All rights reserved.</p>
-            <p>All content on this website, including text, graphics, logos, icons, images, and software,
-            is the property of GreenScore unless otherwise stated. Unauthorised use, reproduction, or
-            distribution of any material without prior written permission is strictly prohibited.</p>
-            <p>We support sharing for educational and environmental purposes. You are welcome to reference
-            our material provided proper credit is given and a link to GreenScore is included.</p>
+            <p>All content on this website, including text, graphics, logos, icons, images,
+            and software, is the property of GreenScore unless otherwise stated. Unauthorised
+            use, reproduction, or distribution of any material without prior written permission
+            is strictly prohibited.</p>
+            <p>We support sharing for educational and environmental purposes. You are welcome
+            to reference our material provided proper credit is given and a link to GreenScore
+            is included.</p>
             <p>Questions? Contact us at:
-                <a href="mailto:contact@greenscore.com" class="text-success">contact@greenscore.com</a>
+                <a href="mailto:contact@greenscore.com" class="text-success">
+                    contact@greenscore.com
+                </a>
             </p>
         </div>
     </div>

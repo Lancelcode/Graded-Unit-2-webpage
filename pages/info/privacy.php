@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
 include ROOT_PATH . '/includes/nav.php';
+$b = BASE_URL;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,17 +12,13 @@ include ROOT_PATH . '/includes/nav.php';
     <style>
         html, body { margin: 0; height: 100%; }
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            color: #333;
-            position: relative;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            color: #333; position: relative;
         }
         body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
+            content: ''; position: fixed; top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.5);
-            z-index: 0;
+            background: rgba(0,0,0,0.5); z-index: 0;
         }
         .page-wrapper {
             position: relative; z-index: 1;
@@ -29,7 +26,8 @@ include ROOT_PATH . '/includes/nav.php';
         }
         .content-wrapper { flex: 1; padding: 4rem 0; }
         .card-bg { background: rgba(255,255,255,0.9); }
-        footer { background-color: #fff; padding: 2rem 0; width: 100%; z-index: 1; position: relative; }
+        footer { background-color: #fff; padding: 2rem 0; width: 100%;
+                 z-index: 1; position: relative; }
         h2.section-title { color: #2c7a7b; }
     </style>
 </head>
@@ -75,16 +73,15 @@ include ROOT_PATH . '/includes/nav.php';
         </div>
         <div class="card card-bg shadow-sm p-4 mb-4">
             <h2 class="section-title mb-3">5. Contact Us</h2>
-            <p>Questions? <a href="mailto:privacy@greenscore.com">contact us</a>.</p>
+            <p>Questions? <a href="mailto:privacy@greenscore.com">Contact us here</a>.</p>
         </div>
 
         <div class="text-center">
-            <a href="/pages/user/user_account.php" class="btn btn-outline-light">
+            <a href="<?= $b ?>/pages/user/user_account.php" class="btn btn-outline-light">
                 ⬅ Back to My Profile
             </a>
         </div>
     </div>
-
     <?php include ROOT_PATH . '/includes/footer.php'; ?>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

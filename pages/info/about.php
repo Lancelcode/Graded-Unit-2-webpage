@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
 include ROOT_PATH . '/includes/nav.php';
+$b = BASE_URL;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,33 +12,24 @@ include ROOT_PATH . '/includes/nav.php';
     <style>
         body {
             margin: 0;
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
         }
         body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 0;
+            content: ''; position: absolute; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 0;
         }
         .page-wrapper {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column; min-height: 100vh;
         }
         .content-wrapper { flex-grow: 1; padding: 4rem 1rem; }
         .card-bg {
-            background: rgba(255,255,255,0.9);
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.9); border-radius: 1rem;
+            padding: 2rem; box-shadow: 0 0 15px rgba(0,0,0,0.2);
         }
         .section-title { font-size: 1.75rem; font-weight: 600; color: #2e7d32; }
         .img-fluid { border-radius: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
-        .btn-success { border-radius: 2rem; padding: 0.75rem 2rem; font-size: 1.2rem; }
     </style>
 </head>
 <body>
@@ -53,8 +45,9 @@ include ROOT_PATH . '/includes/nav.php';
                 <div class="card card-bg">
                     <div class="row align-items-center">
                         <div class="col-md-6">
-                            <img src="/assets/images/earth-hands.jpg"
-                                 alt="Sustainable Responsibility" class="img-fluid mb-3 mb-md-0">
+                            <img src="<?= $b ?>/assets/images/earth-hands.jpg"
+                                 alt="Sustainable Responsibility"
+                                 class="img-fluid mb-3 mb-md-0">
                         </div>
                         <div class="col-md-6">
                             <h3 class="section-title">🌍 Purpose-Built for Corporate Sustainability</h3>
@@ -69,8 +62,9 @@ include ROOT_PATH . '/includes/nav.php';
                 <div class="card card-bg">
                     <div class="row align-items-center">
                         <div class="col-md-6 order-md-2">
-                            <img src="/assets/images/team-green.jpg"
-                                 alt="Collaborative Sustainability" class="img-fluid mb-3 mb-md-0">
+                            <img src="<?= $b ?>/assets/images/team-green.jpg"
+                                 alt="Collaborative Sustainability"
+                                 class="img-fluid mb-3 mb-md-0">
                         </div>
                         <div class="col-md-6 order-md-1">
                             <h3 class="section-title">📈 Track, Learn, Grow</h3>
@@ -85,14 +79,17 @@ include ROOT_PATH . '/includes/nav.php';
                 <div class="card card-bg">
                     <div class="row align-items-center">
                         <div class="col-md-6">
-                            <img src="/assets/images/sdg.jpg"
-                                 alt="Sustainable Development Goals" class="img-fluid mb-3 mb-md-0">
+                            <img src="<?= $b ?>/assets/images/sdg.jpg"
+                                 alt="Sustainable Development Goals"
+                                 class="img-fluid mb-3 mb-md-0">
                         </div>
                         <div class="col-md-6">
                             <h3 class="section-title">📚 Backed by Global Goals</h3>
                             <p>GreenScore is inspired by the
-                                <a href="https://sdgs.un.org/goals" target="_blank">UN Sustainable Development Goals</a>
-                                and the core pillars of sustainability as outlined by <strong>UNESCO</strong>.
+                                <a href="https://sdgs.un.org/goals" target="_blank">
+                                    UN Sustainable Development Goals
+                                </a> and the core pillars of sustainability as outlined by
+                                <strong>UNESCO</strong>.
                             </p>
                             <ul>
                                 <li><strong>🌿 Environmental Sustainability</strong></li>
@@ -110,9 +107,8 @@ include ROOT_PATH . '/includes/nav.php';
                     <h2 class="text-success mb-3">🚀 Start Your Green Transformation</h2>
                     <p>Whether you're a college campus, a non-profit, or a forward-thinking enterprise,
                     GreenScore provides a practical and engaging way to take environmental action. 🌿</p>
-                    <a href="/pages/calculator/green_calculator.php" class="btn btn-success mt-3">
-                        Begin Assessment
-                    </a>
+                    <a href="<?= $b ?>/pages/calculator/green_calculator.php"
+                       class="btn btn-success mt-3">Begin Assessment</a>
                 </div>
             </div>
         </div>

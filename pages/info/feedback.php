@@ -4,16 +4,16 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 include ROOT_PATH . '/includes/nav.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /pages/auth/login.php');
+    header('Location: ' . BASE_URL . '/pages/auth/login.php');
     exit();
 }
 
+$b          = BASE_URL;
 $user_id    = $_SESSION['user_id'];
 $user_name  = $_SESSION['username'];
 $user_email = $_SESSION['email'];
-
-$success = false;
-$error   = '';
+$success    = false;
+$error      = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
@@ -45,19 +45,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         html, body { height: 100%; margin: 0; padding: 0; }
         body {
             display: flex; flex-direction: column;
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
         }
         body::before {
-            content: '';
-            position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.5); z-index: 0;
+            content: ''; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 0;
         }
         .page-wrapper {
             display: flex; flex-direction: column;
             min-height: 100vh; position: relative; z-index: 1;
         }
         .content-wrapper { flex: 1; padding: 4rem 1rem; }
-        .card-bg { background: rgba(255, 255, 255, 0.95); border-radius: 1rem; }
+        .card-bg { background: rgba(255,255,255,0.95); border-radius: 1rem; }
         footer { background-color: #fff; padding: 2rem 0; margin-top: auto; }
     </style>
 </head>
@@ -68,7 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if ($success): ?>
             <div class="alert alert-success shadow-sm">
-                ✅ Thank you! Your feedback has been submitted and will be answered by one of our admins.
+                ✅ Thank you! Your feedback has been submitted and will be answered by
+                one of our admins.
             </div>
         <?php endif; ?>
         <?php if ($error): ?>
