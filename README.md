@@ -74,7 +74,7 @@ Developed as part of the **Graded Unit 2 Software Development** assessment at **
 ├── CommunityTipsTest.php
 ├── PaymentTest.php
 └── fake_login_tools.php         ← Session simulation helper for protected route testing
-
+/
 ---
 
 ## ⚙️ Installation
