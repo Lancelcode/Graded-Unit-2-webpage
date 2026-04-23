@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/../../includes/init.php';
-require_once ROOT_PATH . '/includes/connect_db.php';
 include ROOT_PATH . '/includes/nav.php';
 $b = BASE_URL;
 ?>
@@ -8,115 +7,67 @@ $b = BASE_URL;
 <html lang="en">
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
-    <title>Why GreenScore?</title>
+    <title>Green Partnerships | GreenScore</title>
     <style>
-        body {
-            margin: 0;
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative;
-        }
-        body::before {
-            content: ''; position: absolute; inset: 0;
-            background: rgba(0,0,0,0.5); z-index: 0;
-        }
-        .page-wrapper {
-            position: relative; z-index: 1;
-            display: flex; flex-direction: column; min-height: 100vh;
-        }
-        .content-wrapper { flex-grow: 1; padding: 4rem 1rem; }
-        .card-bg {
-            background: rgba(255,255,255,0.9); border-radius: 1rem;
-            padding: 2rem; box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
-        .section-title { font-size: 1.75rem; font-weight: 600; color: #2e7d32; }
-        .img-fluid { border-radius: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+        .logo-grid img { max-height: 80px; object-fit: contain; }
+        footer { background-color: #fff; }
+        .list-group-item a { text-decoration: none; color: #28a745; font-weight: bold; }
+        .list-group-item a:hover { text-decoration: underline; }
     </style>
 </head>
-<body>
-<div class="page-wrapper">
-    <div class="container content-wrapper">
-        <div class="card card-bg mb-5 text-center">
-            <h1 class="text-success mb-3">💼 Why GreenScore?</h1>
-            <p class="lead">Empowering organisations to measure, track, and improve sustainability efforts.</p>
-        </div>
+<body class="bg-page overlay-50"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg'); color: #333;">
+<div class="container content-wrapper text-center">
+    <h1 class="text-white display-4 mb-4">🌍 GreenScore Partnerships</h1>
+    <p class="text-white fs-5 mb-5">
+        We collaborate with some of the most trusted eco-leaders and institutions around the world.
+    </p>
 
-        <div class="row gy-5">
-            <div class="col-lg-12">
-                <div class="card card-bg">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <img src="<?= $b ?>/assets/images/earth-hands.jpg"
-                                 alt="Sustainable Responsibility"
-                                 class="img-fluid mb-3 mb-md-0">
-                        </div>
-                        <div class="col-md-6">
-                            <h3 class="section-title">🌍 Purpose-Built for Corporate Sustainability</h3>
-                            <p>GreenScore is designed to support educational institutions, businesses,
-                            and public organisations in meeting their environmental responsibilities.</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-4
+                justify-content-center logo-grid mb-5">
+        <?php
+        $logos = ['un','greenpeace','defra','wwf','ukgov','oxfam','edincol'];
+        foreach ($logos as $logo): ?>
+            <div class="col">
+                <img src="<?= $b ?>/assets/images/logos/<?= $logo ?>.png"
+                     class="img-fluid p-2 bg-white shadow-sm rounded"
+                     alt="<?= strtoupper($logo) ?>">
             </div>
-
-            <div class="col-lg-12">
-                <div class="card card-bg">
-                    <div class="row align-items-center">
-                        <div class="col-md-6 order-md-2">
-                            <img src="<?= $b ?>/assets/images/team-green.jpg"
-                                 alt="Collaborative Sustainability"
-                                 class="img-fluid mb-3 mb-md-0">
-                        </div>
-                        <div class="col-md-6 order-md-1">
-                            <h3 class="section-title">📈 Track, Learn, Grow</h3>
-                            <p>With GreenScore, your organisation can quantify environmental efforts,
-                            set benchmarks, and receive recognition through a point-based certification model.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-12">
-                <div class="card card-bg">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <img src="<?= $b ?>/assets/images/sdg.jpg"
-                                 alt="Sustainable Development Goals"
-                                 class="img-fluid mb-3 mb-md-0">
-                        </div>
-                        <div class="col-md-6">
-                            <h3 class="section-title">📚 Backed by Global Goals</h3>
-                            <p>GreenScore is inspired by the
-                                <a href="https://sdgs.un.org/goals" target="_blank">
-                                    UN Sustainable Development Goals
-                                </a> and the core pillars of sustainability as outlined by
-                                <strong>UNESCO</strong>.
-                            </p>
-                            <ul>
-                                <li><strong>🌿 Environmental Sustainability</strong></li>
-                                <li><strong>💼 Economic Sustainability</strong></li>
-                                <li><strong>🤝 Social Sustainability</strong></li>
-                                <li><strong>🎭 Cultural Sustainability</strong></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 text-center">
-                <div class="card card-bg">
-                    <h2 class="text-success mb-3">🚀 Start Your Green Transformation</h2>
-                    <p>Whether you're a college campus, a non-profit, or a forward-thinking enterprise,
-                    GreenScore provides a practical and engaging way to take environmental action. 🌿</p>
-                    <a href="<?= $b ?>/pages/calculator/green_calculator.php"
-                       class="btn btn-success mt-3">Begin Assessment</a>
-                </div>
-            </div>
-        </div>
+        <?php endforeach; ?>
     </div>
 
-    <?php include ROOT_PATH . '/includes/footer.php'; ?>
+    <div class="card card-bg shadow-sm p-4">
+        <h2 class="mb-3 text-success">Why Partner With GreenScore?</h2>
+        <p class="lead mb-3">
+            We are building a cleaner future, together. Every logo above represents a verified
+            sustainability effort and a shared mission to reduce carbon emissions globally.
+        </p>
+        <div class="mt-4 text-start">
+            <h3 class="text-success mb-3">Our Supporters:</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">🌍
+                    <a href="https://www.un.org/" target="_blank">United Nations (UN)</a></li>
+                <li class="list-group-item">🌿
+                    <a href="https://www.greenpeace.org/" target="_blank">Greenpeace</a></li>
+                <li class="list-group-item">🌳
+                    <a href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs"
+                       target="_blank">DEFRA</a></li>
+                <li class="list-group-item">🐼
+                    <a href="https://www.worldwildlife.org/" target="_blank">WWF</a></li>
+                <li class="list-group-item">🇬🇧
+                    <a href="https://www.gov.uk/government/topical-events/the-uks-green-industrial-revolution"
+                       target="_blank">UK Government Initiatives</a></li>
+                <li class="list-group-item">🤝
+                    <a href="https://www.oxfam.org/" target="_blank">Oxfam</a></li>
+                <li class="list-group-item">🎓
+                    <a href="https://www.edinburghcollege.ac.uk/" target="_blank">
+                        Edinburgh College Sustainability Hub</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
+
+<?php include ROOT_PATH . '/includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-<?php mysqli_close($link); ?>

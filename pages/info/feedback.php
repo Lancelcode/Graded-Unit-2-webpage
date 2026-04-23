@@ -42,25 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Feedback | GreenScore</title>
     <style>
-        html, body { height: 100%; margin: 0; padding: 0; }
-        body {
-            display: flex; flex-direction: column;
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-        }
-        body::before {
-            content: ''; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.5); z-index: 0;
-        }
-        .page-wrapper {
-            display: flex; flex-direction: column;
-            min-height: 100vh; position: relative; z-index: 1;
-        }
-        .content-wrapper { flex: 1; padding: 4rem 1rem; }
-        .card-bg { background: rgba(255,255,255,0.95); border-radius: 1rem; }
-        footer { background-color: #fff; padding: 2rem 0; margin-top: auto; }
+        footer { background-color: #fff; margin-top: auto; }
     </style>
 </head>
-<body>
+<body class="bg-page overlay-50"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
 <div class="page-wrapper">
     <div class="container content-wrapper">
         <h2 class="text-white text-center mb-4">💬 We Value Your Feedback</h2>

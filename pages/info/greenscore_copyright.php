@@ -8,29 +8,17 @@ $b = BASE_URL;
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Copyright | GreenScore</title>
     <style>
-        html, body { height: 100%; margin: 0; }
-        body {
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative; color: #333;
-        }
-        body::before {
-            content: ''; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.6); z-index: -1; pointer-events: none;
-        }
-        .content-wrapper {
-            background: rgba(255,255,255,0.95); border-radius: 1rem; padding: 3rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
         footer { background-color: #fff; z-index: 2; }
         a.text-success:hover { text-decoration: underline; }
     </style>
 </head>
-<body>
+<body class="bg-page overlay-60"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg'); color: #333;">
 <?php include ROOT_PATH . '/includes/nav.php'; ?>
 
 <main class="d-flex flex-column min-vh-100">
     <div class="container py-5 flex-grow-1">
-        <div class="content-wrapper">
+        <div class="card-bg p-4">
             <h1 class="mb-4">🌱 GreenScore Copyright</h1>
             <p>&copy; <?= date('Y') ?> <strong>GreenScore</strong>. All rights reserved.</p>
             <p>All content on this website, including text, graphics, logos, icons, images,

@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/../../includes/init.php';
-require_once ROOT_PATH . '/includes/connect_db.php';
 include ROOT_PATH . '/includes/nav.php';
 $b = BASE_URL;
 ?>
@@ -10,28 +9,12 @@ $b = BASE_URL;
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Privacy Policy | GreenScore</title>
     <style>
-        html, body { margin: 0; height: 100%; }
-        body {
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            color: #333; position: relative;
-        }
-        body::before {
-            content: ''; position: fixed; top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.5); z-index: 0;
-        }
-        .page-wrapper {
-            position: relative; z-index: 1;
-            display: flex; flex-direction: column; min-height: 100vh;
-        }
-        .content-wrapper { flex: 1; padding: 4rem 0; }
-        .card-bg { background: rgba(255,255,255,0.9); }
-        footer { background-color: #fff; padding: 2rem 0; width: 100%;
-                 z-index: 1; position: relative; }
         h2.section-title { color: #2c7a7b; }
+        footer { background-color: #fff; }
     </style>
 </head>
-<body>
+<body class="bg-page overlay-50"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg'); color: #333;">
 <div class="page-wrapper">
     <div class="container content-wrapper">
         <h1 class="text-white text-center mb-4">Privacy Policy</h1>
@@ -87,4 +70,3 @@ $b = BASE_URL;
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-<?php mysqli_close($link); ?>
