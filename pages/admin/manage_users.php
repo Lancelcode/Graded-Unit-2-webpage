@@ -1,12 +1,17 @@
 <?php
-require_once 'includes/init.php';
-require_once 'includes/connect_db.php';
+require_once __DIR__ . '/../../includes/init.php';
+require_once ROOT_PATH . '/includes/connect_db.php';
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    http_response_code(403);
+    die("<div class='container mt-5'><div class='alert alert-danger'>Access denied. Admins only.</div></div>");
+}
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-$error = '';
+$error   = '';
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete') {
@@ -29,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
     }
-    $uid = (int)($_POST['user_id'] ?? 0);
+    $uid     = (int)($_POST['user_id'] ?? 0);
     $newRole = ($_POST['role'] === 'admin') ? 'admin' : 'user';
     if ($uid !== (int)$_SESSION['user_id']) {
         $stmt = mysqli_prepare($link, 'UPDATE new_users SET role = ? WHERE id = ?');
@@ -46,18 +51,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
     }
-    $uid = (int)($_POST['user_id'] ?? 0);
-    $allowed = ['active', 'inactive', 'deactivated'];
+    $uid       = (int)($_POST['user_id'] ?? 0);
+    $allowed   = ['active', 'inactive', 'deactivated'];
     $newStatus = in_array($_POST['status'], $allowed) ? $_POST['status'] : 'active';
-    $stmt = mysqli_prepare($link, 'UPDATE new_users SET status = ? WHERE id = ?');
+    $stmt      = mysqli_prepare($link, 'UPDATE new_users SET status = ? WHERE id = ?');
     mysqli_stmt_bind_param($stmt, 'si', $newStatus, $uid);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     $success = 'Status updated.';
 }
 
-$sql = 'SELECT id, username, email, created_at, role, status FROM new_users ORDER BY username';
-$result = mysqli_query($link, $sql);
+$result = mysqli_query($link, 'SELECT id, username, email, created_at, role, status FROM new_users ORDER BY username');
 if (!$result) {
     die('Query error: ' . mysqli_error($link));
 }
@@ -65,22 +69,13 @@ if (!$result) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Manage Users | GreenScore</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-        }
+        html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
         body {
             flex: 1;
-            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
         }
         body::before {
@@ -106,7 +101,7 @@ if (!$result) {
     </style>
 </head>
 <body>
-<?php include 'includes/nav.php'; ?>
+<?php include ROOT_PATH . '/includes/nav.php'; ?>
 
 <div class="container content-wrapper mt-5 p-4 bg-white rounded shadow">
     <h2 class="mb-4">👥 Manage Users</h2>
@@ -119,7 +114,7 @@ if (!$result) {
 
     <?php
     function renderEditButton($id) {
-        return '<a href="edit_user.php?id=' . $id . '" class="btn btn-sm btn-outline-secondary">✏️ Edit Details</a>';
+        return '<a href="/pages/admin/edit_user.php?id=' . $id . '" class="btn btn-sm btn-outline-secondary">✏️ Edit Details</a>';
     }
 
     function renderRoleStatusForms($row) {
@@ -129,7 +124,7 @@ if (!$result) {
             <input type="hidden" name="action" value="update_role">
             <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
             <select name="role" class="form-select form-select-sm d-inline-block w-auto">
-                <option value="user" <?= $row['role'] === 'user' ? 'selected' : '' ?>>User</option>
+                <option value="user"  <?= $row['role'] === 'user'  ? 'selected' : '' ?>>User</option>
                 <option value="admin" <?= $row['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
             </select>
             <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
@@ -139,8 +134,8 @@ if (!$result) {
             <input type="hidden" name="action" value="update_status">
             <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
             <select name="status" class="form-select form-select-sm d-inline-block w-auto">
-                <option value="active" <?= $row['status'] === 'active' ? 'selected' : '' ?>>Active</option>
-                <option value="inactive" <?= $row['status'] === 'inactive' ? 'selected' : '' ?>>Inactive</option>
+                <option value="active"      <?= $row['status'] === 'active'      ? 'selected' : '' ?>>Active</option>
+                <option value="inactive"    <?= $row['status'] === 'inactive'    ? 'selected' : '' ?>>Inactive</option>
                 <option value="deactivated" <?= $row['status'] === 'deactivated' ? 'selected' : '' ?>>Deactivated</option>
             </select>
             <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
@@ -234,7 +229,7 @@ if (!$result) {
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include ROOT_PATH . '/includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function deleteUser(form, id) {

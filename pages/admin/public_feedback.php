@@ -1,17 +1,14 @@
 <?php
-require_once 'includes/init.php';
-require_once 'includes/connect_db.php';
+require_once __DIR__ . '/../../includes/init.php';
+require_once ROOT_PATH . '/includes/connect_db.php';
 
-// FIX: no auth check existed — anyone could hit this page
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     http_response_code(403);
     echo "<div class='container mt-5'><div class='alert alert-danger'>Access denied. Admins only.</div></div>";
-    include 'includes/footer.php';
+    include ROOT_PATH . '/includes/footer.php';
     exit();
 }
 
-// FIX: delete logic was at the bottom of the file after all HTML output
-// Moved here so headers/redirects work correctly
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback'])) {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
@@ -23,36 +20,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback'])) {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
     }
-    // AJAX call — just exit, JS handles the animation
     if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
         exit();
     }
-    header('Location: public_feedback.php');
+    header('Location: /pages/admin/public_feedback.php');
     exit();
 }
 
-include 'includes/nav.php';
+include ROOT_PATH . '/includes/nav.php';
 
-$sql    = "SELECT id, name, email, message, created_at,
-                  admin_response, admin_username, admin_response_at
-           FROM feedback
-           WHERE visible_to_public = 1
-           ORDER BY created_at DESC";
-$result = mysqli_query($link, $sql);
+$result = mysqli_query($link,
+    "SELECT id, name, email, message, created_at,
+            admin_response, admin_username, admin_response_at
+     FROM feedback
+     WHERE visible_to_public = 1
+     ORDER BY created_at DESC"
+);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Community Feedback | GreenScore</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; }
         body {
-            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
             color: #fff;
             display: flex;
@@ -92,14 +85,16 @@ $result = mysqli_query($link, $sql);
                 <small class="text-muted">
                     Asked <?= date('F j, Y, g:i a', strtotime($row['created_at'])) ?>
                 </small>
-                <p class="mt-2 message-text"><?= nl2br(htmlspecialchars($row['message'])) ?></p>
+                <p class="mt-2"><?= nl2br(htmlspecialchars($row['message'])) ?></p>
 
                 <div class="d-flex justify-content-end gap-2 mb-2">
-                    <!-- FIX: CSRF token added to delete form -->
-                    <form method="POST" onsubmit="return deleteFeedback(this, <?= (int) $row['id'] ?>);" class="d-inline">
+                    <form method="POST"
+                          onsubmit="return deleteFeedback(this, <?= (int) $row['id'] ?>);"
+                          class="d-inline">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                         <input type="hidden" name="delete_id" value="<?= (int) $row['id'] ?>">
-                        <button type="submit" name="delete_feedback" class="btn btn-sm btn-outline-danger">🗑 Delete</button>
+                        <button type="submit" name="delete_feedback"
+                                class="btn btn-sm btn-outline-danger">🗑 Delete</button>
                     </form>
                 </div>
 
@@ -120,7 +115,7 @@ $result = mysqli_query($link, $sql);
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include ROOT_PATH . '/includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function deleteFeedback(form, id) {
