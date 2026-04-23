@@ -2,15 +2,27 @@
 require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && isset($_SESSION['user_id'])) {
-    $message = trim($_POST['message']);
-    $user_id = $_SESSION['user_id']; // Fixed session key
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // FIX: CSRF token was never verified
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
+        die('Invalid CSRF token.');
+    }
+
+    $message = trim($_POST['message'] ?? '');
+    $user_id = (int) $_SESSION['user_id'];
 
     if (!empty($message)) {
         $stmt = $link->prepare("INSERT INTO community_tips (user_id, message) VALUES (?, ?)");
-        $stmt->bind_param("is", $user_id, $message);
-        $stmt->execute();
-        $stmt->close();
+        if ($stmt) {
+            $stmt->bind_param("is", $user_id, $message);
+            $stmt->execute();
+            $stmt->close();
+        }
     }
 }
 
