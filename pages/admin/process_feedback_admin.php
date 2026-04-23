@@ -11,11 +11,14 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ' . BASE_URL . '/pages/admin/admin_feedback.php');
+    exit();
+}
+
 if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
     die('Invalid CSRF token.');
 }
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = mysqli_prepare($link,
         "UPDATE feedback
          SET visible_to_public = ?,
