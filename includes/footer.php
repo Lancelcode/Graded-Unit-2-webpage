@@ -7,8 +7,8 @@
                 <p class="small mb-1">Building a Greener Future, Together.</p>
                 <small class="d-block">
                     &copy; <?= date('Y'); ?>
-                    <a href="greenscore_copyright.php" class="text-decoration-none">GreenScore</a>.
-                    All rights reserved.(this is a clickable link to a copyright page)
+                    <a href="greenscore_copyright.php" class="text-white-50 text-decoration-none">GreenScore</a>.
+                    All rights reserved.
                 </small>
             </div>
 
