@@ -21,22 +21,11 @@ $r = mysqli_stmt_get_result($stmt);
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>View Credit Cards | GreenScore</title>
     <style>
-        html, body { height: 100%; margin: 0; }
-        body {
-            display: flex; flex-direction: column;
-            background: url('<?= $b ?>/assets/images/forest-money.jpg') center/cover no-repeat fixed;
-            position: relative; color: #333;
-        }
-        body::before {
-            content: ''; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.5); z-index: 0; pointer-events: none;
-        }
-        .content-wrapper { flex: 1; position: relative; z-index: 1; padding: 4rem 0; }
-        .card-bg { background: rgba(255,255,255,0.85); }
-        footer { position: relative; z-index: 1; background-color: #fff; padding: 2rem 0; }
+        footer { background-color: #fff; }
     </style>
 </head>
-<body>
+<body class="bg-page overlay-50"
+      style="background-image: url('<?= $b ?>/assets/images/forest-money.jpg'); color: #333;">
 <?php include ROOT_PATH . '/includes/nav.php'; ?>
 
 <div class="container content-wrapper">

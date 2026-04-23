@@ -42,22 +42,11 @@ $phone    = htmlspecialchars($row['phone_number']   ?? '—');
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>My Profile | GreenScore</title>
     <style>
-        html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
-        body {
-            min-height: 100vh;
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative;
-        }
-        body::before {
-            content: ''; position: absolute; inset: 0;
-            background: rgba(0,0,0,0.5); z-index: 0;
-        }
-        .content-wrapper { flex: 1; position: relative; z-index: 1; padding: 4rem 0; }
-        .card-bg { background: rgba(255,255,255,0.85); }
-        footer { position: relative; z-index: 1; color: #444; padding: 2rem 0; }
+        footer { color: #444; }
     </style>
 </head>
-<body>
+<body class="bg-page overlay-50"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
 <?php include ROOT_PATH . '/includes/nav.php'; ?>
 
 <div class="container content-wrapper">
@@ -97,7 +86,7 @@ $phone    = htmlspecialchars($row['phone_number']   ?? '—');
                        class="btn btn-success mb-3">🌱 Visit Community</a>
                     <?php
                     $btnClass = 'btn-info';
-                    if ($status === 'inactive')    $btnClass = 'btn-warning';
+                    if ($status === 'inactive')        $btnClass = 'btn-warning';
                     elseif ($status === 'deactivated') $btnClass = 'btn-dark';
                     ?>
                     <button class="btn <?= $btnClass ?> mt-auto" disabled>

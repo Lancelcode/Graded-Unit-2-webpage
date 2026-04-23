@@ -93,30 +93,16 @@ $badgeText = match ($badgeSlug) {
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>My Impact Report | GreenScore</title>
     <style>
-        html, body { height: 100%; margin: 0; }
-        body {
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative; color: #fff; display: flex; flex-direction: column;
-        }
-        body::before {
-            content: ''; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.6); z-index: -1;
-        }
-        .content-wrapper { flex-grow: 1; padding: 4rem 1rem; }
-        .card-bg {
-            background: rgba(255,255,255,0.95); color: #333;
-            padding: 2rem; border-radius: 1rem;
-            box-shadow: 0 0 12px rgba(0,0,0,0.2);
-        }
-        .progress { height: 20px; }
         footer { position: relative; z-index: 1; }
     </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="bg-page overlay-60 d-flex flex-column min-vh-100"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg'); color: #fff;">
+
 <div class="container content-wrapper flex-grow-1">
     <h1 class="text-white text-center mb-5">📊 My Sustainability Impact</h1>
 
-    <div class="card card-bg shadow mb-5">
+    <div class="card-bg p-4 shadow mb-5">
         <h3 class="mb-3 text-success">🧾 Report Summary</h3>
         <p><strong>Total Submissions:</strong> <?= $total ?></p>
         <p><strong>Green Answers Earned:</strong> <?= $green ?> / 100</p>
@@ -151,14 +137,14 @@ $badgeText = match ($badgeSlug) {
         </a>
     </div>
 
-    <div class="card card-bg shadow mt-5 mb-5">
-        <div class="card-body text-center px-4">
+    <div class="card-bg p-4 shadow mt-5 mb-5">
+        <div class="text-center px-4">
             <h3 class="text-success mb-3">🏆 Your Current Title</h3>
             <h5 class="text-muted mb-0">Level <?= $badgeLevel ?></h5>
             <h1 class="display-5 fw-bold mb-3"><?= $badge ?></h1>
             <?php
-            $badgeImage     = ROOT_PATH . "/assets/images/illustrations/{$badgeSlug}.jpg";
-            $badgeImageUrl  = $b . "/assets/images/illustrations/{$badgeSlug}.jpg";
+            $badgeImage    = ROOT_PATH . "/assets/images/illustrations/{$badgeSlug}.jpg";
+            $badgeImageUrl = $b . "/assets/images/illustrations/{$badgeSlug}.jpg";
             if (file_exists($badgeImage)) {
                 echo "<div class='d-flex justify-content-center'>
                     <img src='{$badgeImageUrl}'
