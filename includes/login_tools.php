@@ -4,40 +4,42 @@ function validate($link, $email = '', $pwd = '') {
 
     if (empty($email)) {
         $errors[] = 'Enter your email address.';
-    } else {
-        $e = mysqli_real_escape_string($link, trim($email));
     }
-
     if (empty($pwd)) {
         $errors[] = 'Enter your password.';
-    } else {
-        $p = trim($pwd);
     }
 
-    if (empty($errors)) {
-        $q = "SELECT id, username, email, password, role FROM new_users WHERE email='$e'";
-        $r = mysqli_query($link, $q);
+    if (!empty($errors)) {
+        return [false, $errors];
+    }
 
-        if (mysqli_num_rows($r) === 1) {
-            $row = mysqli_fetch_array($r, MYSQLI_ASSOC);
+    // FIX: prepared statement — $email never touches the query string
+    $stmt = mysqli_prepare($link, "SELECT id, username, email, password, role FROM new_users WHERE email = ?");
+    mysqli_stmt_bind_param($stmt, 's', $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
-            // ✅ Verify using password_verify
-            if (password_verify($p, $row['password'])) {
-                return [true, $row];
-            } else {
-                $errors[] = 'Incorrect password.';
-            }
-        } else {
-            $errors[] = 'Email address and password not found.';
+    if (mysqli_num_rows($result) === 1) {
+        $row = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        if (password_verify($pwd, $row['password'])) {
+            return [true, $row];
         }
+
+        $errors[] = 'Incorrect password.';
+    } else {
+        mysqli_stmt_close($stmt);
+        $errors[] = 'Email address and password not found.';
     }
 
     return [false, $errors];
 }
 
 function load($page = 'login.php') {
-    $url = 'http://localhost/Graded-Unit-2-webpage/' . ltrim($page, '/');
-    header("Location: $url");
+    // FIX: was hardcoded to http://localhost/Graded-Unit-2-webpage/
+    // Root-relative path works on any server
+    $page = ltrim($page, '/');
+    header('Location: /' . $page);
     exit();
 }
-?>
