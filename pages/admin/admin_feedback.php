@@ -11,6 +11,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
+$b      = BASE_URL;
 $result = mysqli_query($link, "SELECT * FROM feedback ORDER BY created_at DESC");
 ?>
 <!DOCTYPE html>
@@ -20,27 +21,15 @@ $result = mysqli_query($link, "SELECT * FROM feedback ORDER BY created_at DESC")
     <title>Admin Feedback Panel | GreenScore</title>
     <style>
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative;
-            min-height: 100vh;
-            margin: 0;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            position: relative; min-height: 100vh; margin: 0;
         }
         body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 0;
+            content: ''; position: absolute; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 0;
         }
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-            padding: 4rem 1rem;
-        }
-        .card-bg {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem;
-        }
+        .content-wrapper { position: relative; z-index: 1; padding: 4rem 1rem; }
+        .card-bg { background: rgba(255,255,255,0.95); border-radius: 1rem; }
     </style>
 </head>
 <body>
@@ -53,8 +42,9 @@ $result = mysqli_query($link, "SELECT * FROM feedback ORDER BY created_at DESC")
         <?php endif; ?>
 
         <?php if (mysqli_num_rows($result) > 0): ?>
-            <form action="/pages/admin/process_feedback_admin.php" method="POST">
-                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+            <form action="<?= $b ?>/pages/admin/process_feedback_admin.php" method="POST">
+                <input type="hidden" name="csrf_token"
+                       value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
                 <?php while ($row = mysqli_fetch_assoc($result)): ?>
                     <div class="card card-bg mb-4 shadow-sm p-3">

@@ -4,7 +4,9 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     http_response_code(403);
-    echo "<div class='container mt-5'><div class='alert alert-danger'>Access denied. Admins only.</div></div>";
+    echo "<div class='container mt-5'>
+            <div class='alert alert-danger'>Access denied. Admins only.</div>
+          </div>";
     include ROOT_PATH . '/includes/footer.php';
     exit();
 }
@@ -20,15 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback'])) {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
     }
-    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-        exit();
-    }
-    header('Location: /pages/admin/public_feedback.php');
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) exit();
+    header('Location: ' . BASE_URL . '/pages/admin/public_feedback.php');
     exit();
 }
 
 include ROOT_PATH . '/includes/nav.php';
-
+$b      = BASE_URL;
 $result = mysqli_query($link,
     "SELECT id, name, email, message, created_at,
             admin_response, admin_username, admin_response_at
@@ -45,30 +45,22 @@ $result = mysqli_query($link,
     <style>
         html, body { height: 100%; margin: 0; }
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            position: relative; color: #fff; display: flex; flex-direction: column;
         }
         body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1;
+            content: ''; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: -1;
         }
         .content-wrapper { flex-grow: 1; padding: 4rem 1rem; }
         .card-bg {
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+            background: rgba(255,255,255,0.95); color: #333;
+            padding: 2rem; border-radius: 1rem;
+            box-shadow: 0 0 12px rgba(0,0,0,0.2);
         }
         .fade-out { animation: fadeOut 0.6s ease-out forwards; }
         @keyframes fadeOut {
-            to { opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
+            to { opacity:0; height:0; padding:0; margin:0; overflow:hidden; }
         }
     </style>
 </head>
@@ -91,7 +83,8 @@ $result = mysqli_query($link,
                     <form method="POST"
                           onsubmit="return deleteFeedback(this, <?= (int) $row['id'] ?>);"
                           class="d-inline">
-                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                        <input type="hidden" name="csrf_token"
+                               value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                         <input type="hidden" name="delete_id" value="<?= (int) $row['id'] ?>">
                         <button type="submit" name="delete_feedback"
                                 class="btn btn-sm btn-outline-danger">🗑 Delete</button>

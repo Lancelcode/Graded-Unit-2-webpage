@@ -6,12 +6,14 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     die('Access denied.');
 }
 
+$b       = BASE_URL;
 $user_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-if ($user_id <= 0) {
-    die('Invalid user ID.');
-}
+if ($user_id <= 0) die('Invalid user ID.');
 
-$stmt = mysqli_prepare($link, "SELECT username, email, role, status, company_name, contact_person, phone_number FROM new_users WHERE id = ?");
+$stmt = mysqli_prepare($link,
+    "SELECT username, email, role, status, company_name, contact_person, phone_number
+     FROM new_users WHERE id = ?"
+);
 mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
 mysqli_stmt_bind_result($stmt, $username, $email, $role, $status, $company, $contact, $phone);
@@ -43,16 +45,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_status   = in_array($_POST['status'], $allowed) ? $_POST['status'] : 'active';
 
     if ($new_username && $new_email) {
-        $stmt = mysqli_prepare($link, "UPDATE new_users SET username = ?, email = ?, role = ?, status = ?, company_name = ?, contact_person = ?, phone_number = ? WHERE id = ?");
-        mysqli_stmt_bind_param($stmt, 'sssssssi', $new_username, $new_email, $new_role, $new_status, $new_company, $new_contact, $new_phone, $user_id);
+        $stmt = mysqli_prepare($link,
+            "UPDATE new_users
+             SET username = ?, email = ?, role = ?, status = ?,
+                 company_name = ?, contact_person = ?, phone_number = ?
+             WHERE id = ?"
+        );
+        mysqli_stmt_bind_param($stmt, 'sssssssi',
+            $new_username, $new_email, $new_role, $new_status,
+            $new_company, $new_contact, $new_phone, $user_id
+        );
         if (mysqli_stmt_execute($stmt)) {
             $success  = 'User updated successfully.';
-            $username = $new_username;
-            $email    = $new_email;
-            $role     = $new_role;
-            $status   = $new_status;
-            $company  = $new_company;
-            $contact  = $new_contact;
+            $username = $new_username; $email   = $new_email;
+            $role     = $new_role;    $status  = $new_status;
+            $company  = $new_company; $contact = $new_contact;
             $phone    = $new_phone;
         } else {
             $error = 'Failed to update user.';
@@ -72,22 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
         body {
             flex: 1;
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
         }
         body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1;
+            content: ''; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: -1;
         }
         .content-wrapper {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-            margin-top: 4rem;
+            background: rgba(255,255,255,0.95); border-radius: 1rem;
+            padding: 2rem; box-shadow: 0 0 12px rgba(0,0,0,0.2); margin-top: 4rem;
         }
         h2 { color: #198754; }
     </style>
@@ -106,7 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form method="post" class="mt-4">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+            <input type="hidden" name="csrf_token"
+                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
             <div class="mb-3">
                 <label for="username" class="form-label">Username:</label>
@@ -150,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="d-flex justify-content-between">
-                <a href="/pages/admin/manage_users.php" class="btn btn-secondary">Back</a>
+                <a href="<?= $b ?>/pages/admin/manage_users.php" class="btn btn-secondary">Back</a>
                 <button type="submit" class="btn btn-success">Update User</button>
             </div>
         </form>

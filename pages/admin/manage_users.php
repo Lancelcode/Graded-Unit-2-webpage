@@ -4,13 +4,16 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     http_response_code(403);
-    die("<div class='container mt-5'><div class='alert alert-danger'>Access denied. Admins only.</div></div>");
+    die("<div class='container mt-5'>
+           <div class='alert alert-danger'>Access denied. Admins only.</div>
+         </div>");
 }
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
+$b       = BASE_URL;
 $error   = '';
 $success = '';
 
@@ -61,7 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
     $success = 'Status updated.';
 }
 
-$result = mysqli_query($link, 'SELECT id, username, email, created_at, role, status FROM new_users ORDER BY username');
+$result = mysqli_query($link,
+    'SELECT id, username, email, created_at, role, status FROM new_users ORDER BY username'
+);
 if (!$result) {
     die('Query error: ' . mysqli_error($link));
 }
@@ -75,28 +80,21 @@ if (!$result) {
         html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
         body {
             flex: 1;
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
         }
         body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1;
+            content: ''; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: -1;
         }
-        main { flex: 1; }
         .content-wrapper {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-            margin-top: 4rem;
+            background: rgba(255,255,255,0.95); border-radius: 1rem;
+            padding: 2rem; box-shadow: 0 0 12px rgba(0,0,0,0.2); margin-top: 4rem;
         }
         h2, h3 { color: #198754; }
         .fade-out { animation: fadeOut 1s ease-out forwards; }
         @keyframes fadeOut {
-            to { opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
+            to { opacity:0; height:0; padding:0; margin:0; overflow:hidden; }
         }
     </style>
 </head>
@@ -113,14 +111,16 @@ if (!$result) {
     <?php endif; ?>
 
     <?php
-    function renderEditButton($id) {
-        return '<a href="/pages/admin/edit_user.php?id=' . $id . '" class="btn btn-sm btn-outline-secondary">✏️ Edit Details</a>';
+    function renderEditButton($id, $b) {
+        return '<a href="' . $b . '/pages/admin/edit_user.php?id=' . $id
+             . '" class="btn btn-sm btn-outline-secondary">✏️ Edit Details</a>';
     }
 
     function renderRoleStatusForms($row) {
         ob_start(); ?>
         <form method="post" class="d-inline-block me-2">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+            <input type="hidden" name="csrf_token"
+                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <input type="hidden" name="action" value="update_role">
             <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
             <select name="role" class="form-select form-select-sm d-inline-block w-auto">
@@ -130,7 +130,8 @@ if (!$result) {
             <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
         </form>
         <form method="post" class="d-inline-block">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+            <input type="hidden" name="csrf_token"
+                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <input type="hidden" name="action" value="update_status">
             <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
             <select name="status" class="form-select form-select-sm d-inline-block w-auto">
@@ -142,105 +143,65 @@ if (!$result) {
         </form>
         <?php return ob_get_clean();
     }
+
+    $sections = [
+        ['label' => '✅ Active Users',              'status' => 'active',      'head' => 'table-success', 'delete' => false],
+        ['label' => '🕓 Inactive Users',            'status' => 'inactive',    'head' => 'table-warning', 'delete' => false],
+        ['label' => '🗑️ Users Marked for Deletion', 'status' => 'deactivated', 'head' => 'table-danger',  'delete' => true ],
+    ];
+
+    foreach ($sections as $section):
+        mysqli_data_seek($result, 0);
     ?>
-
-    <h3 class="mt-4 text-success">✅ Active Users</h3>
+    <h3 class="mt-4"><?= $section['label'] ?></h3>
     <div class="table-responsive">
         <table class="table table-hover align-middle bg-white rounded shadow-sm">
-            <thead class="table-success">
+            <thead class="<?= $section['head'] ?>">
                 <tr>
                     <th>Username</th><th>Email</th><th>Registered</th>
-                    <th colspan="2">Role & Status</th><th>Actions</th>
+                    <th colspan="2">Role &amp; Status</th><th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-            <?php mysqli_data_seek($result, 0); while ($row = mysqli_fetch_assoc($result)): ?>
-                <?php if ($row['status'] === 'active'): ?>
-                    <tr id="user-row-<?= $row['id'] ?>">
-                        <td><?= htmlspecialchars($row['username']) ?></td>
-                        <td><?= htmlspecialchars($row['email']) ?></td>
-                        <td><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
-                        <td colspan="2"><?= renderRoleStatusForms($row) ?></td>
-                        <td><?= renderEditButton($row['id']) ?></td>
-                    </tr>
-                <?php endif; ?>
+            <?php while ($row = mysqli_fetch_assoc($result)):
+                if ($row['status'] !== $section['status']) continue; ?>
+                <tr id="user-row-<?= (int) $row['id'] ?>">
+                    <td><?= htmlspecialchars($row['username']) ?></td>
+                    <td><?= htmlspecialchars($row['email']) ?></td>
+                    <td><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
+                    <td colspan="2"><?= renderRoleStatusForms($row) ?></td>
+                    <td>
+                        <?= renderEditButton((int) $row['id'], $b) ?>
+                        <?php if ($section['delete']): ?>
+                        <form method="post" class="d-inline ms-2"
+                              onsubmit="return deleteUser(this, <?= (int) $row['id'] ?>);">
+                            <input type="hidden" name="csrf_token"
+                                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="user_id" value="<?= (int) $row['id'] ?>">
+                            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                        </form>
+                        <?php endif; ?>
+                    </td>
+                </tr>
             <?php endwhile; ?>
             </tbody>
         </table>
     </div>
-
-    <h3 class="mt-5 text-warning">🕓 Inactive Users</h3>
-    <div class="table-responsive">
-        <table class="table table-hover align-middle bg-white rounded shadow-sm">
-            <thead class="table-warning">
-                <tr>
-                    <th>Username</th><th>Email</th><th>Registered</th>
-                    <th colspan="2">Role & Status</th><th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php mysqli_data_seek($result, 0); while ($row = mysqli_fetch_assoc($result)): ?>
-                <?php if ($row['status'] === 'inactive'): ?>
-                    <tr id="user-row-<?= $row['id'] ?>">
-                        <td><?= htmlspecialchars($row['username']) ?></td>
-                        <td><?= htmlspecialchars($row['email']) ?></td>
-                        <td><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
-                        <td colspan="2"><?= renderRoleStatusForms($row) ?></td>
-                        <td><?= renderEditButton($row['id']) ?></td>
-                    </tr>
-                <?php endif; ?>
-            <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <h3 class="mt-5 text-danger">🗑️ Users Marked for Deletion</h3>
-    <div class="table-responsive">
-        <table class="table table-hover align-middle bg-white rounded shadow-sm">
-            <thead class="table-danger">
-                <tr>
-                    <th>Username</th><th>Email</th><th>Registered</th>
-                    <th colspan="2">Role & Status</th><th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            <?php mysqli_data_seek($result, 0); while ($row = mysqli_fetch_assoc($result)): ?>
-                <?php if ($row['status'] === 'deactivated'): ?>
-                    <tr id="user-row-<?= $row['id'] ?>">
-                        <td><?= htmlspecialchars($row['username']) ?></td>
-                        <td><?= htmlspecialchars($row['email']) ?></td>
-                        <td><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
-                        <td colspan="2"><?= renderRoleStatusForms($row) ?></td>
-                        <td>
-                            <?= renderEditButton($row['id']) ?>
-                            <form method="post" class="d-inline ms-2"
-                                  onsubmit="return deleteUser(this, <?= $row['id'] ?>);">
-                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
-                                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endif; ?>
-            <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
+    <?php endforeach; ?>
 </div>
 
 <?php include ROOT_PATH . '/includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function deleteUser(form, id) {
-    fetch(window.location.href, {
-        method: 'POST',
-        body: new FormData(form)
-    }).then(() => {
-        const row = document.getElementById('user-row-' + id);
-        row.classList.add('fade-out');
-        setTimeout(() => row.remove(), 1000);
-    });
+    if (!confirm('Permanently delete this user?')) return false;
+    fetch(window.location.href, { method: 'POST', body: new FormData(form) })
+        .then(() => {
+            const row = document.getElementById('user-row-' + id);
+            row.classList.add('fade-out');
+            setTimeout(() => row.remove(), 1000);
+        });
     return false;
 }
 </script>

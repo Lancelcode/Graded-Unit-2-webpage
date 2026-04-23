@@ -18,10 +18,10 @@ if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = mysqli_prepare($link,
         "UPDATE feedback
-         SET visible_to_public  = ?,
-             admin_response     = ?,
-             admin_username     = ?,
-             admin_response_at  = NOW()
+         SET visible_to_public = ?,
+             admin_response    = ?,
+             admin_username    = ?,
+             admin_response_at = NOW()
          WHERE id = ?"
     );
 
@@ -38,6 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     mysqli_stmt_close($stmt);
     mysqli_close($link);
 
-    header('Location: /pages/admin/admin_feedback.php?updated=1');
+    header('Location: ' . BASE_URL . '/pages/admin/admin_feedback.php?updated=1');
     exit();
 }
