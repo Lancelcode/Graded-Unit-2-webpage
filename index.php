@@ -10,42 +10,33 @@ $b = BASE_URL;
     <?php include __DIR__ . '/includes/head.php'; ?>
     <title>Welcome to GreenScore</title>
     <style>
-        html, body { height: 100%; }
-        body {
-            background: url('<?= $b ?>/assets/images/earth-bg.jpg') center/cover no-repeat fixed;
-            position: relative;
-            color: #fff;
-            font-size: 1.1rem;
-        }
-        body::before {
-            content: '';
-            position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 0;
-        }
-        .page-wrapper {
-            position: relative; z-index: 1;
-            display: flex; flex-direction: column; min-height: 100vh;
-        }
-        .content-wrapper { flex: 1; padding: 4rem 1rem; }
-        .card-bg { background: rgba(255, 255, 255, 0.95); border-radius: 1rem; }
+        /* Index-specific only */
+        body { font-size: 1.1rem; color: #fff; }
         .icon-circle {
-            background-color: #e6f4ea; border-radius: 50%;
-            padding: 15px; display: inline-block; margin-bottom: 1rem;
+            background-color: #e6f4ea;
+            border-radius: 50%;
+            padding: 15px;
+            display: inline-block;
+            margin-bottom: 1rem;
         }
         .carousel-item img {
-            max-height: 450px; width: auto; margin: 0 auto; display: block;
+            max-height: 450px;
+            width: auto;
+            margin: 0 auto;
+            display: block;
         }
         .carousel-caption h5 {
-            color: white; font-weight: bold;
+            color: white;
+            font-weight: bold;
             text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
         }
     </style>
 </head>
-<body>
+<body class="bg-page overlay-60"
+      style="background-image: url('<?= $b ?>/assets/images/earth-bg.jpg');">
 <div class="page-wrapper">
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <div class="container content-wrapper text-center">
         <h1 class="text-white display-4 mb-4">🌿 Welcome to GreenScore</h1>
         <p class="text-white fs-5 mb-4">Track, reduce, and showcase your sustainability progress.</p>
@@ -89,7 +80,7 @@ $b = BASE_URL;
         </div>
     </div>
 
-    <!-- Features Section -->
+    <!-- Features -->
     <div class="container content-wrapper">
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div class="col">
