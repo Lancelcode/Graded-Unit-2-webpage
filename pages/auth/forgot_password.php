@@ -1,9 +1,9 @@
 <?php
-require_once 'includes/init.php';
-require_once 'includes/connect_db.php';
+require_once __DIR__ . '/../../includes/init.php';
+require_once ROOT_PATH . '/includes/connect_db.php';
 
 if (isset($_SESSION['user_id'])) {
-    header('Location: green_calculator.php');
+    header('Location: /index.php');
     exit();
 }
 
@@ -11,7 +11,7 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-$errors = [];
+$errors  = [];
 $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,19 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die('Invalid CSRF token');
     }
 
-    $email  = trim($_POST['email'] ?? '');
-    $pass1  = $_POST['new_password'] ?? '';
-    $pass2  = $_POST['confirm_password'] ?? '';
+    $email = trim($_POST['email']            ?? '');
+    $pass1 = $_POST['new_password']          ?? '';
+    $pass2 = $_POST['confirm_password']      ?? '';
 
-    if (!preg_match('/^[^@]+@[^@]+$/', $email)) {
-        $errors[] = 'Email must be in the format name@name (no domain).';
-    }
-    if (strlen($pass1) < 1) {
-        $errors[] = 'Password must be at least 1 character.';
-    }
-    if ($pass1 !== $pass2) {
-        $errors[] = 'Passwords do not match.';
-    }
+    if (empty($email))          $errors[] = 'Email is required.';
+    if (strlen($pass1) < 1)     $errors[] = 'Password must not be empty.';
+    if ($pass1 !== $pass2)      $errors[] = 'Passwords do not match.';
 
     if (empty($errors)) {
         $stmt = mysqli_prepare($link, "SELECT id FROM new_users WHERE email = ?");
@@ -43,13 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($uid) {
             $hash = password_hash($pass1, PASSWORD_DEFAULT);
-            $u = mysqli_prepare($link, "UPDATE new_users SET `password` = ? WHERE id = ?");
+            $u    = mysqli_prepare($link, "UPDATE new_users SET password = ? WHERE id = ?");
             mysqli_stmt_bind_param($u, 'si', $hash, $uid);
             mysqli_stmt_execute($u);
             mysqli_stmt_close($u);
             $success = true;
         } else {
-            $errors[] = 'No account found with that email.';
+            $errors[] = 'No account found with that email address.';
         }
     }
 }
@@ -57,16 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Reset Password | GreenScore</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <style>
         body {
-            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
             position: relative;
             min-height: 100vh;
         }
@@ -87,12 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 1rem;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
-        h3 {
-            text-align: center;
-            color: #2e7d32;
-            font-weight: bold;
-            margin-bottom: 2rem;
-        }
+        h3 { text-align: center; color: #2e7d32; font-weight: bold; margin-bottom: 2rem; }
     </style>
 </head>
 <body>
@@ -101,28 +86,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php if ($success): ?>
         <div class="alert alert-success">
-            ✅ Your password has been updated. <a href="login.php">Log in now</a>.
+            ✅ Password updated. <a href="/pages/auth/login.php">Log in now</a>.
         </div>
     <?php else: ?>
         <?php if (!empty($errors)): ?>
             <div class="alert alert-danger">
                 <ul class="mb-0">
-                    <?php foreach ($errors as $e): ?>
-                        <li><?= htmlspecialchars($e) ?></li>
+                    <?php foreach ($errors as $err): ?>
+                        <li><?= htmlspecialchars($err) ?></li>
                     <?php endforeach; ?>
                 </ul>
             </div>
         <?php endif; ?>
 
         <form method="POST">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <div class="mb-3">
                 <label class="form-label">Email</label>
-                <input type="text"
-                       name="email"
-                       class="form-control"
-                       value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                       required>
+                <input type="text" name="email" class="form-control"
+                       value="<?= htmlspecialchars($_POST['email'] ?? '') ?>" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">New Password</label>
@@ -134,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button class="btn btn-success w-100">Reset Password</button>
             <div class="text-center mt-3">
-                <a href="login.php" class="text-decoration-none">← Back to Login</a>
+                <a href="/pages/auth/login.php" class="text-decoration-none">← Back to Login</a>
             </div>
         </form>
     <?php endif; ?>

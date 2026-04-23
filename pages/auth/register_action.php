@@ -1,18 +1,15 @@
 <?php
-require_once 'includes/init.php';
+require_once __DIR__ . '/../../includes/init.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require('includes/connect_db.php');
+    require ROOT_PATH . '/includes/connect_db.php';
 
     $errors = [];
 
-    // CSRF check
     if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         $errors[] = 'Invalid CSRF token.';
     }
 
-    // FIX: replaced mysqli_real_escape_string + raw query strings
-    // with trim/validate only here — prepared statements handle escaping below
     $fn             = trim($_POST['username']       ?? '');
     $e              = trim($_POST['email']          ?? '');
     $company_name   = trim($_POST['company_name']   ?? '');
@@ -35,20 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $p = password_hash(trim($pass1), PASSWORD_DEFAULT);
     }
 
-    // Check if email already exists
     if (empty($errors)) {
         $stmt = mysqli_prepare($link, "SELECT id FROM new_users WHERE email = ?");
         mysqli_stmt_bind_param($stmt, 's', $e);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
-
         if (mysqli_stmt_num_rows($stmt) !== 0) {
-            $errors[] = 'Email address already registered. <a class="alert-link" href="index.php">Sign In Now</a>';
+            $errors[] = 'Email address already registered. <a class="alert-link" href="/pages/auth/login.php">Sign In Now</a>';
         }
         mysqli_stmt_close($stmt);
     }
 
-    // Register the user
     if (empty($errors)) {
         $stmt = mysqli_prepare($link,
             "INSERT INTO new_users (username, email, password, company_name, contact_person, phone_number)
@@ -61,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_id = mysqli_insert_id($link);
             mysqli_stmt_close($stmt);
 
-            // £99 registration entry
             $stmt2 = mysqli_prepare($link,
                 "INSERT INTO green_calculator_results
                     (user_id, total_score, green_count, amber_count, red_count,
@@ -73,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mysqli_stmt_close($stmt2);
 
             mysqli_close($link);
-            header("Location: login.php?msg=Registered+Successfully");
+            header("Location: /pages/auth/login.php?msg=Registered+Successfully");
             exit();
         } else {
             mysqli_stmt_close($stmt);
@@ -86,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($errors as $msg) {
             echo " - $msg<br>";
         }
-        echo '<p>Please try again.</p></div>';
+        echo '<p><a href="/pages/auth/register.php">Go back</a></p></div>';
         mysqli_close($link);
     }
 }
