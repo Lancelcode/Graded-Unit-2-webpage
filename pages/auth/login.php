@@ -17,36 +17,16 @@ $b = BASE_URL;
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Login | GreenScore</title>
     <style>
-        html, body { height: 100%; margin: 0; }
-        body {
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            color: #333;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1;
-        }
-        .content-wrapper {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem;
-            padding: 2.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            margin-top: 5rem;
-        }
-        footer { background: white; z-index: 2; }
+        .auth-card { margin-top: 5rem; }
+        footer { background: white; z-index: 2; position: relative; }
     </style>
 </head>
-<body>
+<body class="bg-page overlay-60"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg'); color: #333;">
 <?php include ROOT_PATH . '/includes/nav.php'; ?>
 
 <div class="container" style="max-width: 500px;">
-    <div class="content-wrapper">
+    <div class="auth-card">
         <h2 class="text-success text-center mb-4">Login to GreenScore</h2>
 
         <?php if (isset($_SESSION['login_error'])): ?>
@@ -58,7 +38,6 @@ $b = BASE_URL;
         <form action="<?= $b ?>/includes/login_action.php" method="post">
             <input type="hidden" name="csrf_token"
                    value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-
             <div class="mb-3">
                 <label for="email" class="form-label">Email:</label>
                 <input type="email" id="email" name="email" class="form-control"
@@ -69,7 +48,6 @@ $b = BASE_URL;
                 <input type="password" id="password" name="password" class="form-control"
                        required placeholder="Enter your password">
             </div>
-
             <button type="submit" class="btn btn-success w-100">Login</button>
         </form>
 
