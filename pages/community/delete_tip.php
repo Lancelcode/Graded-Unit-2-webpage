@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
     }
-
     $tip_id  = (int) ($_POST['id'] ?? 0);
     $user_id = (int) $_SESSION['user_id'];
 
@@ -19,5 +18,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
 }
 
 mysqli_close($link);
-header("Location: /pages/community/community.php");
+header('Location: ' . BASE_URL . '/pages/community/community.php');
 exit();

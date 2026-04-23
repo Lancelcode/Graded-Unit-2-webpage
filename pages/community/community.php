@@ -5,6 +5,7 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 $logged_in_user     = $_SESSION['user_id']  ?? null;
 $logged_in_username = $_SESSION['username'] ?? '';
 $logged_in_email    = $_SESSION['email']    ?? '';
+$b                  = BASE_URL;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_tip'])) {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
@@ -12,15 +13,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_tip'])) {
     }
     if (isset($_POST['delete_id']) && ctype_digit((string) $_POST['delete_id'])) {
         $deleteId = (int) $_POST['delete_id'];
-        $stmt = mysqli_prepare($link, "DELETE FROM community_tips WHERE id = ? AND user_id = ? LIMIT 1");
+        $stmt = mysqli_prepare($link,
+            "DELETE FROM community_tips WHERE id = ? AND user_id = ? LIMIT 1"
+        );
         mysqli_stmt_bind_param($stmt, 'ii', $deleteId, $logged_in_user);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
     }
-    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
-        exit();
-    }
-    header('Location: /pages/community/community.php');
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) exit();
+    header('Location: ' . $b . '/pages/community/community.php');
     exit();
 }
 
@@ -53,9 +54,8 @@ $results = mysqli_stmt_get_result($stmt);
     <style>
         html, body { height: 100%; margin: 0; padding: 0; }
         body {
-            display: flex;
-            flex-direction: column;
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            display: flex; flex-direction: column;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
         }
         .page-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
         .content-wrapper { flex: 1; padding: 4rem 1rem; }
@@ -63,7 +63,7 @@ $results = mysqli_stmt_get_result($stmt);
         footer { background-color: #fff; color: #444; padding: 2rem 0; margin-top: auto; }
         .fade-out { animation: fadeOut 0.6s ease-out forwards; }
         @keyframes fadeOut {
-            to { opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
+            to { opacity:0; height:0; padding:0; margin:0; overflow:hidden; }
         }
     </style>
 </head>
@@ -75,15 +75,15 @@ $results = mysqli_stmt_get_result($stmt);
 
         <div class="card card-bg shadow-sm mb-4">
             <div class="card-body">
-                <form action="/pages/community/post_tip.php" method="POST">
+                <form action="<?= $b ?>/pages/community/post_tip.php" method="POST">
                     <input type="hidden" name="csrf_token"
                            value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                     <textarea name="message" rows="3" class="form-control"
                               placeholder="E.g. I switched to bamboo toothbrushes!" required></textarea>
                     <button type="submit" class="btn btn-success mt-3">✅ Post Tip</button>
                 </form>
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <form method="POST" action="/pages/community/clear_tips.php"
+                <div class="mt-3">
+                    <form method="POST" action="<?= $b ?>/pages/community/clear_tips.php"
                           onsubmit="return confirm('⚠️ Clear all your tips? This cannot be undone.')">
                         <input type="hidden" name="csrf_token"
                                value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
@@ -91,7 +91,7 @@ $results = mysqli_stmt_get_result($stmt);
                     </form>
                 </div>
                 <div class="mt-3">
-                    <a href="/pages/user/user_account.php" class="btn btn-outline-dark">
+                    <a href="<?= $b ?>/pages/user/user_account.php" class="btn btn-outline-dark">
                         👤 Back to My Profile
                     </a>
                 </div>
@@ -158,7 +158,7 @@ $results = mysqli_stmt_get_result($stmt);
 
 <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <form class="modal-content" action="/pages/community/edit_tip.php" method="POST">
+        <form class="modal-content" action="<?= $b ?>/pages/community/edit_tip.php" method="POST">
             <input type="hidden" name="csrf_token"
                    value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
             <div class="modal-header">
