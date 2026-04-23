@@ -11,16 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
     }
+
     $message = trim($_POST['message'] ?? '');
     $user_id = (int) $_SESSION['user_id'];
 
     if (!empty($message)) {
-        $stmt = $link->prepare("INSERT INTO community_tips (user_id, message) VALUES (?, ?)");
-        if ($stmt) {
-            $stmt->bind_param("is", $user_id, $message);
-            $stmt->execute();
-            $stmt->close();
-        }
+        $stmt = mysqli_prepare($link,
+            "INSERT INTO community_tips (user_id, message) VALUES (?, ?)"
+        );
+        mysqli_stmt_bind_param($stmt, 'is', $user_id, $message);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
     }
 }
 
