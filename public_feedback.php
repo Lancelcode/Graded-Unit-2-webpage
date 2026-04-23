@@ -1,18 +1,45 @@
 <?php
 require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
+
+// FIX: no auth check existed — anyone could hit this page
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    http_response_code(403);
+    echo "<div class='container mt-5'><div class='alert alert-danger'>Access denied. Admins only.</div></div>";
+    include 'includes/footer.php';
+    exit();
+}
+
+// FIX: delete logic was at the bottom of the file after all HTML output
+// Moved here so headers/redirects work correctly
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback'])) {
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
+        die('Invalid CSRF token.');
+    }
+    if (isset($_POST['delete_id']) && ctype_digit((string) $_POST['delete_id'])) {
+        $deleteId = (int) $_POST['delete_id'];
+        $stmt = mysqli_prepare($link, "DELETE FROM feedback WHERE id = ? LIMIT 1");
+        mysqli_stmt_bind_param($stmt, 'i', $deleteId);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
+    // AJAX call — just exit, JS handles the animation
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+        exit();
+    }
+    header('Location: public_feedback.php');
+    exit();
+}
+
 include 'includes/nav.php';
 
-$sql = "
-  SELECT id, name, email, message, created_at,
-         admin_response, admin_username, admin_response_at
-  FROM feedback
-  WHERE visible_to_public = 1
-  ORDER BY created_at DESC
-";
+$sql    = "SELECT id, name, email, message, created_at,
+                  admin_response, admin_username, admin_response_at
+           FROM feedback
+           WHERE visible_to_public = 1
+           ORDER BY created_at DESC";
 $result = mysqli_query($link, $sql);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,10 +50,7 @@ $result = mysqli_query($link, $sql);
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
+        html, body { height: 100%; margin: 0; }
         body {
             background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
@@ -41,10 +65,7 @@ $result = mysqli_query($link, $sql);
             background: rgba(0, 0, 0, 0.6);
             z-index: -1;
         }
-        .content-wrapper {
-            flex-grow: 1;
-            padding: 4rem 1rem;
-        }
+        .content-wrapper { flex-grow: 1; padding: 4rem 1rem; }
         .card-bg {
             background: rgba(255, 255, 255, 0.95);
             color: #333;
@@ -52,17 +73,9 @@ $result = mysqli_query($link, $sql);
             border-radius: 1rem;
             box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
         }
-        .fade-out {
-            animation: fadeOut 1s ease-out forwards;
-        }
+        .fade-out { animation: fadeOut 0.6s ease-out forwards; }
         @keyframes fadeOut {
-            to {
-                opacity: 0;
-                height: 0;
-                padding: 0;
-                margin: 0;
-                overflow: hidden;
-            }
+            to { opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
         }
     </style>
 </head>
@@ -71,7 +84,7 @@ $result = mysqli_query($link, $sql);
     <h2 class="text-white text-center mb-5">💬 Community Feedback</h2>
     <div id="feedback-list">
         <?php while ($row = mysqli_fetch_assoc($result)): ?>
-            <div class="card card-bg mb-4" id="feedback-<?= $row['id'] ?>">
+            <div class="card card-bg mb-4" id="feedback-<?= (int) $row['id'] ?>">
                 <p class="mb-1">
                     <strong><?= htmlspecialchars($row['name']) ?></strong>
                     (<?= htmlspecialchars($row['email']) ?>)
@@ -82,8 +95,10 @@ $result = mysqli_query($link, $sql);
                 <p class="mt-2 message-text"><?= nl2br(htmlspecialchars($row['message'])) ?></p>
 
                 <div class="d-flex justify-content-end gap-2 mb-2">
-                    <form method="POST" onsubmit="return deleteFeedback(this, <?= $row['id'] ?>);" class="d-inline">
-                        <input type="hidden" name="delete_id" value="<?= $row['id'] ?>">
+                    <!-- FIX: CSRF token added to delete form -->
+                    <form method="POST" onsubmit="return deleteFeedback(this, <?= (int) $row['id'] ?>);" class="d-inline">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                        <input type="hidden" name="delete_id" value="<?= (int) $row['id'] ?>">
                         <button type="submit" name="delete_feedback" class="btn btn-sm btn-outline-danger">🗑 Delete</button>
                     </form>
                 </div>
@@ -108,26 +123,19 @@ $result = mysqli_query($link, $sql);
 <?php include 'includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function deleteFeedback(form, id) {
-        fetch(window.location.href, {
-            method: 'POST',
-            body: new FormData(form)
-        })
-            .then(() => {
-                const card = document.getElementById('feedback-' + id);
-                card.classList.add('fade-out');
-                setTimeout(() => card.remove(), 1000);
-            });
-        return false;
-    }
+function deleteFeedback(form, id) {
+    fetch(window.location.href, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: new FormData(form)
+    }).then(() => {
+        const card = document.getElementById('feedback-' + id);
+        card.classList.add('fade-out');
+        setTimeout(() => card.remove(), 600);
+    });
+    return false;
+}
 </script>
 </body>
 </html>
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback']) && is_numeric($_POST['delete_id'])) {
-    $deleteId = intval($_POST['delete_id']);
-    mysqli_query($link, "DELETE FROM feedback WHERE id = $deleteId LIMIT 1");
-    exit();
-}
-mysqli_close($link);
-?>
+<?php mysqli_close($link); ?>
