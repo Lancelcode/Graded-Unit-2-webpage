@@ -99,3 +99,7 @@ coverage/
 *.tmp
 *.bak
 *.backup
+
+phpunit.phar
+.phpunit.result.cache
+assets/images/*.sql
