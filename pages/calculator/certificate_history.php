@@ -4,61 +4,48 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 include ROOT_PATH . '/includes/nav.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /pages/auth/login.php');
+    header('Location: ' . BASE_URL . '/pages/auth/login.php');
     exit();
 }
 
+$b              = BASE_URL;
 $user_id        = (int) $_SESSION['user_id'];
 $action_message = '';
 
 if (isset($_POST['delete_id'])) {
-    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
-        die('Invalid CSRF token.');
-    }
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) die('Invalid CSRF token.');
     $delete_id = (int) $_POST['delete_id'];
     $stmt = mysqli_prepare($link, "DELETE FROM green_calculator_results WHERE id = ? AND user_id = ?");
     mysqli_stmt_bind_param($stmt, 'ii', $delete_id, $user_id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    mysqli_stmt_execute($stmt); mysqli_stmt_close($stmt);
     $action_message = '❌ Entry deleted successfully.';
 }
 
 if (isset($_POST['reset_id'])) {
-    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
-        die('Invalid CSRF token.');
-    }
-    $reset_id = (int) $_POST['reset_id'];
-    $_SESSION['reset_entry_id'] = $reset_id;
-    header('Location: /pages/calculator/green_calculator.php?reset=1');
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) die('Invalid CSRF token.');
+    $_SESSION['reset_entry_id'] = (int) $_POST['reset_id'];
+    header('Location: ' . BASE_URL . '/pages/calculator/green_calculator.php?reset=1');
     exit();
 }
 
 if (isset($_POST['clear_all'])) {
-    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
-        die('Invalid CSRF token.');
-    }
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) die('Invalid CSRF token.');
     $stmt = mysqli_prepare($link, "DELETE FROM green_calculator_results WHERE user_id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $user_id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    mysqli_stmt_execute($stmt); mysqli_stmt_close($stmt);
     $action_message = '🧹 All entries cleared.';
 }
 
 if (isset($_POST['update_id'])) {
-    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
-        die('Invalid CSRF token.');
-    }
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) die('Invalid CSRF token.');
     $update_id    = (int) $_POST['update_id'];
     $new_award    = trim($_POST['award_level'] ?? '');
     $new_feedback = trim($_POST['feedback_message'] ?? '');
     $stmt = mysqli_prepare($link,
-        "UPDATE green_calculator_results
-         SET award_level = ?, feedback_message = ?
-         WHERE id = ? AND user_id = ?"
+        "UPDATE green_calculator_results SET award_level = ?, feedback_message = ? WHERE id = ? AND user_id = ?"
     );
     mysqli_stmt_bind_param($stmt, 'ssii', $new_award, $new_feedback, $update_id, $user_id);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    mysqli_stmt_execute($stmt); mysqli_stmt_close($stmt);
     $action_message = '✏️ Entry updated.';
 }
 
@@ -69,17 +56,14 @@ mysqli_stmt_bind_param($levels_stmt, 'i', $user_id);
 mysqli_stmt_execute($levels_stmt);
 $levels_result = mysqli_stmt_get_result($levels_stmt);
 $award_levels  = [];
-while ($lvl = mysqli_fetch_assoc($levels_result)) {
-    $award_levels[] = $lvl['award_level'];
-}
+while ($lvl = mysqli_fetch_assoc($levels_result)) $award_levels[] = $lvl['award_level'];
 mysqli_stmt_close($levels_stmt);
 
 $entries_per_page = 8;
-$page   = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
-$offset = ($page - 1) * $entries_per_page;
-$order  = (isset($_GET['sort']) && $_GET['sort'] === 'oldest') ? 'ASC' : 'DESC';
-$level_filter = (isset($_GET['level']) && in_array($_GET['level'], $award_levels, true))
-    ? $_GET['level'] : '';
+$page         = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+$offset       = ($page - 1) * $entries_per_page;
+$order        = (isset($_GET['sort']) && $_GET['sort'] === 'oldest') ? 'ASC' : 'DESC';
+$level_filter = (isset($_GET['level']) && in_array($_GET['level'], $award_levels, true)) ? $_GET['level'] : '';
 
 if ($level_filter !== '') {
     $count_stmt = mysqli_prepare($link,
@@ -93,20 +77,21 @@ if ($level_filter !== '') {
     mysqli_stmt_bind_param($count_stmt, 'i', $user_id);
 }
 mysqli_stmt_execute($count_stmt);
-$count_result  = mysqli_stmt_get_result($count_stmt);
-$total_entries = (int) mysqli_fetch_assoc($count_result)['total'];
+$total_entries = (int) mysqli_fetch_assoc(mysqli_stmt_get_result($count_stmt))['total'];
 $total_pages   = (int) ceil($total_entries / $entries_per_page);
 mysqli_stmt_close($count_stmt);
 
 if ($level_filter !== '') {
-    $data_sql  = "SELECT * FROM green_calculator_results WHERE user_id = ? AND award_level = ?
-                  ORDER BY submitted_at $order LIMIT ? OFFSET ?";
-    $data_stmt = mysqli_prepare($link, $data_sql);
+    $data_stmt = mysqli_prepare($link,
+        "SELECT * FROM green_calculator_results WHERE user_id = ? AND award_level = ?
+         ORDER BY submitted_at $order LIMIT ? OFFSET ?"
+    );
     mysqli_stmt_bind_param($data_stmt, 'isii', $user_id, $level_filter, $entries_per_page, $offset);
 } else {
-    $data_sql  = "SELECT * FROM green_calculator_results WHERE user_id = ?
-                  ORDER BY submitted_at $order LIMIT ? OFFSET ?";
-    $data_stmt = mysqli_prepare($link, $data_sql);
+    $data_stmt = mysqli_prepare($link,
+        "SELECT * FROM green_calculator_results WHERE user_id = ?
+         ORDER BY submitted_at $order LIMIT ? OFFSET ?"
+    );
     mysqli_stmt_bind_param($data_stmt, 'iii', $user_id, $entries_per_page, $offset);
 }
 mysqli_stmt_execute($data_stmt);
@@ -120,24 +105,15 @@ $results = mysqli_stmt_get_result($data_stmt);
     <style>
         html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
         }
         body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: -1;
+            content: ''; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: -1;
         }
         .page-wrapper { flex: 1; position: relative; z-index: 1; padding-top: 4rem; }
         .card-bg { background: rgba(255,255,255,0.95); border-radius: 1rem; }
-        footer {
-            background-color: rgba(255,255,255,0.95);
-            color: #444;
-            padding: 2rem 0;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -175,8 +151,9 @@ $results = mysqli_stmt_get_result($data_stmt);
         <?php if (mysqli_num_rows($results) > 0): ?>
             <div class="card card-bg shadow-sm p-4 mb-4">
                 <form method="post" class="text-end mb-3"
-                      onsubmit="return confirm('Are you sure you want to clear all certificates?')">
-                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                      onsubmit="return confirm('Clear all certificates?')">
+                    <input type="hidden" name="csrf_token"
+                           value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                     <button type="submit" name="clear_all" class="btn btn-outline-danger">
                         🧹 Clear All
                     </button>
@@ -246,7 +223,8 @@ $results = mysqli_stmt_get_result($data_stmt);
                     $query_params = $_GET;
                     for ($i = 1; $i <= $total_pages; $i++) {
                         $query_params['page'] = $i;
-                        $url    = '/pages/calculator/certificate_history.php?' . http_build_query($query_params);
+                        $url    = $b . '/pages/calculator/certificate_history.php?'
+                                . http_build_query($query_params);
                         $active = ($i === $page) ? 'active' : '';
                         echo "<li class='page-item $active'>
                                 <a class='page-link' href='" . htmlspecialchars($url) . "'>$i</a>
@@ -260,14 +238,14 @@ $results = mysqli_stmt_get_result($data_stmt);
         <?php else: ?>
             <div class="card card-bg shadow-sm p-4 mb-4">
                 <p class="mb-0">No certificates found. Try the
-                    <a href="/pages/calculator/green_calculator.php">Green Calculator</a>
+                    <a href="<?= $b ?>/pages/calculator/green_calculator.php">Green Calculator</a>
                     to get started.
                 </p>
             </div>
         <?php endif; ?>
 
         <div class="text-center mt-3">
-            <a href="/pages/user/user_account.php" class="btn btn-outline-light">
+            <a href="<?= $b ?>/pages/user/user_account.php" class="btn btn-outline-light">
                 👤 Back to My Profile
             </a>
         </div>

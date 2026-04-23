@@ -3,10 +3,11 @@ require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /pages/auth/login.php');
+    header('Location: ' . BASE_URL . '/pages/auth/login.php');
     exit();
 }
 
+$b          = BASE_URL;
 $show_modal = false;
 $award = $emoji = $message = '';
 $total = $shortfall = $cost = 0;
@@ -26,54 +27,44 @@ $measures = [
 ];
 
 $explanations = [
-    "Waste Reduction" => "Waste reduction assesses how actively a company minimises its total waste output through operational improvements, material efficiency, recycling programmes, and waste prevention strategies.\n\nExamples: Conducting annual waste audits, setting formal targets (5–10% per year), composting organic waste, eliminating single-use plastics, transitioning to digital documentation.\n\nImpact: Reduces landfill methane emissions, decreases environmental contamination, and lowers demand for raw material extraction.",
-    "Renewable Energy Usage" => "Evaluates the proportion of a company's energy supply that comes from sustainable sources such as solar, wind, hydro, or biomass.\n\nExamples: Installing solar panels, purchasing certified green electricity, entering renewable energy power purchase agreements (PPAs).\n\nImpact: Cuts CO₂ emissions from fossil fuel combustion, contributing to climate change mitigation.",
-    "Water Conservation" => "Measures how effectively a company reduces freshwater usage through technology upgrades, behaviour change, and reuse initiatives.\n\nExamples: Installing low-flow fixtures, rainwater harvesting, recycling greywater, fixing leaks promptly.\n\nImpact: Reduces energy and chemicals required for water treatment, preserving natural water ecosystems.",
-    "Sustainable Supply Chain" => "Evaluates how a company integrates environmental responsibility into supplier selection, purchasing policies, and logistics.\n\nExamples: Preferring local suppliers, sourcing certified sustainable materials, conducting supplier environmental audits.\n\nImpact: Reduces environmental impact across the entire product lifecycle.",
+    "Waste Reduction"              => "Waste reduction assesses how actively a company minimises its total waste output through operational improvements, material efficiency, recycling programmes, and waste prevention strategies.\n\nExamples: Conducting annual waste audits, setting formal targets (5–10% per year), composting organic waste, eliminating single-use plastics, transitioning to digital documentation.\n\nImpact: Reduces landfill methane emissions, decreases environmental contamination, and lowers demand for raw material extraction.",
+    "Renewable Energy Usage"       => "Evaluates the proportion of a company's energy supply that comes from sustainable sources such as solar, wind, hydro, or biomass.\n\nExamples: Installing solar panels, purchasing certified green electricity, entering renewable energy power purchase agreements (PPAs).\n\nImpact: Cuts CO₂ emissions from fossil fuel combustion, contributing to climate change mitigation.",
+    "Water Conservation"           => "Measures how effectively a company reduces freshwater usage through technology upgrades, behaviour change, and reuse initiatives.\n\nExamples: Installing low-flow fixtures, rainwater harvesting, recycling greywater, fixing leaks promptly.\n\nImpact: Reduces energy and chemicals required for water treatment, preserving natural water ecosystems.",
+    "Sustainable Supply Chain"     => "Evaluates how a company integrates environmental responsibility into supplier selection, purchasing policies, and logistics.\n\nExamples: Preferring local suppliers, sourcing certified sustainable materials, conducting supplier environmental audits.\n\nImpact: Reduces environmental impact across the entire product lifecycle.",
     "Eco-friendly Products/Services" => "Measures the extent to which a company designs and offers products or services with reduced environmental impacts.\n\nExamples: Biodegradable packaging, energy-efficient devices, carbon-neutral services, designing for recyclability.\n\nImpact: Lowers total resource footprint and encourages responsible consumer choices.",
     "Energy-Efficient Infrastructure" => "Assesses the extent to which company buildings are optimised to minimise energy use.\n\nExamples: LED lighting, upgraded insulation, energy management systems, LEED/BREEAM certifications.\n\nImpact: Reduces operational carbon emissions and supports net-zero building targets.",
     "Transportation Sustainability" => "Measures efforts to minimise emissions from commuting, business travel, and logistics.\n\nExamples: Electrifying vehicle fleets, promoting public transport or cycling, offering remote work, carbon-neutral freight.\n\nImpact: Reduces emissions from transportation — a major source of greenhouse gases.",
-    "Community Engagement" => "Evaluates a company's efforts to raise environmental awareness and support local sustainability initiatives.\n\nExamples: Sponsoring tree-planting drives, employee volunteer days, public education campaigns.\n\nImpact: Multiplies positive environmental impacts and builds goodwill with stakeholders.",
-    "Carbon Offsetting" => "Assesses commitment to compensate for unavoidable greenhouse gas emissions by supporting certified climate projects.\n\nExamples: Purchasing carbon credits from reforestation projects, investing in renewable energy farms.\n\nImpact: Balances emissions while financing global climate mitigation.",
-    "Transparency and Reporting" => "Evaluates how openly a company communicates its environmental impact, targets, and progress.\n\nExamples: Annual sustainability reports (GRI, CDP standards), greenhouse gas inventories, science-based targets.\n\nImpact: Builds stakeholder trust and drives internal accountability.",
+    "Community Engagement"         => "Evaluates a company's efforts to raise environmental awareness and support local sustainability initiatives.\n\nExamples: Sponsoring tree-planting drives, employee volunteer days, public education campaigns.\n\nImpact: Multiplies positive environmental impacts and builds goodwill with stakeholders.",
+    "Carbon Offsetting"            => "Assesses commitment to compensate for unavoidable greenhouse gas emissions by supporting certified climate projects.\n\nExamples: Purchasing carbon credits from reforestation projects, investing in renewable energy farms.\n\nImpact: Balances emissions while financing global climate mitigation.",
+    "Transparency and Reporting"   => "Evaluates how openly a company communicates its environmental impact, targets, and progress.\n\nExamples: Annual sustainability reports (GRI, CDP standards), greenhouse gas inventories, science-based targets.\n\nImpact: Builds stakeholder trust and drives internal accountability.",
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     foreach ($measures as $index => $m) {
         $score  = intval($_POST["measure_$index"]);
         $total += $score;
-        if ($score === 10)     $green++;
-        elseif ($score === 5)  $amber++;
-        else                   $red++;
+        if ($score === 10)    $green++;
+        elseif ($score === 5) $amber++;
+        else                  $red++;
     }
 
     $shortfall = 100 - $total;
     $cost      = $shortfall * 10;
 
     if ($total >= 80) {
-        $award   = "Certificate of Gold 🥇";
-        $emoji   = "🥇";
+        $award = "Certificate of Gold 🥇"; $emoji = "🥇";
         $message = "Outstanding! You're leading the way in sustainability.";
     } elseif ($total >= 65) {
-        $award   = "Certificate of Silver 🥈";
-        $emoji   = "🥈";
+        $award = "Certificate of Silver 🥈"; $emoji = "🥈";
         $message = "Great job! You're making a positive environmental impact.";
     } elseif ($total > 50) {
-        $award   = "Certificate of Bronze 🥉";
-        $emoji   = "🥉";
+        $award = "Certificate of Bronze 🥉"; $emoji = "🥉";
         $message = "Nice effort! Keep building sustainable habits.";
     } else {
         $award = "Certificate of Participation 👏";
-        if ($total >= 41) {
-            $emoji   = "🌟";
-            $message = "You're almost there! Just a few more changes will go a long way.";
-        } elseif ($total >= 26) {
-            $emoji   = "💪";
-            $message = "You're making progress. Small steps matter — keep going!";
-        } else {
-            $emoji   = "🌱";
-            $message = "Every journey starts somewhere — you've taken that first step!";
-        }
+        if ($total >= 41)      { $emoji = "🌟"; $message = "You're almost there! Just a few more changes will go a long way."; }
+        elseif ($total >= 26)  { $emoji = "💪"; $message = "You're making progress. Small steps matter — keep going!"; }
+        else                   { $emoji = "🌱"; $message = "Every journey starts somewhere — you've taken that first step!"; }
     }
 
     $user_id = $_SESSION['user_id'];
@@ -89,7 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     );
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
-
     $show_modal = true;
 }
 ?>
@@ -102,22 +92,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     <style>
         html { overflow-y: scroll; }
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            margin: 0;
-            padding: 0;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            margin: 0; padding: 0;
         }
         .container { margin-top: 3rem; margin-bottom: 3rem; }
         .card {
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(255,255,255,0.95);
             border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        .modal-header {
-            background-color: #198754;
-            color: white;
-        }
-        .modal-title { color: #00ff66 !important; }
-        .progress { height: 20px; border-radius: 10px; overflow: hidden; }
+        .modal-header { background-color: #198754; color: white; }
+        .modal-title  { color: #00ff66 !important; }
+        .progress     { height: 20px; border-radius: 10px; overflow: hidden; }
         .progress-bar { font-size: 14px; font-weight: bold; }
         body.modal-open { padding-right: 0 !important; }
     </style>
@@ -132,7 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <h1 class="text-success mb-4">🌿 Green Calculator</h1>
                 <p class="lead">Evaluate your sustainability impact by selecting your practices below.</p>
                 <form method="POST">
-                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                    <input type="hidden" name="csrf_token"
+                           value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                     <?php foreach ($measures as $index => $measure):
                         $modalId = "info" . preg_replace('/[^A-Za-z0-9]/', '', $measure);
                     ?>
@@ -172,9 +159,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                         Calculate My Score 🌍
                     </button>
                     <div class="mt-3">
-                        <a href="/pages/user/user_account.php" class="btn btn-outline-dark">
-                            👤 Back to My Profile
-                        </a>
+                        <a href="<?= $b ?>/pages/user/user_account.php"
+                           class="btn btn-outline-dark">👤 Back to My Profile</a>
                     </div>
                 </form>
             </div>
@@ -190,10 +176,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     <hr>
                     <h6 class="text-center mb-2">Awards:</h6>
                     <ul class="list-unstyled text-center mb-0">
-                        <li>🥇 Gold:         80–100 pts</li>
-                        <li>🥈 Silver:       65–79 pts</li>
-                        <li>🥉 Bronze:       51–64 pts</li>
-                        <li>👏 Certificate:  0–50 pts</li>
+                        <li>🥇 Gold:        80–100 pts</li>
+                        <li>🥈 Silver:      65–79 pts</li>
+                        <li>🥉 Bronze:      51–64 pts</li>
+                        <li>👏 Certificate: 0–50 pts</li>
                     </ul>
                 </div>
                 <div class="card shadow-sm p-3 mt-4">
@@ -210,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 
 <?php if ($show_modal): ?>
 <div class="modal fade show" id="resultModal" tabindex="-1"
-     style="display: block;" aria-modal="true" role="dialog">
+     style="display:block;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered animate__animated animate__zoomIn">
         <div class="modal-content">
             <div class="modal-header">
@@ -226,21 +212,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     <label>🟢 Green</label>
                     <div class="progress">
                         <div class="progress-bar bg-success"
-                             style="width: <?= $green * 10 ?>%"><?= $green ?></div>
+                             style="width:<?= $green * 10 ?>%"><?= $green ?></div>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label>🟠 Amber</label>
                     <div class="progress">
                         <div class="progress-bar bg-warning text-dark"
-                             style="width: <?= $amber * 10 ?>%"><?= $amber ?></div>
+                             style="width:<?= $amber * 10 ?>%"><?= $amber ?></div>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label>🔴 Red</label>
                     <div class="progress">
                         <div class="progress-bar bg-danger"
-                             style="width: <?= $red * 10 ?>%"><?= $red ?></div>
+                             style="width:<?= $red * 10 ?>%"><?= $red ?></div>
                     </div>
                 </div>
 
@@ -255,16 +241,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <?php endif; ?>
             </div>
             <div class="modal-footer d-flex flex-wrap justify-content-between gap-2">
-                <a href="/pages/calculator/certificate_preview.php?level=<?= urlencode($award) ?>"
+                <a href="<?= $b ?>/pages/calculator/certificate_preview.php?level=<?= urlencode($award) ?>"
                    class="btn btn-outline-success">📄 Download Certificate</a>
                 <?php if ($shortfall > 0): ?>
-                    <a href="/pages/calculator/buy_points.php?shortfall=<?= $shortfall ?>&cost=<?= $cost ?>"
+                    <a href="<?= $b ?>/pages/calculator/buy_points.php?shortfall=<?= $shortfall ?>&cost=<?= $cost ?>"
                        class="btn btn-outline-warning">💸 Buy Points</a>
                 <?php endif; ?>
-                <a href="/pages/community/community.php"  class="btn btn-outline-info">🌱 Visit Community</a>
-                <a href="/pages/info/green_resources.php" class="btn btn-outline-dark">📚 Tips & Guides</a>
+                <a href="<?= $b ?>/pages/community/community.php"
+                   class="btn btn-outline-info">🌱 Visit Community</a>
+                <a href="<?= $b ?>/pages/info/green_resources.php"
+                   class="btn btn-outline-dark">📚 Tips &amp; Guides</a>
                 <button class="btn btn-secondary"
-                        onclick="window.location='/pages/calculator/green_calculator.php'">
+                        onclick="window.location='<?= $b ?>/pages/calculator/green_calculator.php'">
                     Close
                 </button>
             </div>

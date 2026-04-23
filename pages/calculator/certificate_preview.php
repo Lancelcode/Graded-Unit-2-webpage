@@ -2,10 +2,11 @@
 require_once __DIR__ . '/../../includes/init.php';
 
 if (!isset($_SESSION['username'])) {
-    header('Location: /pages/auth/login.php');
+    header('Location: ' . BASE_URL . '/pages/auth/login.php');
     exit();
 }
 
+$b        = BASE_URL;
 $award    = isset($_GET['level']) ? htmlspecialchars($_GET['level']) : 'Certificate of Participation 👏';
 $username = htmlspecialchars($_SESSION['username']);
 $date     = date('F j, Y');
@@ -17,54 +18,33 @@ $date     = date('F j, Y');
     <title>Green Certificate | GreenScore</title>
     <style>
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            margin: 0;
-            color: #333;
-            position: relative;
-            min-height: 100vh;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            margin: 0; color: #333; position: relative; min-height: 100vh;
         }
         body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 0;
+            content: ''; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 0;
         }
         .page-wrapper {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column; min-height: 100vh;
         }
         .content-wrapper {
-            flex: 1;
-            padding: 5rem 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            flex: 1; padding: 5rem 1rem;
+            display: flex; justify-content: center; align-items: center;
         }
         .certificate {
-            background: #fff;
-            padding: 4rem 2rem;
-            max-width: 900px;
-            width: 100%;
-            border: 12px double #4CAF50;
-            border-radius: 20px;
-            text-align: center;
+            background: #fff; padding: 4rem 2rem; max-width: 900px; width: 100%;
+            border: 12px double #4CAF50; border-radius: 20px; text-align: center;
             box-shadow: 0 0 20px rgba(0,0,0,0.35);
         }
         .certificate h1 { font-size: 3.5rem; color: #2e7d32; font-weight: bold; }
         .certificate .lead { font-size: 1.4rem; }
         .certificate h2 { font-size: 2.5rem; color: #000; }
         .award-badge {
-            font-size: 2rem;
-            background-color: #e8f5e9;
-            color: #388e3c;
-            display: inline-block;
-            padding: 0.5rem 1.5rem;
-            border-radius: 30px;
-            font-weight: bold;
+            font-size: 2rem; background-color: #e8f5e9; color: #388e3c;
+            display: inline-block; padding: 0.5rem 1.5rem;
+            border-radius: 30px; font-weight: bold;
         }
         .certificate p.date { margin-top: 1rem; font-style: italic; }
         footer { background-color: #fff; color: #444; padding: 2rem 0; }
@@ -87,10 +67,8 @@ $date     = date('F j, Y');
                 <button onclick="window.print()" class="btn btn-success">
                     🖨️ Print / Save as PDF
                 </button>
-                <a href="/pages/calculator/certificate_history.php"
-                   class="btn btn-outline-secondary">
-                    ⬅ Back to History
-                </a>
+                <a href="<?= $b ?>/pages/calculator/certificate_history.php"
+                   class="btn btn-outline-secondary">⬅ Back to History</a>
             </div>
         </div>
     </div>
