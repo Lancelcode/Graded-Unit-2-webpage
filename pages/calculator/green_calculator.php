@@ -27,16 +27,16 @@ $measures = [
 ];
 
 $explanations = [
-    "Waste Reduction"              => "Waste reduction assesses how actively a company minimises its total waste output through operational improvements, material efficiency, recycling programmes, and waste prevention strategies.\n\nExamples: Conducting annual waste audits, setting formal targets (5–10% per year), composting organic waste, eliminating single-use plastics, transitioning to digital documentation.\n\nImpact: Reduces landfill methane emissions, decreases environmental contamination, and lowers demand for raw material extraction.",
-    "Renewable Energy Usage"       => "Evaluates the proportion of a company's energy supply that comes from sustainable sources such as solar, wind, hydro, or biomass.\n\nExamples: Installing solar panels, purchasing certified green electricity, entering renewable energy power purchase agreements (PPAs).\n\nImpact: Cuts CO₂ emissions from fossil fuel combustion, contributing to climate change mitigation.",
-    "Water Conservation"           => "Measures how effectively a company reduces freshwater usage through technology upgrades, behaviour change, and reuse initiatives.\n\nExamples: Installing low-flow fixtures, rainwater harvesting, recycling greywater, fixing leaks promptly.\n\nImpact: Reduces energy and chemicals required for water treatment, preserving natural water ecosystems.",
-    "Sustainable Supply Chain"     => "Evaluates how a company integrates environmental responsibility into supplier selection, purchasing policies, and logistics.\n\nExamples: Preferring local suppliers, sourcing certified sustainable materials, conducting supplier environmental audits.\n\nImpact: Reduces environmental impact across the entire product lifecycle.",
-    "Eco-friendly Products/Services" => "Measures the extent to which a company designs and offers products or services with reduced environmental impacts.\n\nExamples: Biodegradable packaging, energy-efficient devices, carbon-neutral services, designing for recyclability.\n\nImpact: Lowers total resource footprint and encourages responsible consumer choices.",
+    "Waste Reduction"                 => "Waste reduction assesses how actively a company minimises its total waste output through operational improvements, material efficiency, recycling programmes, and waste prevention strategies.\n\nExamples: Conducting annual waste audits, setting formal targets (5–10% per year), composting organic waste, eliminating single-use plastics, transitioning to digital documentation.\n\nImpact: Reduces landfill methane emissions, decreases environmental contamination, and lowers demand for raw material extraction.",
+    "Renewable Energy Usage"          => "Evaluates the proportion of a company's energy supply that comes from sustainable sources such as solar, wind, hydro, or biomass.\n\nExamples: Installing solar panels, purchasing certified green electricity, entering renewable energy power purchase agreements (PPAs).\n\nImpact: Cuts CO₂ emissions from fossil fuel combustion, contributing to climate change mitigation.",
+    "Water Conservation"              => "Measures how effectively a company reduces freshwater usage through technology upgrades, behaviour change, and reuse initiatives.\n\nExamples: Installing low-flow fixtures, rainwater harvesting, recycling greywater, fixing leaks promptly.\n\nImpact: Reduces energy and chemicals required for water treatment, preserving natural water ecosystems.",
+    "Sustainable Supply Chain"        => "Evaluates how a company integrates environmental responsibility into supplier selection, purchasing policies, and logistics.\n\nExamples: Preferring local suppliers, sourcing certified sustainable materials, conducting supplier environmental audits.\n\nImpact: Reduces environmental impact across the entire product lifecycle.",
+    "Eco-friendly Products/Services"  => "Measures the extent to which a company designs and offers products or services with reduced environmental impacts.\n\nExamples: Biodegradable packaging, energy-efficient devices, carbon-neutral services, designing for recyclability.\n\nImpact: Lowers total resource footprint and encourages responsible consumer choices.",
     "Energy-Efficient Infrastructure" => "Assesses the extent to which company buildings are optimised to minimise energy use.\n\nExamples: LED lighting, upgraded insulation, energy management systems, LEED/BREEAM certifications.\n\nImpact: Reduces operational carbon emissions and supports net-zero building targets.",
-    "Transportation Sustainability" => "Measures efforts to minimise emissions from commuting, business travel, and logistics.\n\nExamples: Electrifying vehicle fleets, promoting public transport or cycling, offering remote work, carbon-neutral freight.\n\nImpact: Reduces emissions from transportation — a major source of greenhouse gases.",
-    "Community Engagement"         => "Evaluates a company's efforts to raise environmental awareness and support local sustainability initiatives.\n\nExamples: Sponsoring tree-planting drives, employee volunteer days, public education campaigns.\n\nImpact: Multiplies positive environmental impacts and builds goodwill with stakeholders.",
-    "Carbon Offsetting"            => "Assesses commitment to compensate for unavoidable greenhouse gas emissions by supporting certified climate projects.\n\nExamples: Purchasing carbon credits from reforestation projects, investing in renewable energy farms.\n\nImpact: Balances emissions while financing global climate mitigation.",
-    "Transparency and Reporting"   => "Evaluates how openly a company communicates its environmental impact, targets, and progress.\n\nExamples: Annual sustainability reports (GRI, CDP standards), greenhouse gas inventories, science-based targets.\n\nImpact: Builds stakeholder trust and drives internal accountability.",
+    "Transportation Sustainability"   => "Measures efforts to minimise emissions from commuting, business travel, and logistics.\n\nExamples: Electrifying vehicle fleets, promoting public transport or cycling, offering remote work, carbon-neutral freight.\n\nImpact: Reduces emissions from transportation — a major source of greenhouse gases.",
+    "Community Engagement"            => "Evaluates a company's efforts to raise environmental awareness and support local sustainability initiatives.\n\nExamples: Sponsoring tree-planting drives, employee volunteer days, public education campaigns.\n\nImpact: Multiplies positive environmental impacts and builds goodwill with stakeholders.",
+    "Carbon Offsetting"               => "Assesses commitment to compensate for unavoidable greenhouse gas emissions by supporting certified climate projects.\n\nExamples: Purchasing carbon credits from reforestation projects, investing in renewable energy farms.\n\nImpact: Balances emissions while financing global climate mitigation.",
+    "Transparency and Reporting"      => "Evaluates how openly a company communicates its environmental impact, targets, and progress.\n\nExamples: Annual sustainability reports (GRI, CDP standards), greenhouse gas inventories, science-based targets.\n\nImpact: Builds stakeholder trust and drives internal accountability.",
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
@@ -62,9 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         $message = "Nice effort! Keep building sustainable habits.";
     } else {
         $award = "Certificate of Participation 👏";
-        if ($total >= 41)      { $emoji = "🌟"; $message = "You're almost there! Just a few more changes will go a long way."; }
-        elseif ($total >= 26)  { $emoji = "💪"; $message = "You're making progress. Small steps matter — keep going!"; }
-        else                   { $emoji = "🌱"; $message = "Every journey starts somewhere — you've taken that first step!"; }
+        if ($total >= 41)     { $emoji = "🌟"; $message = "You're almost there! Just a few more changes will go a long way."; }
+        elseif ($total >= 26) { $emoji = "💪"; $message = "You're making progress. Small steps matter — keep going!"; }
+        else                  { $emoji = "🌱"; $message = "Every journey starts somewhere — you've taken that first step!"; }
     }
 
     $user_id = $_SESSION['user_id'];
@@ -90,28 +90,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     <title>Green Calculator | GreenScore</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
+        /* Calculator-specific only */
         html { overflow-y: scroll; }
-        body {
-            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            margin: 0; padding: 0;
-        }
-        .container { margin-top: 3rem; margin-bottom: 3rem; }
-        .card {
-            background-color: rgba(255,255,255,0.95);
-            border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
         .modal-header { background-color: #198754; color: white; }
         .modal-title  { color: #00ff66 !important; }
-        .progress     { height: 20px; border-radius: 10px; overflow: hidden; }
-        .progress-bar { font-size: 14px; font-weight: bold; }
         body.modal-open { padding-right: 0 !important; }
     </style>
 </head>
-<body>
+<body class="bg-page overlay-50"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
 <?php include ROOT_PATH . '/includes/nav.php'; ?>
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div class="card p-4 shadow-sm">
         <div class="row">
             <div class="col-md-8">
