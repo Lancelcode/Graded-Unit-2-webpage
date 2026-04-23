@@ -1,16 +1,15 @@
 <?php
-require_once 'includes/init.php';
-require_once 'includes/connect_db.php';
-include 'includes/nav.php';
+require_once __DIR__ . '/../../includes/init.php';
+require_once ROOT_PATH . '/includes/connect_db.php';
+include ROOT_PATH . '/includes/nav.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: /pages/auth/login.php');
     exit();
 }
 
 $user_id = (int) $_SESSION['user_id'];
 
-// FIX: all three queries now use prepared statements
 $stmt = mysqli_prepare($link, "SELECT COUNT(*) AS total FROM green_calculator_results WHERE user_id = ?");
 mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
@@ -84,16 +83,12 @@ $badgeText = match ($badgeSlug) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>My Impact Report | GreenScore</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; }
         body {
-            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
             color: #fff;
             display: flex;
@@ -131,8 +126,7 @@ $badgeText = match ($badgeSlug) {
             <label class="form-label">Your Green Journey Progress</label>
             <div class="progress">
                 <div class="progress-bar bg-success"
-                     style="width: <?= $greenPercent ?>%;"
-                     role="progressbar">
+                     style="width: <?= $greenPercent ?>%;" role="progressbar">
                     <?= $greenPercent ?>%
                 </div>
             </div>
@@ -144,27 +138,30 @@ $badgeText = match ($badgeSlug) {
     </div>
 
     <div class="text-center mt-4 d-flex flex-wrap justify-content-center gap-3">
-        <a href="certificate_history.php" class="btn btn-lg btn-outline-light fw-bold px-4 py-2 shadow-sm">
+        <a href="/pages/calculator/certificate_history.php"
+           class="btn btn-lg btn-outline-light fw-bold px-4 py-2 shadow-sm">
             📄 View Certificates
         </a>
-        <a href="green_calculator.php" class="btn btn-lg btn-success fw-bold px-4 py-2 shadow-sm">
+        <a href="/pages/calculator/green_calculator.php"
+           class="btn btn-lg btn-success fw-bold px-4 py-2 shadow-sm">
             🧮 Take the Calculator Again
         </a>
-        <a href="user_account.php" class="btn btn-lg btn-outline-light fw-bold px-4 py-2 shadow-sm">
+        <a href="/pages/user/user_account.php"
+           class="btn btn-lg btn-outline-light fw-bold px-4 py-2 shadow-sm">
             👤 Back to My Profile
         </a>
     </div>
 
-    <div class="card card-bg shadow mb-5 mt-4">
+    <div class="card card-bg shadow mt-5 mb-5">
         <div class="card-body text-center px-4">
             <h3 class="text-success mb-3">🏆 Your Current Title</h3>
             <h5 class="text-muted mb-0">Level <?= $badgeLevel ?></h5>
             <h1 class="display-5 fw-bold mb-3"><?= $badge ?></h1>
             <?php
-            $badgeImage = "assets/images/illustrations/{$badgeSlug}.jpg";
+            $badgeImage = ROOT_PATH . "/assets/images/illustrations/{$badgeSlug}.jpg";
             if (file_exists($badgeImage)) {
                 echo "<div class='d-flex justify-content-center'>
-                    <img src='{$badgeImage}'
+                    <img src='/assets/images/illustrations/{$badgeSlug}.jpg'
                          alt='" . htmlspecialchars($badge) . "'
                          class='img-fluid my-4'
                          style='max-width:600px; border-radius:1rem; box-shadow:0 0 16px rgba(0,0,0,0.3);'>
@@ -176,7 +173,7 @@ $badgeText = match ($badgeSlug) {
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include ROOT_PATH . '/includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
