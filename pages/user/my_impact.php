@@ -12,27 +12,19 @@ $b       = BASE_URL;
 $user_id = (int) $_SESSION['user_id'];
 
 $stmt = mysqli_prepare($link,
-    "SELECT COUNT(*) AS total FROM green_calculator_results WHERE user_id = ?"
+    "SELECT
+        COUNT(*)           AS total,
+        SUM(green_count)   AS green,
+        SUM(donation_cost) AS donation
+     FROM green_calculator_results
+     WHERE user_id = ?"
 );
 mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
-$total = (int) mysqli_fetch_assoc(mysqli_stmt_get_result($stmt))['total'];
-mysqli_stmt_close($stmt);
-
-$stmt = mysqli_prepare($link,
-    "SELECT SUM(green_count) AS green FROM green_calculator_results WHERE user_id = ?"
-);
-mysqli_stmt_bind_param($stmt, 'i', $user_id);
-mysqli_stmt_execute($stmt);
-$green = (int) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmt))['green'] ?? 0);
-mysqli_stmt_close($stmt);
-
-$stmt = mysqli_prepare($link,
-    "SELECT SUM(donation_cost) AS donation FROM green_calculator_results WHERE user_id = ?"
-);
-mysqli_stmt_bind_param($stmt, 'i', $user_id);
-mysqli_stmt_execute($stmt);
-$donation = (float) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmt))['donation'] ?? 0);
+$row      = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$total    = (int)   ($row['total']    ?? 0);
+$green    = (int)   ($row['green']    ?? 0);
+$donation = (float) ($row['donation'] ?? 0);
 mysqli_stmt_close($stmt);
 
 $levels = [
