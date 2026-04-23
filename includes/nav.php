@@ -27,7 +27,6 @@ $b = BASE_URL;
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="<?= $b ?>/pages/calculator/green_calculator.php">🧮 Green Calculator</a></li>
                             <li><a class="dropdown-item" href="<?= $b ?>/pages/calculator/certificate_history.php">📄 My Certificate History</a></li>
-                            <li><a class="dropdown-item" href="<?= $b ?>/pages/calculator/buy_points.php">💸 Buy Points</a></li>
                             <li><a class="dropdown-item" href="<?= $b ?>/pages/user/my_impact.php">📊 My Impact</a></li>
                         </ul>
                     </li>
