@@ -2,7 +2,6 @@
 require_once 'includes/init.php';
 require_once 'includes/connect_db.php';
 
-// Ensure CSRF token
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -10,7 +9,6 @@ if (empty($_SESSION['csrf_token'])) {
 $error = '';
 $success = '';
 
-// Handle deletes
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete') {
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
@@ -27,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
     }
 }
 
-// Handle role updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'update_role') {
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
@@ -45,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
     }
 }
 
-// Handle status updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'update_status') {
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
@@ -60,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
     $success = 'Status updated.';
 }
 
-// Fetch users
 $sql = 'SELECT id, username, email, created_at, role, status FROM new_users ORDER BY username';
 $result = mysqli_query($link, $sql);
 if (!$result) {
@@ -83,18 +78,8 @@ if (!$result) {
             display: flex;
             flex-direction: column;
         }
-
         body {
             flex: 1;
-            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative;
-        }
-
-        main {
-            flex: 1;
-        }
-
-        body {
             background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
         }
@@ -105,6 +90,7 @@ if (!$result) {
             background: rgba(0, 0, 0, 0.6);
             z-index: -1;
         }
+        main { flex: 1; }
         .content-wrapper {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 1rem;
@@ -112,30 +98,14 @@ if (!$result) {
             box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
             margin-top: 4rem;
         }
-        h2, h3 {
-            color: #198754;
-        }
-        .inline {
-            display: inline-block;
-        }
-        .fade-out {
-            animation: fadeOut 1s ease-out forwards;
-        }
+        h2, h3 { color: #198754; }
+        .fade-out { animation: fadeOut 1s ease-out forwards; }
         @keyframes fadeOut {
-            to {
-                opacity: 0;
-                height: 0;
-                padding: 0;
-                margin: 0;
-                overflow: hidden;
-            }
-        }
-        .deactivated-table, .inactive-table {
-            margin-top: 3rem;
+            to { opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
         }
     </style>
 </head>
-<body style="background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;">
+<body>
 <?php include 'includes/nav.php'; ?>
 
 <div class="container content-wrapper mt-5 p-4 bg-white rounded shadow">
@@ -155,7 +125,7 @@ if (!$result) {
     function renderRoleStatusForms($row) {
         ob_start(); ?>
         <form method="post" class="d-inline-block me-2">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <input type="hidden" name="action" value="update_role">
             <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
             <select name="role" class="form-select form-select-sm d-inline-block w-auto">
@@ -165,7 +135,7 @@ if (!$result) {
             <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
         </form>
         <form method="post" class="d-inline-block">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <input type="hidden" name="action" value="update_status">
             <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
             <select name="status" class="form-select form-select-sm d-inline-block w-auto">
@@ -183,13 +153,10 @@ if (!$result) {
     <div class="table-responsive">
         <table class="table table-hover align-middle bg-white rounded shadow-sm">
             <thead class="table-success">
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Registered</th>
-                <th colspan="2">Role & Status</th>
-                <th>Actions</th>
-            </tr>
+                <tr>
+                    <th>Username</th><th>Email</th><th>Registered</th>
+                    <th colspan="2">Role & Status</th><th>Actions</th>
+                </tr>
             </thead>
             <tbody>
             <?php mysqli_data_seek($result, 0); while ($row = mysqli_fetch_assoc($result)): ?>
@@ -211,13 +178,10 @@ if (!$result) {
     <div class="table-responsive">
         <table class="table table-hover align-middle bg-white rounded shadow-sm">
             <thead class="table-warning">
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Registered</th>
-                <th colspan="2">Role & Status</th>
-                <th>Actions</th>
-            </tr>
+                <tr>
+                    <th>Username</th><th>Email</th><th>Registered</th>
+                    <th colspan="2">Role & Status</th><th>Actions</th>
+                </tr>
             </thead>
             <tbody>
             <?php mysqli_data_seek($result, 0); while ($row = mysqli_fetch_assoc($result)): ?>
@@ -239,13 +203,10 @@ if (!$result) {
     <div class="table-responsive">
         <table class="table table-hover align-middle bg-white rounded shadow-sm">
             <thead class="table-danger">
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Registered</th>
-                <th colspan="2">Role & Status</th>
-                <th>Actions</th>
-            </tr>
+                <tr>
+                    <th>Username</th><th>Email</th><th>Registered</th>
+                    <th colspan="2">Role & Status</th><th>Actions</th>
+                </tr>
             </thead>
             <tbody>
             <?php mysqli_data_seek($result, 0); while ($row = mysqli_fetch_assoc($result)): ?>
@@ -257,8 +218,9 @@ if (!$result) {
                         <td colspan="2"><?= renderRoleStatusForms($row) ?></td>
                         <td>
                             <?= renderEditButton($row['id']) ?>
-                            <form method="post" class="d-inline ms-2" onsubmit="return deleteUser(this, <?= $row['id'] ?>);">
-                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                            <form method="post" class="d-inline ms-2"
+                                  onsubmit="return deleteUser(this, <?= $row['id'] ?>);">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
                                 <button class="btn btn-sm btn-danger" type="submit">Delete</button>
@@ -271,20 +233,21 @@ if (!$result) {
         </table>
     </div>
 </div>
+
 <?php include 'includes/footer.php'; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function deleteUser(form, id) {
-        fetch(window.location.href, {
-            method: 'POST',
-            body: new FormData(form)
-        }).then(() => {
-            const row = document.getElementById('user-row-' + id);
-            row.classList.add('fade-out');
-            setTimeout(() => row.remove(), 1000);
-        });
-        return false;
-    }
+function deleteUser(form, id) {
+    fetch(window.location.href, {
+        method: 'POST',
+        body: new FormData(form)
+    }).then(() => {
+        const row = document.getElementById('user-row-' + id);
+        row.classList.add('fade-out');
+        setTimeout(() => row.remove(), 1000);
+    });
+    return false;
+}
 </script>
 </body>
 </html>
