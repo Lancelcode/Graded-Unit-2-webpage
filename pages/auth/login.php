@@ -2,13 +2,14 @@
 require_once __DIR__ . '/../../includes/init.php';
 
 if (isset($_SESSION['user_id'])) {
-    header('Location: /index.php');
+    header('Location: ' . BASE_URL . '/index.php');
     exit();
 }
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+$b = BASE_URL;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +19,7 @@ if (empty($_SESSION['csrf_token'])) {
     <style>
         html, body { height: 100%; margin: 0; }
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -54,8 +55,9 @@ if (empty($_SESSION['csrf_token'])) {
             </div>
         <?php endif; ?>
 
-        <form action="/includes/login_action.php" method="post">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+        <form action="<?= $b ?>/includes/login_action.php" method="post">
+            <input type="hidden" name="csrf_token"
+                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email:</label>
@@ -72,7 +74,14 @@ if (empty($_SESSION['csrf_token'])) {
         </form>
 
         <div class="text-center mt-3">
-            <a href="/pages/auth/forgot_password.php" class="text-success">Forgot your password?</a>
+            <a href="<?= $b ?>/pages/auth/forgot_password.php" class="text-success">
+                Forgot your password?
+            </a>
+        </div>
+        <div class="text-center mt-2">
+            <a href="<?= $b ?>/pages/auth/register.php" class="text-muted">
+                Don't have an account? Register
+            </a>
         </div>
     </div>
 </div>

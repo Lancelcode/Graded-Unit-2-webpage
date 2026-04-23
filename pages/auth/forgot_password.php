@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
 
 if (isset($_SESSION['user_id'])) {
-    header('Location: /index.php');
+    header('Location: ' . BASE_URL . '/index.php');
     exit();
 }
 
@@ -13,19 +13,20 @@ if (empty($_SESSION['csrf_token'])) {
 
 $errors  = [];
 $success = false;
+$b       = BASE_URL;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token');
     }
 
-    $email = trim($_POST['email']            ?? '');
-    $pass1 = $_POST['new_password']          ?? '';
-    $pass2 = $_POST['confirm_password']      ?? '';
+    $email = trim($_POST['email']           ?? '');
+    $pass1 = $_POST['new_password']         ?? '';
+    $pass2 = $_POST['confirm_password']     ?? '';
 
-    if (empty($email))          $errors[] = 'Email is required.';
-    if (strlen($pass1) < 1)     $errors[] = 'Password must not be empty.';
-    if ($pass1 !== $pass2)      $errors[] = 'Passwords do not match.';
+    if (empty($email))       $errors[] = 'Email is required.';
+    if (strlen($pass1) < 1)  $errors[] = 'Password must not be empty.';
+    if ($pass1 !== $pass2)   $errors[] = 'Passwords do not match.';
 
     if (empty($errors)) {
         $stmt = mysqli_prepare($link, "SELECT id FROM new_users WHERE email = ?");
@@ -55,21 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Reset Password | GreenScore</title>
     <style>
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             margin: 0;
             position: relative;
             min-height: 100vh;
         }
         body::before {
             content: '';
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: rgba(0, 0, 0, 0.5);
             z-index: 0;
         }
         .content-wrapper {
-            position: relative;
-            z-index: 1;
+            position: relative; z-index: 1;
             max-width: 450px;
             margin: 5rem auto;
             background: rgba(255, 255, 255, 0.95);
@@ -86,7 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php if ($success): ?>
         <div class="alert alert-success">
-            ✅ Password updated. <a href="/pages/auth/login.php">Log in now</a>.
+            ✅ Password updated.
+            <a href="<?= $b ?>/pages/auth/login.php">Log in now</a>.
         </div>
     <?php else: ?>
         <?php if (!empty($errors)): ?>
@@ -100,7 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form method="POST">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+            <input type="hidden" name="csrf_token"
+                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="text" name="email" class="form-control"
@@ -116,7 +117,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button class="btn btn-success w-100">Reset Password</button>
             <div class="text-center mt-3">
-                <a href="/pages/auth/login.php" class="text-decoration-none">← Back to Login</a>
+                <a href="<?= $b ?>/pages/auth/login.php" class="text-decoration-none">
+                    ← Back to Login
+                </a>
             </div>
         </form>
     <?php endif; ?>

@@ -2,13 +2,14 @@
 require_once __DIR__ . '/../../includes/init.php';
 
 if (isset($_SESSION['user_id'])) {
-    header('Location: /index.php');
+    header('Location: ' . BASE_URL . '/index.php');
     exit();
 }
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+$b = BASE_URL;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +21,7 @@ if (empty($_SESSION['csrf_token'])) {
         body {
             display: flex;
             flex-direction: column;
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
             color: #fff;
         }
@@ -54,8 +55,9 @@ if (empty($_SESSION['csrf_token'])) {
 <div class="container content-wrapper">
     <div class="card-bg">
         <h2 class="text-success text-center mb-4">Create Your Account</h2>
-        <form action="/pages/auth/register_action.php" method="POST">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+        <form action="<?= $b ?>/pages/auth/register_action.php" method="POST">
+            <input type="hidden" name="csrf_token"
+                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
             <div class="mb-3">
                 <label for="username" class="form-label">Name:</label>
@@ -90,6 +92,11 @@ if (empty($_SESSION['csrf_token'])) {
                 Subscribe for just £99 a year!
             </button>
         </form>
+        <div class="text-center mt-3">
+            <a href="<?= $b ?>/pages/auth/login.php" class="text-muted">
+                Already have an account? Login
+            </a>
+        </div>
     </div>
 </div>
 

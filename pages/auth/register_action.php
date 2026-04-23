@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($fn))             $errors[] = 'Enter your name.';
     if (empty($e))              $errors[] = 'Enter your email address.';
     if (empty($company_name))   $errors[] = 'Enter your company name.';
-    if (empty($contact_person)) $errors[] = 'Enter the contact person\'s name.';
+    if (empty($contact_person)) $errors[] = "Enter the contact person's name.";
     if (empty($phone_number))   $errors[] = 'Enter a phone number.';
 
     if (empty($pass1)) {
@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
         if (mysqli_stmt_num_rows($stmt) !== 0) {
-            $errors[] = 'Email address already registered. <a class="alert-link" href="/pages/auth/login.php">Sign In Now</a>';
+            $errors[] = 'Email address already registered. <a class="alert-link" href="'
+                . BASE_URL . '/pages/auth/login.php">Sign In Now</a>';
         }
         mysqli_stmt_close($stmt);
     }
@@ -59,19 +60,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "INSERT INTO green_calculator_results
                     (user_id, total_score, green_count, amber_count, red_count,
                      award_level, emoji, feedback_message, shortfall, donation_cost)
-                 VALUES (?, 0, 0, 0, 0, 'Initial Registration 🎟️', '🎟️', 'Thank you for joining GreenScore!', 0, 99.00)"
+                 VALUES (?, 0, 0, 0, 0, 'Initial Registration 🎟️', '🎟️',
+                         'Thank you for joining GreenScore!', 0, 99.00)"
             );
             mysqli_stmt_bind_param($stmt2, 'i', $user_id);
             mysqli_stmt_execute($stmt2);
             mysqli_stmt_close($stmt2);
-
             mysqli_close($link);
-            header("Location: /pages/auth/login.php?msg=Registered+Successfully");
+
+            header('Location: ' . BASE_URL . '/pages/auth/login.php?msg=Registered+Successfully');
             exit();
         } else {
             mysqli_stmt_close($stmt);
             mysqli_close($link);
-            echo "<p>Registration failed. Please try again.</p>";
+            echo '<p>Registration failed. Please try again.</p>';
         }
     } else {
         echo '<div class="container mt-4">';
@@ -79,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($errors as $msg) {
             echo " - $msg<br>";
         }
-        echo '<p><a href="/pages/auth/register.php">Go back</a></p></div>';
+        echo '<p><a href="' . BASE_URL . '/pages/auth/register.php">Go back</a></p></div>';
         mysqli_close($link);
     }
 }
