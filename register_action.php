@@ -6,75 +6,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];
 
-    // CSRF protection
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    // CSRF check
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         $errors[] = 'Invalid CSRF token.';
     }
 
-    // Name
-    if (empty($_POST['username'])) {
-        $errors[] = 'Enter your name.';
-    } else {
-        $fn = mysqli_real_escape_string($link, trim($_POST['username']));
-    }
+    // FIX: replaced mysqli_real_escape_string + raw query strings
+    // with trim/validate only here — prepared statements handle escaping below
+    $fn             = trim($_POST['username']       ?? '');
+    $e              = trim($_POST['email']          ?? '');
+    $company_name   = trim($_POST['company_name']   ?? '');
+    $contact_person = trim($_POST['contact_person'] ?? '');
+    $phone_number   = trim($_POST['phone_number']   ?? '');
+    $pass1          = $_POST['pass1'] ?? '';
+    $pass2          = $_POST['pass2'] ?? '';
 
-    // Email
-    if (empty($_POST['email'])) {
-        $errors[] = 'Enter your email address.';
-    } else {
-        $e = mysqli_real_escape_string($link, trim($_POST['email']));
-    }
+    if (empty($fn))             $errors[] = 'Enter your name.';
+    if (empty($e))              $errors[] = 'Enter your email address.';
+    if (empty($company_name))   $errors[] = 'Enter your company name.';
+    if (empty($contact_person)) $errors[] = 'Enter the contact person\'s name.';
+    if (empty($phone_number))   $errors[] = 'Enter a phone number.';
 
-    // Password
-    if (!empty($_POST['pass1'])) {
-        if ($_POST['pass1'] !== $_POST['pass2']) {
-            $errors[] = 'Passwords do not match.';
-        } else {
-            $p = password_hash(trim($_POST['pass1']), PASSWORD_DEFAULT);
-        }
-    } else {
+    if (empty($pass1)) {
         $errors[] = 'Enter your password.';
-    }
-
-    // Required additional fields
-    if (empty($_POST['company_name'])) {
-        $errors[] = 'Enter your company name.';
+    } elseif ($pass1 !== $pass2) {
+        $errors[] = 'Passwords do not match.';
     } else {
-        $company_name = mysqli_real_escape_string($link, trim($_POST['company_name']));
-    }
-
-    if (empty($_POST['contact_person'])) {
-        $errors[] = 'Enter the contact person\'s name.';
-    } else {
-        $contact_person = mysqli_real_escape_string($link, trim($_POST['contact_person']));
-    }
-
-    if (empty($_POST['phone_number'])) {
-        $errors[] = 'Enter a phone number.';
-    } else {
-        $phone_number = mysqli_real_escape_string($link, trim($_POST['phone_number']));
+        $p = password_hash(trim($pass1), PASSWORD_DEFAULT);
     }
 
     // Check if email already exists
     if (empty($errors)) {
-        $q = "SELECT id FROM new_users WHERE email=?";
-        $stmt = mysqli_prepare($link, $q);
+        $stmt = mysqli_prepare($link, "SELECT id FROM new_users WHERE email = ?");
         mysqli_stmt_bind_param($stmt, 's', $e);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
 
-        if (mysqli_stmt_num_rows($stmt) != 0) {
+        if (mysqli_stmt_num_rows($stmt) !== 0) {
             $errors[] = 'Email address already registered. <a class="alert-link" href="index.php">Sign In Now</a>';
         }
-
         mysqli_stmt_close($stmt);
     }
 
     // Register the user
     if (empty($errors)) {
-        $q = "INSERT INTO new_users (username, email, password, company_name, contact_person, phone_number)
-              VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = mysqli_prepare($link, $q);
+        $stmt = mysqli_prepare($link,
+            "INSERT INTO new_users (username, email, password, company_name, contact_person, phone_number)
+             VALUES (?, ?, ?, ?, ?, ?)"
+        );
         mysqli_stmt_bind_param($stmt, 'ssssss', $fn, $e, $p, $company_name, $contact_person, $phone_number);
         $r = mysqli_stmt_execute($stmt);
 
@@ -82,20 +61,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user_id = mysqli_insert_id($link);
             mysqli_stmt_close($stmt);
 
-            // ✅ Add £99 registration donation
-            $insert_donation = "
-                INSERT INTO green_calculator_results (
-                    user_id, total_score, green_count, amber_count, red_count,
-                    award_level, emoji, feedback_message, shortfall, donation_cost
-                ) VALUES (?, 0, 0, 0, 0, 'Initial Registration 🎟️', '🎟️', 'Thank you for joining GreenScore!', 0, 99.00)
-            ";
-            $stmt2 = mysqli_prepare($link, $insert_donation);
+            // £99 registration entry
+            $stmt2 = mysqli_prepare($link,
+                "INSERT INTO green_calculator_results
+                    (user_id, total_score, green_count, amber_count, red_count,
+                     award_level, emoji, feedback_message, shortfall, donation_cost)
+                 VALUES (?, 0, 0, 0, 0, 'Initial Registration 🎟️', '🎟️', 'Thank you for joining GreenScore!', 0, 99.00)"
+            );
             mysqli_stmt_bind_param($stmt2, 'i', $user_id);
             mysqli_stmt_execute($stmt2);
             mysqli_stmt_close($stmt2);
 
             mysqli_close($link);
-            header("Location: login.php?msg=Registered+and+Charged+£99");
+            header("Location: login.php?msg=Registered+Successfully");
             exit();
         } else {
             mysqli_stmt_close($stmt);
@@ -112,4 +90,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_close($link);
     }
 }
-?>
