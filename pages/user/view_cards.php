@@ -10,7 +10,11 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 $b      = BASE_URL;
 $userId = (int) $_SESSION['user_id'];
 
-$stmt = mysqli_prepare($link, "SELECT * FROM credit_cards WHERE user_id = ?");
+$stmt = mysqli_prepare($link,
+    "SELECT id, card_number, expiry_date, cardholder_name, cvv
+     FROM credit_cards
+     WHERE user_id = ?"
+);
 mysqli_stmt_bind_param($stmt, 'i', $userId);
 mysqli_stmt_execute($stmt);
 $r = mysqli_stmt_get_result($stmt);

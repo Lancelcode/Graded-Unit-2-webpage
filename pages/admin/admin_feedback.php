@@ -13,7 +13,11 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 }
 
 $b      = BASE_URL;
-$result = mysqli_query($link, "SELECT * FROM feedback ORDER BY created_at DESC");
+$result = mysqli_query($link,
+    "SELECT id, name, email, message, created_at, visible_to_public, admin_response
+     FROM feedback
+     ORDER BY created_at DESC"
+);
 ?>
 <!DOCTYPE html>
 <html lang="en">

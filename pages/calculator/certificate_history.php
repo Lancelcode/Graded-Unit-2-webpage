@@ -86,16 +86,21 @@ mysqli_stmt_close($count_stmt);
 
 if ($level_filter !== '') {
     $data_stmt = mysqli_prepare($link,
-        "SELECT * FROM green_calculator_results WHERE user_id = ? AND award_level = ?
+        "SELECT id, submitted_at, award_level, total_score,
+                green_count, amber_count, red_count, feedback_message
+         FROM green_calculator_results
+         WHERE user_id = ? AND award_level = ?
          ORDER BY submitted_at $order LIMIT ? OFFSET ?"
     );
     mysqli_stmt_bind_param($data_stmt, 'isii', $user_id, $level_filter, $entries_per_page, $offset);
 } else {
     $data_stmt = mysqli_prepare($link,
-        "SELECT * FROM green_calculator_results WHERE user_id = ?
+        "SELECT id, submitted_at, award_level, total_score,
+                green_count, amber_count, red_count, feedback_message
+         FROM green_calculator_results
+         WHERE user_id = ?
          ORDER BY submitted_at $order LIMIT ? OFFSET ?"
     );
-    mysqli_stmt_bind_param($data_stmt, 'iii', $user_id, $entries_per_page, $offset);
 }
 mysqli_stmt_execute($data_stmt);
 $results = mysqli_stmt_get_result($data_stmt);
