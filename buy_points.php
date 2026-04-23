@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once 'includes/init.php';
 if (
     !isset($_SESSION['username']) ||
     !isset($_SESSION['user_id']) ||
