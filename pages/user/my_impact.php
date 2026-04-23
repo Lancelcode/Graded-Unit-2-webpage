@@ -4,25 +4,32 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 include ROOT_PATH . '/includes/nav.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /pages/auth/login.php');
+    header('Location: ' . BASE_URL . '/pages/auth/login.php');
     exit();
 }
 
+$b       = BASE_URL;
 $user_id = (int) $_SESSION['user_id'];
 
-$stmt = mysqli_prepare($link, "SELECT COUNT(*) AS total FROM green_calculator_results WHERE user_id = ?");
+$stmt = mysqli_prepare($link,
+    "SELECT COUNT(*) AS total FROM green_calculator_results WHERE user_id = ?"
+);
 mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
 $total = (int) mysqli_fetch_assoc(mysqli_stmt_get_result($stmt))['total'];
 mysqli_stmt_close($stmt);
 
-$stmt = mysqli_prepare($link, "SELECT SUM(green_count) AS green FROM green_calculator_results WHERE user_id = ?");
+$stmt = mysqli_prepare($link,
+    "SELECT SUM(green_count) AS green FROM green_calculator_results WHERE user_id = ?"
+);
 mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
 $green = (int) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmt))['green'] ?? 0);
 mysqli_stmt_close($stmt);
 
-$stmt = mysqli_prepare($link, "SELECT SUM(donation_cost) AS donation FROM green_calculator_results WHERE user_id = ?");
+$stmt = mysqli_prepare($link,
+    "SELECT SUM(donation_cost) AS donation FROM green_calculator_results WHERE user_id = ?"
+);
 mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
 $donation = (float) (mysqli_fetch_assoc(mysqli_stmt_get_result($stmt))['donation'] ?? 0);
@@ -88,26 +95,18 @@ $badgeText = match ($badgeSlug) {
     <style>
         html, body { height: 100%; margin: 0; }
         body {
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
-            position: relative;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            position: relative; color: #fff; display: flex; flex-direction: column;
         }
         body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1;
+            content: ''; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: -1;
         }
         .content-wrapper { flex-grow: 1; padding: 4rem 1rem; }
         .card-bg {
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+            background: rgba(255,255,255,0.95); color: #333;
+            padding: 2rem; border-radius: 1rem;
+            box-shadow: 0 0 12px rgba(0,0,0,0.2);
         }
         .progress { height: 20px; }
         footer { position: relative; z-index: 1; }
@@ -126,7 +125,7 @@ $badgeText = match ($badgeSlug) {
             <label class="form-label">Your Green Journey Progress</label>
             <div class="progress">
                 <div class="progress-bar bg-success"
-                     style="width: <?= $greenPercent ?>%;" role="progressbar">
+                     style="width:<?= $greenPercent ?>%;" role="progressbar">
                     <?= $greenPercent ?>%
                 </div>
             </div>
@@ -138,15 +137,15 @@ $badgeText = match ($badgeSlug) {
     </div>
 
     <div class="text-center mt-4 d-flex flex-wrap justify-content-center gap-3">
-        <a href="/pages/calculator/certificate_history.php"
+        <a href="<?= $b ?>/pages/calculator/certificate_history.php"
            class="btn btn-lg btn-outline-light fw-bold px-4 py-2 shadow-sm">
             📄 View Certificates
         </a>
-        <a href="/pages/calculator/green_calculator.php"
+        <a href="<?= $b ?>/pages/calculator/green_calculator.php"
            class="btn btn-lg btn-success fw-bold px-4 py-2 shadow-sm">
             🧮 Take the Calculator Again
         </a>
-        <a href="/pages/user/user_account.php"
+        <a href="<?= $b ?>/pages/user/user_account.php"
            class="btn btn-lg btn-outline-light fw-bold px-4 py-2 shadow-sm">
             👤 Back to My Profile
         </a>
@@ -158,13 +157,15 @@ $badgeText = match ($badgeSlug) {
             <h5 class="text-muted mb-0">Level <?= $badgeLevel ?></h5>
             <h1 class="display-5 fw-bold mb-3"><?= $badge ?></h1>
             <?php
-            $badgeImage = ROOT_PATH . "/assets/images/illustrations/{$badgeSlug}.jpg";
+            $badgeImage     = ROOT_PATH . "/assets/images/illustrations/{$badgeSlug}.jpg";
+            $badgeImageUrl  = $b . "/assets/images/illustrations/{$badgeSlug}.jpg";
             if (file_exists($badgeImage)) {
                 echo "<div class='d-flex justify-content-center'>
-                    <img src='/assets/images/illustrations/{$badgeSlug}.jpg'
+                    <img src='{$badgeImageUrl}'
                          alt='" . htmlspecialchars($badge) . "'
                          class='img-fluid my-4'
-                         style='max-width:600px; border-radius:1rem; box-shadow:0 0 16px rgba(0,0,0,0.3);'>
+                         style='max-width:600px; border-radius:1rem;
+                                box-shadow:0 0 16px rgba(0,0,0,0.3);'>
                   </div>";
             }
             ?>

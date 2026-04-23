@@ -2,15 +2,15 @@
 require_once __DIR__ . '/../../includes/init.php';
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])) {
-    header('Location: /pages/auth/login.php');
+    header('Location: ' . BASE_URL . '/pages/auth/login.php');
     exit();
 }
 
 require_once ROOT_PATH . '/includes/connect_db.php';
+$b      = BASE_URL;
 $userId = (int) $_SESSION['user_id'];
 
-$q    = "SELECT * FROM credit_cards WHERE user_id = ?";
-$stmt = mysqli_prepare($link, $q);
+$stmt = mysqli_prepare($link, "SELECT * FROM credit_cards WHERE user_id = ?");
 mysqli_stmt_bind_param($stmt, 'i', $userId);
 mysqli_stmt_execute($stmt);
 $r = mysqli_stmt_get_result($stmt);
@@ -23,21 +23,15 @@ $r = mysqli_stmt_get_result($stmt);
     <style>
         html, body { height: 100%; margin: 0; }
         body {
-            display: flex;
-            flex-direction: column;
-            background: url('/assets/images/forest-money.jpg') center/cover no-repeat fixed;
-            position: relative;
-            color: #333;
+            display: flex; flex-direction: column;
+            background: url('<?= $b ?>/assets/images/forest-money.jpg') center/cover no-repeat fixed;
+            position: relative; color: #333;
         }
         body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 0;
-            pointer-events: none;
+            content: ''; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 0; pointer-events: none;
         }
-        .content-wrapper { flex: 1; position: relative; z-index: auto; padding: 4rem 0; }
+        .content-wrapper { flex: 1; position: relative; z-index: 1; padding: 4rem 0; }
         .card-bg { background: rgba(255,255,255,0.85); }
         footer { position: relative; z-index: 1; background-color: #fff; padding: 2rem 0; }
     </style>
@@ -81,7 +75,8 @@ $r = mysqli_stmt_get_result($stmt);
                                 <div class="modal fade" id="delModal<?= $row['id'] ?>" tabindex="-1">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form action="/pages/user/manage_credit_card.php" method="post">
+                                            <form action="<?= $b ?>/pages/user/manage_credit_card.php"
+                                                  method="post">
                                                 <input type="hidden" name="csrf_token"
                                                        value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <input type="hidden" name="action" value="delete">
@@ -97,7 +92,8 @@ $r = mysqli_stmt_get_result($stmt);
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                                    <button type="submit"
+                                                            class="btn btn-danger">Yes, Delete</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -108,7 +104,8 @@ $r = mysqli_stmt_get_result($stmt);
                                 <div class="modal fade" id="editModal<?= $row['id'] ?>" tabindex="-1">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form action="/pages/user/manage_credit_card.php" method="post">
+                                            <form action="<?= $b ?>/pages/user/manage_credit_card.php"
+                                                  method="post">
                                                 <input type="hidden" name="csrf_token"
                                                        value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                                 <input type="hidden" name="action" value="update">
@@ -173,7 +170,7 @@ $r = mysqli_stmt_get_result($stmt);
     <?php endif; ?>
 
     <div class="mt-4 text-center">
-        <a href="/pages/user/user_account.php" class="btn btn-outline-light">
+        <a href="<?= $b ?>/pages/user/user_account.php" class="btn btn-outline-light">
             ⬅ Back to My Profile
         </a>
     </div>

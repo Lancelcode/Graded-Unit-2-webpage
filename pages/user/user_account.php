@@ -7,20 +7,23 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header('Location: /pages/auth/login.php');
+    header('Location: ' . BASE_URL . '/pages/auth/login.php');
     exit();
 }
 
+$b       = BASE_URL;
 $user_id = (int) $_SESSION['user_id'];
 
-$q    = "SELECT username, email, created_at, status, company_name, contact_person, phone_number FROM new_users WHERE id = ?";
-$stmt = mysqli_prepare($link, $q);
+$stmt = mysqli_prepare($link,
+    "SELECT username, email, created_at, status, company_name, contact_person, phone_number
+     FROM new_users WHERE id = ?"
+);
 mysqli_stmt_bind_param($stmt, 'i', $user_id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
 if (mysqli_num_rows($result) === 0) {
-    header('Location: /pages/auth/login.php');
+    header('Location: ' . BASE_URL . '/pages/auth/login.php');
     exit();
 }
 
@@ -40,20 +43,16 @@ $phone    = htmlspecialchars($row['phone_number']   ?? '—');
     <title>My Profile | GreenScore</title>
     <style>
         html, body { height: 100%; margin: 0; display: flex; flex-direction: column; }
-        .content-wrapper { flex: 1; }
         body {
             min-height: 100vh;
-            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('<?= $b ?>/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
             position: relative;
         }
         body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 0;
+            content: ''; position: absolute; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 0;
         }
-        .content-wrapper { position: relative; z-index: 1; padding: 4rem 0; }
+        .content-wrapper { flex: 1; position: relative; z-index: 1; padding: 4rem 0; }
         .card-bg { background: rgba(255,255,255,0.85); }
         footer { position: relative; z-index: 1; color: #444; padding: 2rem 0; }
     </style>
@@ -88,13 +87,13 @@ $phone    = htmlspecialchars($row['phone_number']   ?? '—');
             <div class="card card-bg shadow-sm h-100">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Actions</h5>
-                    <a href="/pages/user/my_impact.php"
+                    <a href="<?= $b ?>/pages/user/my_impact.php"
                        class="btn btn-success mb-3">📈 View My Impact</a>
-                    <a href="/pages/calculator/certificate_history.php"
+                    <a href="<?= $b ?>/pages/calculator/certificate_history.php"
                        class="btn btn-success mb-3">🏅 Certificate History</a>
-                    <a href="/pages/calculator/green_calculator.php"
+                    <a href="<?= $b ?>/pages/calculator/green_calculator.php"
                        class="btn btn-success mb-3">🧮 Take Green Calculator</a>
-                    <a href="/pages/community/community.php"
+                    <a href="<?= $b ?>/pages/community/community.php"
                        class="btn btn-success mb-3">🌱 Visit Community</a>
                     <?php
                     $btnClass = 'btn-info';
@@ -112,7 +111,8 @@ $phone    = htmlspecialchars($row['phone_number']   ?? '—');
             <div class="card card-bg shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">💳 Add Credit Card</h5>
-                    <form action="/pages/user/manage_credit_card.php" method="POST" class="row g-3">
+                    <form action="<?= $b ?>/pages/user/manage_credit_card.php"
+                          method="POST" class="row g-3">
                         <input type="hidden" name="csrf_token"
                                value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                         <input type="hidden" name="action" value="add">
@@ -137,7 +137,7 @@ $phone    = htmlspecialchars($row['phone_number']   ?? '—');
                             <button type="submit" class="btn btn-success w-100">💾 Add Card</button>
                         </div>
                         <div class="col-md-6">
-                            <a href="/pages/user/view_cards.php"
+                            <a href="<?= $b ?>/pages/user/view_cards.php"
                                class="btn btn-outline-dark w-100">📄 View Cards</a>
                         </div>
                     </form>
