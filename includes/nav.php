@@ -82,6 +82,12 @@ $b = BASE_URL;
                             <a class="btn btn-light btn-sm" href="<?= $b ?>/pages/auth/register.php">Register</a>
                         </li>
                     <?php endif; ?>
+
+                    <li class="nav-item">
+                        <button id="darkModeToggle" class="dark-mode-btn" title="Toggle dark mode">
+                            🌙
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>

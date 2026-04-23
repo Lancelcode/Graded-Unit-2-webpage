@@ -68,3 +68,25 @@
         </div>
     </div>
 </footer>
+
+<script>
+(function () {
+    const saved = localStorage.getItem('greenscore-dark');
+    if (saved === 'on') {
+        document.body.classList.add('dark-mode');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('darkModeToggle');
+        if (!btn) return;
+
+        btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+
+        btn.addEventListener('click', function () {
+            const isDark = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('greenscore-dark', isDark ? 'on' : 'off');
+            btn.textContent = isDark ? '☀️' : '🌙';
+        });
+    });
+})();
+</script>
