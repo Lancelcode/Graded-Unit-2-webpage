@@ -1,13 +1,11 @@
 <?php
-require_once 'includes/init.php';
-require_once 'includes/connect_db.php';
+require_once __DIR__ . '/../../includes/init.php';
+require_once ROOT_PATH . '/includes/connect_db.php';
 
 $logged_in_user     = $_SESSION['user_id']  ?? null;
 $logged_in_username = $_SESSION['username'] ?? '';
 $logged_in_email    = $_SESSION['email']    ?? '';
 
-// FIX: delete logic was at the bottom after all HTML output
-// Moved here so redirects work correctly
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_tip'])) {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
@@ -22,13 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_tip'])) {
     if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
         exit();
     }
-    header('Location: community.php');
+    header('Location: /pages/community/community.php');
     exit();
 }
 
-include 'includes/nav.php';
+include ROOT_PATH . '/includes/nav.php';
 
-// Pagination
 $limit  = 5;
 $page   = isset($_GET['page']) ? max((int) $_GET['page'], 1) : 1;
 $offset = ($page - 1) * $limit;
@@ -51,18 +48,14 @@ $results = mysqli_stmt_get_result($stmt);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Community Board | GreenScore</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; padding: 0; }
         body {
             display: flex;
             flex-direction: column;
-            background: url('assets/images/forest-hero.jpg') center/cover no-repeat fixed;
+            background: url('/assets/images/forest-hero.jpg') center/cover no-repeat fixed;
         }
         .page-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
         .content-wrapper { flex: 1; padding: 4rem 1rem; }
@@ -80,29 +73,31 @@ $results = mysqli_stmt_get_result($stmt);
         <h1 class="text-white text-center mb-4">📝 Sustainability Community Board</h1>
         <p class="lead text-center text-white mb-5">Share your eco-friendly tips 💚</p>
 
-        <!-- Tip form -->
         <div class="card card-bg shadow-sm mb-4">
             <div class="card-body">
-                <form action="post_tip.php" method="POST">
-                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                <form action="/pages/community/post_tip.php" method="POST">
+                    <input type="hidden" name="csrf_token"
+                           value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                     <textarea name="message" rows="3" class="form-control"
                               placeholder="E.g. I switched to bamboo toothbrushes!" required></textarea>
                     <button type="submit" class="btn btn-success mt-3">✅ Post Tip</button>
                 </form>
                 <div class="d-flex justify-content-between align-items-center mt-3">
-                    <form method="POST" action="clear_tips.php"
-                          onsubmit="return confirm('⚠️ Are you sure you want to clear all your tips? This cannot be undone.')">
-                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                    <form method="POST" action="/pages/community/clear_tips.php"
+                          onsubmit="return confirm('⚠️ Clear all your tips? This cannot be undone.')">
+                        <input type="hidden" name="csrf_token"
+                               value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                         <button type="submit" class="btn btn-danger">🧹 Clear My Tips</button>
                     </form>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <a href="user_account.php" class="btn btn-outline-dark">👤 Back to My Profile</a>
+                <div class="mt-3">
+                    <a href="/pages/user/user_account.php" class="btn btn-outline-dark">
+                        👤 Back to My Profile
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Tip list -->
         <div class="card card-bg shadow-sm mb-4">
             <div class="card-body">
                 <h4 class="mb-4">💬 Latest Tips</h4>
@@ -126,15 +121,14 @@ $results = mysqli_stmt_get_result($stmt);
                                             data-message="<?= htmlspecialchars($row['message'], ENT_QUOTES) ?>">
                                         ✏️ Edit
                                     </button>
-                                    <!-- FIX: CSRF token added to delete form -->
                                     <form method="POST"
                                           onsubmit="return deleteTip(this, <?= (int) $row['id'] ?>);"
                                           class="d-inline">
-                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                                        <input type="hidden" name="csrf_token"
+                                               value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                                         <input type="hidden" name="delete_id" value="<?= (int) $row['id'] ?>">
-                                        <button type="submit" name="delete_tip" class="btn btn-sm btn-outline-danger">
-                                            🗑 Delete
-                                        </button>
+                                        <button type="submit" name="delete_tip"
+                                                class="btn btn-sm btn-outline-danger">🗑 Delete</button>
                                     </form>
                                 </div>
                             <?php endif; ?>
@@ -146,7 +140,6 @@ $results = mysqli_stmt_get_result($stmt);
             </div>
         </div>
 
-        <!-- Pagination -->
         <?php if ($total_pages > 1): ?>
             <nav class="mt-4">
                 <ul class="pagination justify-content-center">
@@ -160,21 +153,22 @@ $results = mysqli_stmt_get_result($stmt);
         <?php endif; ?>
     </div>
 
-    <?php include 'includes/footer.php'; ?>
+    <?php include ROOT_PATH . '/includes/footer.php'; ?>
 </div>
 
-<!-- Edit modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <form class="modal-content" action="edit_tip.php" method="POST">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+        <form class="modal-content" action="/pages/community/edit_tip.php" method="POST">
+            <input type="hidden" name="csrf_token"
+                   value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Tip</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="tip_id" id="editTipId">
-                <textarea class="form-control" name="message" id="editTipMessage" rows="4" required></textarea>
+                <textarea class="form-control" name="message"
+                          id="editTipMessage" rows="4" required></textarea>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success">💾 Save Changes</button>

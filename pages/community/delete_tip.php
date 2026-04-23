@@ -1,9 +1,7 @@
 <?php
-require_once 'includes/init.php';
-require_once 'includes/connect_db.php';
+require_once __DIR__ . '/../../includes/init.php';
+require_once ROOT_PATH . '/includes/connect_db.php';
 
-// FIX: was a GET request — any link could trigger a delete without user knowledge
-// Now requires POST + CSRF
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
@@ -21,5 +19,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
 }
 
 mysqli_close($link);
-header("Location: community.php");
+header("Location: /pages/community/community.php");
 exit();
