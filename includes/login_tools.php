@@ -13,8 +13,9 @@ function validate($link, $email = '', $pwd = '') {
         return [false, $errors];
     }
 
-    // FIX: prepared statement — $email never touches the query string
-    $stmt = mysqli_prepare($link, "SELECT id, username, email, password, role FROM new_users WHERE email = ?");
+    $stmt = mysqli_prepare($link,
+        "SELECT id, username, email, password, role FROM new_users WHERE email = ?"
+    );
     mysqli_stmt_bind_param($stmt, 's', $email);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -37,9 +38,9 @@ function validate($link, $email = '', $pwd = '') {
 }
 
 function load($page = 'login.php') {
-    // FIX: was hardcoded to http://localhost/Graded-Unit-2-webpage/
-    // Root-relative path works on any server
+    // FIX: use BASE_URL so redirects work in any subfolder
+    $base = defined('BASE_URL') ? BASE_URL : '';
     $page = ltrim($page, '/');
-    header('Location: /' . $page);
+    header('Location: ' . $base . '/' . $page);
     exit();
 }
