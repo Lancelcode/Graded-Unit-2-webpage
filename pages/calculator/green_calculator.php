@@ -79,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         $award, $emoji, $message, $shortfall, $cost
     );
     mysqli_stmt_execute($stmt);
+    $last_cert_id = mysqli_insert_id($link);
     mysqli_stmt_close($stmt);
     $show_modal = true;
 }
@@ -231,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <?php endif; ?>
             </div>
             <div class="modal-footer d-flex flex-wrap justify-content-between gap-2">
-                <a href="<?= $b ?>/pages/calculator/certificate_preview.php?level=<?= urlencode($award) ?>"
+                <a href="<?= $b ?>/pages/calculator/certificate_preview.php?id=<?= $last_cert_id ?>"
                    class="btn btn-outline-success">📄 Download Certificate</a>
                 <?php if ($shortfall > 0): ?>
                     <a href="<?= $b ?>/pages/calculator/buy_points.php?shortfall=<?= $shortfall ?>&cost=<?= $cost ?>"
