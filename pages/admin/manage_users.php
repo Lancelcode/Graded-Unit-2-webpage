@@ -4,10 +4,8 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 require_once ROOT_PATH . '/includes/helpers.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    http_response_code(403);
-    die("<div class='container mt-5'>
-           <div class='alert alert-danger'>Access denied. Admins only.</div>
-         </div>");
+    include ROOT_PATH . '/403.php';
+    exit();
 }
 
 
