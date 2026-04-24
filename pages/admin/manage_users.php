@@ -4,10 +4,11 @@ require_once ROOT_PATH . '/includes/connect_db.php';
 require_once ROOT_PATH . '/includes/helpers.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    include ROOT_PATH . '/403.php';
-    exit();
+    http_response_code(403);
+    die("<div class='container mt-5'>
+           <div class='alert alert-danger'>Access denied. Admins only.</div>
+         </div>");
 }
-
 
 $b       = BASE_URL;
 $error   = '';
@@ -64,6 +65,8 @@ $result = mysqli_query($link,
     'SELECT id, username, email, created_at, role, status FROM new_users ORDER BY username'
 );
 if (!$result) die('Query error: ' . mysqli_error($link));
+
+include ROOT_PATH . '/includes/nav.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,70 +74,106 @@ if (!$result) die('Query error: ' . mysqli_error($link));
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Manage Users | GreenScore</title>
     <style>
-        h2.admin-title, h3.admin-title { color: #198754; }
+        .auth-wrapper { max-width: 1000px; margin: 0 auto; }
+
+        .section-title {
+            color: #198754;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        /* Table sits inside the white card */
+        .table { margin-bottom: 0; }
+        .table thead th { font-weight: 600; font-size: 0.85rem; letter-spacing: 0.03em; }
+        .table td { vertical-align: middle; font-size: 0.9rem; }
+
+        /* Dark mode table text */
+        body.dark-mode .table       { color: #e0e0e0; }
+        body.dark-mode .table-hover tbody tr:hover > * { background-color: rgba(255,255,255,0.04); }
+        body.dark-mode .bg-white    { background: rgba(30,30,30,0.97) !important; }
+        body.dark-mode .admin-title { color: #4ade80; }
     </style>
 </head>
-<body class="bg-page overlay-60"
+<body class="bg-page overlay-50"
       style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
-<?php include ROOT_PATH . '/includes/nav.php'; ?>
 
-<div class="container">
-    <div class="content-box">
-        <h2 class="admin-title mb-4">👥 Manage Users</h2>
+<div class="container content-wrapper">
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h2 class="text-success text-center mb-4">👥 Manage Users</h2>
 
-        <?php if ($error): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-        <?php elseif ($success): ?>
-            <div class="alert alert-success fade-out"><?= htmlspecialchars($success) ?></div>
-        <?php endif; ?>
+            <?php if ($error): ?>
+                <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+            <?php elseif ($success): ?>
+                <div class="alert alert-success fade-out"><?= htmlspecialchars($success) ?></div>
+            <?php endif; ?>
 
-        <?php
+            <?php
+            $sections = [
+                ['label' => '✅ Active Users',              'status' => 'active',      'head' => 'table-success', 'delete' => false],
+                ['label' => '🕓 Inactive Users',            'status' => 'inactive',    'head' => 'table-warning', 'delete' => false],
+                ['label' => '🗑️ Users Marked for Deletion', 'status' => 'deactivated', 'head' => 'table-danger',  'delete' => true ],
+            ];
 
-        $sections = [
-            ['label' => '✅ Active Users',              'status' => 'active',      'head' => 'table-success', 'delete' => false],
-            ['label' => '🕓 Inactive Users',            'status' => 'inactive',    'head' => 'table-warning', 'delete' => false],
-            ['label' => '🗑️ Users Marked for Deletion', 'status' => 'deactivated', 'head' => 'table-danger',  'delete' => true ],
-        ];
+            foreach ($sections as $section):
+                mysqli_data_seek($result, 0);
 
-        foreach ($sections as $section):
-            mysqli_data_seek($result, 0);
-        ?>
-        <h3 class="admin-title mt-4"><?= $section['label'] ?></h3>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle bg-white rounded shadow-sm">
-                <thead class="<?= $section['head'] ?>">
-                    <tr>
-                        <th>Username</th><th>Email</th><th>Registered</th>
-                        <th colspan="2">Role &amp; Status</th><th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php while ($row = mysqli_fetch_assoc($result)):
-                    if ($row['status'] !== $section['status']) continue; ?>
-                    <tr id="user-row-<?= (int) $row['id'] ?>">
-                        <td><?= htmlspecialchars($row['username']) ?></td>
-                        <td><?= htmlspecialchars($row['email']) ?></td>
-                        <td><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
-                        <td colspan="2"><?= renderRoleStatusForms($row) ?></td>
-                        <td>
-                            <?= renderEditButton((int) $row['id'], $b) ?>
-                            <?php if ($section['delete']): ?>
-                            <form method="post" class="d-inline ms-2"
-                                  onsubmit="return deleteUser(this, <?= (int) $row['id'] ?>);">
-                                <input type="hidden" name="csrf_token"
-                                       value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="user_id" value="<?= (int) $row['id'] ?>">
-                                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
-                            </form>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-                </tbody>
-            </table>
+                // Count rows in this section
+                $section_count = 0;
+                while ($r = mysqli_fetch_assoc($result)) {
+                    if ($r['status'] === $section['status']) $section_count++;
+                }
+                mysqli_data_seek($result, 0);
+            ?>
+            <div class="section-title"><?= $section['label'] ?>
+                <span class="badge bg-secondary fw-normal ms-1"><?= $section_count ?></span>
+            </div>
+
+            <?php if ($section_count === 0): ?>
+                <p class="text-muted small mb-3">No users in this category.</p>
+            <?php else: ?>
+            <div class="table-responsive mb-3">
+                <table class="table table-hover align-middle bg-white rounded shadow-sm">
+                    <thead class="<?= $section['head'] ?>">
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Registered</th>
+                            <th>Role &amp; Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php while ($row = mysqli_fetch_assoc($result)):
+                        if ($row['status'] !== $section['status']) continue; ?>
+                        <tr id="user-row-<?= (int) $row['id'] ?>">
+                            <td><strong><?= htmlspecialchars($row['username']) ?></strong></td>
+                            <td class="text-muted"><?= htmlspecialchars($row['email']) ?></td>
+                            <td class="text-muted"><?= date('d/m/Y', strtotime($row['created_at'])) ?></td>
+                            <td><?= renderRoleStatusForms($row) ?></td>
+                            <td>
+                                <?= renderEditButton((int) $row['id'], $b) ?>
+                                <?php if ($section['delete']): ?>
+                                <form method="post" class="d-inline ms-2"
+                                      onsubmit="return deleteUser(this, <?= (int) $row['id'] ?>);">
+                                    <input type="hidden" name="csrf_token"
+                                           value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="user_id" value="<?= (int) $row['id'] ?>">
+                                    <button class="btn btn-sm btn-danger" type="submit">🗑 Delete</button>
+                                </form>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
+            <?php endif; ?>
+            <?php endforeach; ?>
+
         </div>
-        <?php endforeach; ?>
     </div>
 </div>
 
