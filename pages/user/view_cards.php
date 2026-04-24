@@ -157,8 +157,12 @@ $r = mysqli_stmt_get_result($stmt);
             </div>
         </div>
     <?php else: ?>
-        <div class="alert alert-info card-bg shadow-sm">
-            No saved cards yet. Add one in your profile.
+        <div class="card card-bg shadow-sm p-5 text-center">
+            <div style="font-size:3rem;">💳</div>
+            <h4 class="mt-3 mb-2">No saved cards yet</h4>
+            <p class="text-muted mb-4">Add a credit card from your profile to use for contributions.</p>
+            <a href="<?= $b ?>/pages/user/user_account.php"
+               class="btn btn-success px-4">👤 Go to My Profile</a>
         </div>
     <?php endif; ?>
 

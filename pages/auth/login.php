@@ -6,6 +6,23 @@ if (isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Convert inline alerts to toasts so footer picks them up
+if (!empty($_SESSION['login_error'])) {
+    $_SESSION['toast_error'] = $_SESSION['login_error'];
+    unset($_SESSION['login_error']);
+}
+if (!empty($_SESSION['register_success'])) {
+    $_SESSION['toast_success'] = $_SESSION['register_success'];
+    unset($_SESSION['register_success']);
+}
+if (isset($_SESSION['login_attempts_left'])
+    && $_SESSION['login_attempts_left'] >= 1
+    && $_SESSION['login_attempts_left'] <= 2) {
+    $_SESSION['toast_warning'] = '⚠️ ' . (int)$_SESSION['login_attempts_left']
+        . ' attempt(s) remaining before lockout.';
+    unset($_SESSION['login_attempts_left']);
+}
+
 $b = BASE_URL;
 ?>
 <!DOCTYPE html>
@@ -27,37 +44,28 @@ $b = BASE_URL;
     <div class="auth-card">
         <h2 class="text-success text-center mb-4">Login to GreenScore</h2>
 
-        <?php
-        if (!empty($_SESSION['login_error'])) {
-            $_SESSION['toast_error'] = $_SESSION['login_error'];
-            unset($_SESSION['login_error']);
-        }
-        if (!empty($_SESSION['register_success'])) {
-            $_SESSION['toast_success'] = $_SESSION['register_success'];
-            unset($_SESSION['register_success']);
-        }
-        if (isset($_SESSION['login_attempts_left'])
-            && $_SESSION['login_attempts_left'] >= 1
-            && $_SESSION['login_attempts_left'] <= 2) {
-            $_SESSION['toast_warning'] = '⚠️ ' . (int)$_SESSION['login_attempts_left'] . ' attempt(s) remaining before lockout.';
-            unset($_SESSION['login_attempts_left']);
-        }
-        ?>
-
-        <form action="<?= $b ?>/includes/login_action.php" method="post">
+        <form action="<?= $b ?>/includes/login_action.php" method="post"
+              autocomplete="on" novalidate>
             <input type="hidden" name="csrf_token"
                    value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
             <div class="mb-3">
                 <label for="email" class="form-label">Email:</label>
                 <input type="email" id="email" name="email" class="form-control"
-                       required placeholder="Enter your email">
+                       required placeholder="Enter your email"
+                       autocomplete="email"
+                       aria-label="Email address"
+                       aria-required="true">
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password:</label>
                 <input type="password" id="password" name="password" class="form-control"
-                       required placeholder="Enter your password">
+                       required placeholder="Enter your password"
+                       autocomplete="current-password"
+                       aria-label="Password"
+                       aria-required="true">
             </div>
-            <button type="submit" class="btn btn-success w-100">Login</button>
+            <button type="submit" class="btn btn-success w-100"
+                    aria-label="Log in to GreenScore">Login</button>
         </form>
 
         <div class="text-center mt-3">

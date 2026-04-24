@@ -105,7 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endwhile;
         else: ?>
-            <div class="alert alert-info card-bg">No public feedback yet.</div>
+            <div class="card card-bg p-5 text-center">
+                <div style="font-size:3rem;">💬</div>
+                <h5 class="mt-3 mb-2">No public feedback yet</h5>
+                <p class="text-muted mb-0">Be the first to submit feedback above.</p>
+            </div>
         <?php endif;
         mysqli_close($link);
         ?>

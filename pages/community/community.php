@@ -28,19 +28,42 @@ include ROOT_PATH . '/includes/nav.php';
 $limit  = 5;
 $page   = isset($_GET['page']) ? max((int) $_GET['page'], 1) : 1;
 $offset = ($page - 1) * $limit;
+$search = trim($_GET['search'] ?? '');
 
-$count_result = mysqli_query($link, "SELECT COUNT(*) AS total FROM community_tips");
-$total        = (int) mysqli_fetch_assoc($count_result)['total'];
-$total_pages  = (int) ceil($total / $limit);
+if ($search !== '') {
+    $like = '%' . $search . '%';
+    $count_stmt = mysqli_prepare($link,
+        "SELECT COUNT(*) AS total FROM community_tips WHERE message LIKE ?"
+    );
+    mysqli_stmt_bind_param($count_stmt, 's', $like);
+    mysqli_stmt_execute($count_stmt);
+    $total = (int) mysqli_fetch_assoc(mysqli_stmt_get_result($count_stmt))['total'];
+    mysqli_stmt_close($count_stmt);
 
-$stmt = mysqli_prepare($link,
-    "SELECT ct.*, u.username, u.email
-     FROM community_tips ct
-     JOIN new_users u ON ct.user_id = u.id
-     ORDER BY ct.created_at DESC
-     LIMIT ? OFFSET ?"
-);
-mysqli_stmt_bind_param($stmt, 'ii', $limit, $offset);
+    $stmt = mysqli_prepare($link,
+        "SELECT ct.*, u.username, u.email
+         FROM community_tips ct
+         JOIN new_users u ON ct.user_id = u.id
+         WHERE ct.message LIKE ?
+         ORDER BY ct.created_at DESC
+         LIMIT ? OFFSET ?"
+    );
+    mysqli_stmt_bind_param($stmt, 'sii', $like, $limit, $offset);
+} else {
+    $count_result = mysqli_query($link, "SELECT COUNT(*) AS total FROM community_tips");
+    $total        = (int) mysqli_fetch_assoc($count_result)['total'];
+
+    $stmt = mysqli_prepare($link,
+        "SELECT ct.*, u.username, u.email
+         FROM community_tips ct
+         JOIN new_users u ON ct.user_id = u.id
+         ORDER BY ct.created_at DESC
+         LIMIT ? OFFSET ?"
+    );
+    mysqli_stmt_bind_param($stmt, 'ii', $limit, $offset);
+}
+
+$total_pages = (int) ceil($total / $limit);
 mysqli_stmt_execute($stmt);
 $results = mysqli_stmt_get_result($stmt);
 ?>
@@ -58,21 +81,48 @@ $results = mysqli_stmt_get_result($stmt);
 <div class="page-wrapper">
     <div class="container content-wrapper">
         <h1 class="text-white text-center mb-4">📝 Sustainability Community Board</h1>
-        <p class="lead text-center text-white mb-5">Share your eco-friendly tips 💚</p>
+        <p class="lead text-center text-white mb-4">Share your eco-friendly tips 💚</p>
+
+        <!-- Search bar -->
+        <form method="GET" class="mb-4" role="search" aria-label="Search community tips">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control"
+                       placeholder="🔍 Search tips..."
+                       value="<?= htmlspecialchars($search) ?>"
+                       aria-label="Search tips"
+                       maxlength="100">
+                <button class="btn btn-success" type="submit" aria-label="Submit search">Search</button>
+                <?php if ($search !== ''): ?>
+                    <a href="<?= $b ?>/pages/community/community.php"
+                       class="btn btn-outline-light"
+                       aria-label="Clear search">✕ Clear</a>
+                <?php endif; ?>
+            </div>
+            <?php if ($search !== ''): ?>
+                <small class="text-white-50 mt-1 d-block">
+                    <?= $total ?> result<?= $total !== 1 ? 's' : '' ?> for
+                    "<strong><?= htmlspecialchars($search) ?></strong>"
+                </small>
+            <?php endif; ?>
+        </form>
 
         <div class="card card-bg shadow-sm mb-4">
             <div class="card-body">
-                <form action="<?= $b ?>/pages/community/post_tip.php" method="POST">
+                <form action="<?= $b ?>/pages/community/post_tip.php" method="POST"
+                      aria-label="Post a new sustainability tip">
                     <input type="hidden" name="csrf_token"
                            value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                    <label for="tipMessage" class="form-label fw-semibold">Share a tip:</label>
                     <textarea name="message" id="tipMessage" rows="3" class="form-control"
                               placeholder="E.g. I switched to bamboo toothbrushes!"
-                              maxlength="500" required></textarea>
+                              maxlength="500" required
+                              aria-label="Your sustainability tip"
+                              aria-describedby="tipCounter"></textarea>
                     <div class="d-flex justify-content-between align-items-center mt-1 mb-2">
-                        <small id="tipCounter" class="text-muted">0 / 500</small>
+                        <small id="tipCounter" class="text-muted" aria-live="polite">0 / 500</small>
                         <small class="text-muted fst-italic">Keep it concise and helpful 🌱</small>
                     </div>
-                    <button type="submit" class="btn btn-success">✅ Post Tip</button>
+                    <button type="submit" class="btn btn-success" aria-label="Post tip">✅ Post Tip</button>
                 </form>
                 <div class="mt-3">
                     <form method="POST" action="<?= $b ?>/pages/community/clear_tips.php"
@@ -133,11 +183,16 @@ $results = mysqli_stmt_get_result($stmt);
         </div>
 
         <?php if ($total_pages > 1): ?>
-            <nav class="mt-4">
+            <nav class="mt-4" aria-label="Community tips pagination">
                 <ul class="pagination justify-content-center">
-                    <?php for ($p = 1; $p <= $total_pages; $p++): ?>
+                    <?php for ($p = 1; $p <= $total_pages; $p++):
+                        $params = ['page' => $p];
+                        if ($search !== '') $params['search'] = $search;
+                    ?>
                         <li class="page-item <?= ($p === $page) ? 'active' : '' ?>">
-                            <a class="page-link" href="?page=<?= $p ?>"><?= $p ?></a>
+                            <a class="page-link"
+                               href="?<?= http_build_query($params) ?>"
+                               aria-label="Page <?= $p ?>"><?= $p ?></a>
                         </li>
                     <?php endfor; ?>
                 </ul>
