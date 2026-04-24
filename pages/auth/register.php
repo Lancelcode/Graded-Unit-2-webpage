@@ -33,15 +33,6 @@ unset($_SESSION['register_errors'], $_SESSION['register_old']);
         <div class="auth-card">
             <h2 class="text-success text-center mb-4">Create Your Account</h2>
 
-            <?php if (!empty($errors)): ?>
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        <?php foreach ($errors as $err): ?>
-                            <li><?= htmlspecialchars($err) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
 
             <form action="<?= $b ?>/pages/auth/register_action.php" method="POST">
                 <input type="hidden" name="csrf_token"
