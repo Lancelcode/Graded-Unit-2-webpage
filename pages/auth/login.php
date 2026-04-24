@@ -32,7 +32,9 @@ $b = BASE_URL;
             </div>
         <?php endif; ?>
 
-        <?php if (isset($_SESSION['login_attempts_left']) && $_SESSION['login_attempts_left'] <= 2): ?>
+        <?php if (isset($_SESSION['login_attempts_left'])
+            && $_SESSION['login_attempts_left'] >= 1
+            && $_SESSION['login_attempts_left'] <= 2): ?>
             <div class="alert alert-warning">
                 ⚠️ Warning: <?= (int) $_SESSION['login_attempts_left'] ?> attempt(s) remaining
                 before your account is temporarily locked.
