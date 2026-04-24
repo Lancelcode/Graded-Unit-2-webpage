@@ -14,34 +14,85 @@ if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST
     $errors[] = 'Invalid CSRF token.';
 }
 
+// ── Collect and sanitise inputs ──────────────────────────────
 $fn             = trim($_POST['username']       ?? '');
 $e              = trim($_POST['email']          ?? '');
 $company_name   = trim($_POST['company_name']   ?? '');
 $contact_person = trim($_POST['contact_person'] ?? '');
-$phone_number   = trim($_POST['phone_number']   ?? '');
+$phone_number   = trim(preg_replace('/[^\d+\-\s()]/', '', $_POST['phone_number'] ?? ''));
 $pass1          = $_POST['pass1'] ?? '';
 $pass2          = $_POST['pass2'] ?? '';
 
-if (empty($fn))             $errors[] = 'Enter your name.';
+// ── Length limits — match DB column sizes ────────────────────
+// new_users: username varchar(50), email varchar(100),
+//            company_name varchar(100), contact_person varchar(100),
+//            phone_number varchar(20)
+if (empty($fn)) {
+    $errors[] = 'Enter your name.';
+} elseif (strlen($fn) > 50) {
+    $errors[] = 'Name cannot exceed 50 characters.';
+}
+
 if (empty($e)) {
     $errors[] = 'Enter your email address.';
+} elseif (strlen($e) > 100) {
+    $errors[] = 'Email cannot exceed 100 characters.';
 } elseif (!filter_var($e, FILTER_VALIDATE_EMAIL) || !preg_match('/\.[a-zA-Z]{2,}$/', $e)) {
     $errors[] = 'Enter a valid email address (e.g. name@example.com).';
 }
-if (empty($company_name))   $errors[] = 'Enter your company name.';
-if (empty($contact_person)) $errors[] = "Enter the contact person's name.";
-if (empty($phone_number))   $errors[] = 'Enter a phone number.';
+
+if (empty($company_name)) {
+    $errors[] = 'Enter your company name.';
+} elseif (strlen($company_name) > 100) {
+    $errors[] = 'Company name cannot exceed 100 characters.';
+}
+
+if (empty($contact_person)) {
+    $errors[] = "Enter the contact person's name.";
+} elseif (strlen($contact_person) > 100) {
+    $errors[] = "Contact person's name cannot exceed 100 characters.";
+}
+
+// ── Phone validation ─────────────────────────────────────────
+// Stripped to digits only for length check, allow +, -, spaces, ()
+$digits_only = preg_replace('/\D/', '', $phone_number);
+if (empty($phone_number)) {
+    $errors[] = 'Enter a phone number.';
+} elseif (strlen($digits_only) < 7) {
+    $errors[] = 'Phone number must have at least 7 digits.';
+} elseif (strlen($digits_only) > 15) {
+    $errors[] = 'Phone number cannot exceed 15 digits (international standard).';
+}
+
+// ── Password complexity ──────────────────────────────────────
+$common_passwords = [
+    'password', 'password1', '12345678', '123456789', 'qwerty123',
+    'iloveyou', 'sunshine', 'princess', 'letmein1', 'welcome1',
+    'monkey123', 'dragon12', 'football', 'baseball', 'abc12345',
+];
 
 if (empty($pass1)) {
     $errors[] = 'Enter your password.';
 } elseif (strlen($pass1) < 8) {
     $errors[] = 'Password must be at least 8 characters.';
+} elseif (strlen($pass1) > 72) {
+    // bcrypt silently truncates at 72 bytes — reject anything longer
+    $errors[] = 'Password cannot exceed 72 characters.';
+} elseif (!preg_match('/[A-Z]/', $pass1)) {
+    $errors[] = 'Password must contain at least one uppercase letter.';
+} elseif (!preg_match('/[a-z]/', $pass1)) {
+    $errors[] = 'Password must contain at least one lowercase letter.';
+} elseif (!preg_match('/[0-9]/', $pass1)) {
+    $errors[] = 'Password must contain at least one number.';
+} elseif (in_array(strtolower($pass1), $common_passwords)) {
+    $errors[] = 'That password is too common. Please choose a stronger one.';
 } elseif ($pass1 !== $pass2) {
     $errors[] = 'Passwords do not match.';
 } else {
     $p = password_hash(trim($pass1), PASSWORD_DEFAULT);
 }
 
+// ── Duplicate email check ────────────────────────────────────
 if (empty($errors)) {
     $stmt = mysqli_prepare($link, "SELECT id FROM new_users WHERE email = ?");
     mysqli_stmt_bind_param($stmt, 's', $e);
@@ -53,6 +104,7 @@ if (empty($errors)) {
     mysqli_stmt_close($stmt);
 }
 
+// ── Redirect back on errors ──────────────────────────────────
 if (!empty($errors)) {
     $_SESSION['register_errors'] = $errors;
     $_SESSION['register_old']    = [
@@ -67,6 +119,7 @@ if (!empty($errors)) {
     exit();
 }
 
+// ── Insert new user ──────────────────────────────────────────
 $stmt = mysqli_prepare($link,
     "INSERT INTO new_users (username, email, password, company_name, contact_person, phone_number)
      VALUES (?, ?, ?, ?, ?, ?)"
