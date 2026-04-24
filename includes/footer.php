@@ -170,7 +170,30 @@ foreach ($toasts as $key => $config):
 endforeach;
 ?>
 </div>
-
+<!-- ── Back to top ──────────────────────────────────────────── -->
+<button id="backToTop"
+        aria-label="Back to top"
+        title="Back to top"
+        style="
+            position: fixed;
+            bottom: 5rem;
+            right: 1.5rem;
+            z-index: 1000;
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            border: none;
+            background: #198754;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        ">
+    ↑
+</button>
 <script>
 (function () {
     // Dark mode
@@ -189,10 +212,22 @@ endforeach;
             btn.textContent = isDark ? '☀️' : '🌙';
         });
 
-        // Initialise any toasts
+       // Initialise any toasts
         document.querySelectorAll('.toast').forEach(function (el) {
             new bootstrap.Toast(el).show();
         });
+
+        // Back to top button
+        const backToTop = document.getElementById('backToTop');
+        if (backToTop) {
+            window.addEventListener('scroll', function () {
+                backToTop.style.opacity = window.scrollY > 400 ? '1' : '0';
+                backToTop.style.pointerEvents = window.scrollY > 400 ? 'auto' : 'none';
+            });
+            backToTop.addEventListener('click', function () {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
     });
 })();
 </script>

@@ -502,3 +502,9 @@ body.dark-mode .border-bottom {
 body.dark-mode .progress {
     background-color: #2a2a2a;
 }
+
+/* ── Back to top ────────────────────────────────────────────── */
+body.dark-mode #backToTop {
+    background: #4ade80;
+    color: #121212;
+}
