@@ -108,3 +108,4 @@ phpunit.phar
 assets/images/*.sql
 composer.phar
 test-results.txt
+composer.lock
