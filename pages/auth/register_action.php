@@ -23,8 +23,11 @@ $pass1          = $_POST['pass1'] ?? '';
 $pass2          = $_POST['pass2'] ?? '';
 
 if (empty($fn))             $errors[] = 'Enter your name.';
-if (empty($e))              $errors[] = 'Enter your email address.';
-if (!filter_var($e, FILTER_VALIDATE_EMAIL)) $errors[] = 'Enter a valid email address.';
+if (empty($e)) {
+    $errors[] = 'Enter your email address.';
+} elseif (!filter_var($e, FILTER_VALIDATE_EMAIL) || !preg_match('/\.[a-zA-Z]{2,}$/', $e)) {
+    $errors[] = 'Enter a valid email address (e.g. name@example.com).';
+}
 if (empty($company_name))   $errors[] = 'Enter your company name.';
 if (empty($contact_person)) $errors[] = "Enter the contact person's name.";
 if (empty($phone_number))   $errors[] = 'Enter a phone number.';
