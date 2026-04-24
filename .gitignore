@@ -105,4 +105,5 @@ phpunit.phar
 # ─────────────────────────────
 # Project-specific
 # ─────────────────────────────
-assets/images/*.sql
+assets/images/*.sqlcomposer.phar
+test-results.txt
