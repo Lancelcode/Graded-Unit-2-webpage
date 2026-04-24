@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
+require_once ROOT_PATH . '/includes/helpers.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     http_response_code(403);
@@ -90,38 +91,6 @@ if (!$result) die('Query error: ' . mysqli_error($link));
         <?php endif; ?>
 
         <?php
-        function renderEditButton($id, $b) {
-            return '<a href="' . $b . '/pages/admin/edit_user.php?id=' . $id
-                 . '" class="btn btn-sm btn-outline-secondary">✏️ Edit Details</a>';
-        }
-
-        function renderRoleStatusForms($row) {
-            ob_start(); ?>
-            <form method="post" class="d-inline-block me-2">
-                <input type="hidden" name="csrf_token"
-                       value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                <input type="hidden" name="action" value="update_role">
-                <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
-                <select name="role" class="form-select form-select-sm d-inline-block w-auto">
-                    <option value="user"  <?= $row['role'] === 'user'  ? 'selected' : '' ?>>User</option>
-                    <option value="admin" <?= $row['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
-                </select>
-                <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
-            </form>
-            <form method="post" class="d-inline-block">
-                <input type="hidden" name="csrf_token"
-                       value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                <input type="hidden" name="action" value="update_status">
-                <input type="hidden" name="user_id" value="<?= $row['id'] ?>">
-                <select name="status" class="form-select form-select-sm d-inline-block w-auto">
-                    <option value="active"      <?= $row['status'] === 'active'      ? 'selected' : '' ?>>Active</option>
-                    <option value="inactive"    <?= $row['status'] === 'inactive'    ? 'selected' : '' ?>>Inactive</option>
-                    <option value="deactivated" <?= $row['status'] === 'deactivated' ? 'selected' : '' ?>>Deactivated</option>
-                </select>
-                <button class="btn btn-sm btn-outline-primary" type="submit">Save</button>
-            </form>
-            <?php return ob_get_clean();
-        }
 
         $sections = [
             ['label' => '✅ Active Users',              'status' => 'active',      'head' => 'table-success', 'delete' => false],
