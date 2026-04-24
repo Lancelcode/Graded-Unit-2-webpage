@@ -8,6 +8,7 @@ $b = BASE_URL;
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Privacy Policy | GreenScore</title>
+    <meta name="description" content="GreenScore privacy policy — how we collect, use and protect your data.">
     <style>
         h2.section-title { color: #2c7a7b; }
         footer { background-color: #fff; }

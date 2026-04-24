@@ -84,6 +84,7 @@ $badgeText = match ($badgeSlug) {
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>My Impact Report | GreenScore</title>
+    <meta name="description" content="Your personal GreenScore sustainability impact report and badge progress.">
 </head>
 <body class="bg-page overlay-60 d-flex flex-column min-vh-100"
       style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">

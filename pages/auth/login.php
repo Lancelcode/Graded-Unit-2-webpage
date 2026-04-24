@@ -13,6 +13,7 @@ $b = BASE_URL;
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Login | GreenScore</title>
+    <meta name="description" content="Log in to your GreenScore account to access your sustainability dashboard and certificates.">
     <style>
         .auth-card { margin-top: 5rem; }
         footer { background: white; z-index: 2; position: relative; }

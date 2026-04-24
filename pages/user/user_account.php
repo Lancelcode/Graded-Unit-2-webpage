@@ -38,6 +38,7 @@ $phone    = htmlspecialchars($row['phone_number']   ?? '—');
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>My Profile | GreenScore</title>
+    <meta name="description" content="Manage your GreenScore profile, certificates and sustainability progress.">
     <style>
         footer { color: #444; }
     </style>

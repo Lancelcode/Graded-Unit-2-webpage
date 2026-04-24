@@ -8,6 +8,7 @@ $b = BASE_URL;
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Green Resources | GreenScore</title>
+    <meta name="description" content="Sustainability guides, tools and resources to help your organisation go green.">
     <style>
         /* Resource cards have a unique hover lift + custom link style */
         .resource-card {

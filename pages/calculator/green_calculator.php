@@ -89,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Green Calculator | GreenScore</title>
+    <meta name="description" content="Complete the GreenScore sustainability assessment to receive a score, feedback and a certificate for your organisation.">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
         /* Calculator-specific only */

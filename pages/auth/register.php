@@ -16,6 +16,7 @@ unset($_SESSION['register_errors'], $_SESSION['register_old']);
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Register | GreenScore</title>
+    <meta name="description" content="Create a GreenScore account to start measuring your organisation's sustainability impact.">
     <style>
         .auth-wrapper { max-width: 500px; margin: 0 auto; }
         .form-label   { color: #222; font-weight: 500; }

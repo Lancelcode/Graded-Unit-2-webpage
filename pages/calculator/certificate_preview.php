@@ -69,6 +69,7 @@ elseif  (str_contains($award, 'Bronze')) $award_colour = '#a0522d';
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>GreenScore Certificate — <?= $cert_ref ?></title>
+    <meta name="description" content="Your official GreenScore sustainability certificate.">
     <style>
         .cert-page {
             display: flex;

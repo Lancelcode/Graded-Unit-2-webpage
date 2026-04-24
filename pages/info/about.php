@@ -8,6 +8,7 @@ $b = BASE_URL;
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Green Partnerships | GreenScore</title>
+    <meta name="description" content="Learn about GreenScore and how it helps organisations meet their sustainability goals.">
     <style>
         .logo-grid img { max-height: 80px; object-fit: contain; }
         footer { background-color: #fff; }

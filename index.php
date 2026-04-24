@@ -9,6 +9,7 @@ $b = BASE_URL;
 <head>
     <?php include __DIR__ . '/includes/head.php'; ?>
     <title>Welcome to GreenScore</title>
+    <meta name="description" content="GreenScore helps organisations measure, track and improve their environmental impact through a structured scoring and certification system.">
     <style>
         /* Index-specific only */
         body { font-size: 1.1rem; color: #fff; }

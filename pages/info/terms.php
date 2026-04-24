@@ -8,6 +8,7 @@ $b = BASE_URL;
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Terms &amp; Conditions | GreenScore</title>
+    <meta name="description" content="GreenScore terms and conditions of use.">
     <style>
         h2.section-title { color: #2c7a7b; }
         footer { background-color: #fff; }

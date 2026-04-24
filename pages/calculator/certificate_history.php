@@ -112,6 +112,7 @@ $results = mysqli_stmt_get_result($data_stmt);
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Certificate History | GreenScore</title>
+    <meta name="description" content="View and manage all your GreenScore sustainability certificates.">
     <style>
         .award-gold   { border-left: 5px solid #d4a017; }
         .award-silver { border-left: 5px solid #8a9ba8; }

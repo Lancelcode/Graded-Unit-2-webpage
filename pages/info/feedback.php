@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Feedback | GreenScore</title>
+    <meta name="description" content="Share your feedback with the GreenScore team.">
     <style>
         footer { background-color: #fff; margin-top: auto; }
     </style>

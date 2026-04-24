@@ -49,6 +49,7 @@ $results = mysqli_stmt_get_result($stmt);
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Community Board | GreenScore</title>
+    <meta name="description" content="Share and discover sustainability tips with other GreenScore members.">
     <style>
         footer { background-color: #fff; color: #444; }
     </style>
