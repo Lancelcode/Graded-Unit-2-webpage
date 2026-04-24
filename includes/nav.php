@@ -5,6 +5,9 @@ if (session_status() === PHP_SESSION_NONE) {
 if (!defined('BASE_URL')) {
     require_once __DIR__ . '/init.php';
 }
+if (!function_exists('isActive')) {
+    require_once __DIR__ . '/helpers.php';
+}
 $b = BASE_URL;
 ?>
 
@@ -22,46 +25,116 @@ $b = BASE_URL;
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown"
-                           role="button" data-bs-toggle="dropdown">🛠️ Tools</a>
+                        <a class="nav-link dropdown-toggle <?= isActive('/pages/calculator/') ?>"
+                           href="#" id="toolsDropdown" role="button"
+                           data-bs-toggle="dropdown">
+                            🛠️ Tools
+                        </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= $b ?>/pages/calculator/green_calculator.php">🧮 Green Calculator</a></li>
-                            <li><a class="dropdown-item" href="<?= $b ?>/pages/calculator/certificate_history.php">📄 My Certificate History</a></li>
-                            <li><a class="dropdown-item" href="<?= $b ?>/pages/user/my_impact.php">📊 My Impact</a></li>
+                            <li>
+                                <a class="dropdown-item <?= isActive('green_calculator') ?>"
+                                   href="<?= $b ?>/pages/calculator/green_calculator.php">
+                                    🧮 Green Calculator
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item <?= isActive('certificate_history') ?>"
+                                   href="<?= $b ?>/pages/calculator/certificate_history.php">
+                                    📄 My Certificate History
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item <?= isActive('my_impact') ?>"
+                                   href="<?= $b ?>/pages/user/my_impact.php">
+                                    📊 My Impact
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="infoDropdown"
-                           role="button" data-bs-toggle="dropdown">📚 Resources</a>
+                        <a class="nav-link dropdown-toggle <?= isActive('/pages/info/') ?>"
+                           href="#" id="infoDropdown" role="button"
+                           data-bs-toggle="dropdown">
+                            📚 Resources
+                        </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?= $b ?>/pages/info/partner.php">🌱 Partners</a></li>
-                            <li><a class="dropdown-item" href="<?= $b ?>/pages/info/green_resources.php">🌿 Sustainability Info</a></li>
-                            <li><a class="dropdown-item" href="<?= $b ?>/pages/info/about.php">ℹ️ About</a></li>
-                            <li><a class="dropdown-item" href="<?= $b ?>/pages/info/privacy.php">🔐 Privacy Policy</a></li>
-                            <li><a class="dropdown-item" href="<?= $b ?>/pages/info/terms.php">📜 Terms &amp; Conditions</a></li>
+                            <li>
+                                <a class="dropdown-item <?= isActive('partner') ?>"
+                                   href="<?= $b ?>/pages/info/partner.php">
+                                    🌱 Partners
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item <?= isActive('green_resources') ?>"
+                                   href="<?= $b ?>/pages/info/green_resources.php">
+                                    🌿 Sustainability Info
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item <?= isActive('about') ?>"
+                                   href="<?= $b ?>/pages/info/about.php">
+                                    ℹ️ About
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item <?= isActive('privacy') ?>"
+                                   href="<?= $b ?>/pages/info/privacy.php">
+                                    🔐 Privacy Policy
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item <?= isActive('terms') ?>"
+                                   href="<?= $b ?>/pages/info/terms.php">
+                                    📜 Terms &amp; Conditions
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown"
-                               role="button" data-bs-toggle="dropdown">🛠 Admin Dashboard</a>
+                            <a class="nav-link dropdown-toggle <?= isActive('/pages/admin/') ?>"
+                               href="#" id="adminDropdown" role="button"
+                               data-bs-toggle="dropdown">
+                                🛠 Admin Dashboard
+                            </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="<?= $b ?>/pages/admin/admin_feedback.php">📝 Review User Feedback</a></li>
-                                <li><a class="dropdown-item" href="<?= $b ?>/pages/admin/public_feedback.php">🌍 Public Feedback Submissions</a></li>
-                                <li><a class="dropdown-item" href="<?= $b ?>/pages/admin/manage_users.php">👥 Manage Users</a></li>
+                                <li>
+                                    <a class="dropdown-item <?= isActive('admin_feedback') ?>"
+                                       href="<?= $b ?>/pages/admin/admin_feedback.php">
+                                        📝 Review User Feedback
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item <?= isActive('public_feedback') ?>"
+                                       href="<?= $b ?>/pages/admin/public_feedback.php">
+                                        🌍 Public Feedback Submissions
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item <?= isActive('manage_users') ?>"
+                                       href="<?= $b ?>/pages/admin/manage_users.php">
+                                        👥 Manage Users
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     <?php endif; ?>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $b ?>/pages/info/feedback.php">💬 Feedback</a>
+                        <a class="nav-link <?= isActive('feedback') ?>"
+                           href="<?= $b ?>/pages/info/feedback.php">
+                            💬 Feedback
+                        </a>
                     </li>
 
                     <?php if (isset($_SESSION['username'])): ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= $b ?>/pages/user/user_account.php">👤 Profile</a>
+                            <a class="nav-link <?= isActive('user_account') ?>"
+                               href="<?= $b ?>/pages/user/user_account.php">
+                                👤 Profile
+                            </a>
                         </li>
                     <?php endif; ?>
                 </ul>
@@ -72,14 +145,17 @@ $b = BASE_URL;
                             <span>👋 Hello, <strong><?= htmlspecialchars($_SESSION['username']) ?></strong></span>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm" href="<?= $b ?>/pages/auth/logout.php">Logout</a>
+                            <a class="btn btn-outline-light btn-sm"
+                               href="<?= $b ?>/pages/auth/logout.php">Logout</a>
                         </li>
                     <?php else: ?>
                         <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm" href="<?= $b ?>/pages/auth/login.php">Login</a>
+                            <a class="btn btn-outline-light btn-sm <?= isActive('login') ?>"
+                               href="<?= $b ?>/pages/auth/login.php">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-light btn-sm" href="<?= $b ?>/pages/auth/register.php">Register</a>
+                            <a class="btn btn-light btn-sm <?= isActive('register') ?>"
+                               href="<?= $b ?>/pages/auth/register.php">Register</a>
                         </li>
                     <?php endif; ?>
 

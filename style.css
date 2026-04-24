@@ -98,6 +98,17 @@ header {
     opacity: 0.85;
 }
 
+.navbar .nav-link.active,
+.navbar .dropdown-item.active {
+    font-weight: 700;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 0.25rem;
+}
+
+.navbar .dropdown-toggle.active::after {
+    border-top-color: rgba(255, 255, 255, 0.9);
+}
+
 /* ── Cards ──────────────────────────────────────────────────── */
 .card-bg {
     background: var(--card-bg);
