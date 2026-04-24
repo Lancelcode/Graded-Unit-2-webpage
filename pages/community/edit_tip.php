@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_bind_param($stmt, 'sii', $message, $tip_id, $user_id);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
+        $_SESSION['toast_success'] = 'Your tip has been updated.';
     }
 }
 

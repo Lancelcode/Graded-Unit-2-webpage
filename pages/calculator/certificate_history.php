@@ -11,15 +11,15 @@ if (!isset($_SESSION['user_id'])) {
 $b              = BASE_URL;
 $user_id        = (int) $_SESSION['user_id'];
 $is_admin       = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
-$action_message = '';
-
 if (isset($_POST['delete_id'])) {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) die('Invalid CSRF token.');
     $delete_id = (int) $_POST['delete_id'];
     $stmt = mysqli_prepare($link, "DELETE FROM green_calculator_results WHERE id = ? AND user_id = ?");
     mysqli_stmt_bind_param($stmt, 'ii', $delete_id, $user_id);
     mysqli_stmt_execute($stmt); mysqli_stmt_close($stmt);
-    $action_message = '❌ Entry deleted successfully.';
+    $_SESSION['toast_success'] = 'Entry deleted successfully.';
+    header('Location: ' . BASE_URL . '/pages/calculator/certificate_history.php');
+    exit();
 }
 
 if (isset($_POST['clear_all'])) {
@@ -27,7 +27,9 @@ if (isset($_POST['clear_all'])) {
     $stmt = mysqli_prepare($link, "DELETE FROM green_calculator_results WHERE user_id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $user_id);
     mysqli_stmt_execute($stmt); mysqli_stmt_close($stmt);
-    $action_message = '🧹 All entries cleared.';
+    $_SESSION['toast_success'] = 'All certificates cleared.';
+    header('Location: ' . BASE_URL . '/pages/calculator/certificate_history.php');
+    exit();
 }
 
 if (isset($_POST['reset_id'])) {
@@ -49,7 +51,9 @@ if (isset($_POST['update_id'])) {
     );
     mysqli_stmt_bind_param($stmt, 'ssii', $new_award, $new_feedback, $update_id, $user_id);
     mysqli_stmt_execute($stmt); mysqli_stmt_close($stmt);
-    $action_message = '✏️ Entry updated.';
+    $_SESSION['toast_success'] = 'Entry updated successfully.';
+    header('Location: ' . BASE_URL . '/pages/calculator/certificate_history.php');
+    exit();
 }
 
 $levels_stmt = mysqli_prepare($link,
@@ -112,7 +116,6 @@ $results = mysqli_stmt_get_result($data_stmt);
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Certificate History | GreenScore</title>
-    <meta name="description" content="View and manage all your GreenScore sustainability certificates.">
     <style>
         .award-gold   { border-left: 5px solid #d4a017; }
         .award-silver { border-left: 5px solid #8a9ba8; }
@@ -152,12 +155,6 @@ $results = mysqli_stmt_get_result($data_stmt);
 <div class="page-wrapper d-flex flex-column min-vh-100">
     <div class="container content-wrapper">
         <h1 class="text-white text-center mb-4">📜 Certificate History</h1>
-
-        <?php if ($action_message): ?>
-            <div class="alert alert-success text-center">
-                <?= htmlspecialchars($action_message) ?>
-            </div>
-        <?php endif; ?>
 
         <!-- Filters + Clear All -->
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">

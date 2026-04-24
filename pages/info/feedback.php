@@ -12,29 +12,8 @@ $b          = BASE_URL;
 $user_id    = $_SESSION['user_id'];
 $user_name  = $_SESSION['username'];
 $user_email = $_SESSION['email'];
-$success    = false;
-$error      = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
-        die('Invalid CSRF token.');
-    }
-    try {
-        $message = trim($_POST['message']);
-        if (empty($message)) {
-            throw new Exception("⚠️ Please enter your feedback before submitting.");
-        }
-        $stmt = mysqli_prepare($link,
-            "INSERT INTO feedback (user_id, name, email, message) VALUES (?, ?, ?, ?)"
-        );
-        mysqli_stmt_bind_param($stmt, 'isss', $user_id, $user_name, $user_email, $message);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-        $success = true;
-    } catch (Exception $e) {
-        $error = $e->getMessage();
-    }
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
         die('Invalid CSRF token.');
     }
@@ -48,11 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_bind_param($stmt, 'isss', $user_id, $user_name, $user_email, $message);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
-        $_SESSION['toast_success'] = 'Thank you! Your feedback has been submitted.';
+        $_SESSION['toast_success'] = 'Thank you! Your feedback has been submitted and will be answered by one of our admins.';
     }
     header('Location: ' . BASE_URL . '/pages/info/feedback.php');
     exit();
-}
 }
 ?>
 <!DOCTYPE html>
@@ -60,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Feedback | GreenScore</title>
-    <meta name="description" content="Share your feedback with the GreenScore team.">
     <style>
         footer { background-color: #fff; margin-top: auto; }
     </style>
@@ -70,11 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="page-wrapper">
     <div class="container content-wrapper">
         <h2 class="text-white text-center mb-4">💬 We Value Your Feedback</h2>
-
-       
-        <?php if ($error): ?>
-            <div class="alert alert-warning shadow-sm"><?= htmlspecialchars($error) ?></div>
-        <?php endif; ?>
 
         <form method="POST" class="card card-bg p-4 shadow-sm mb-5">
             <input type="hidden" name="csrf_token"

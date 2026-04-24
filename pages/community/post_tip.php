@@ -22,6 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_bind_param($stmt, 'is', $user_id, $message);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
+        $_SESSION['toast_success'] = 'Your tip has been posted!';
+    } else {
+        $_SESSION['toast_warning'] = 'Please enter a message before posting.';
     }
 }
 

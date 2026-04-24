@@ -49,7 +49,6 @@ $results = mysqli_stmt_get_result($stmt);
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Community Board | GreenScore</title>
-    <meta name="description" content="Share and discover sustainability tips with other GreenScore members.">
     <style>
         footer { background-color: #fff; color: #444; }
     </style>
@@ -123,7 +122,7 @@ $results = mysqli_stmt_get_result($stmt);
                         </div>
                     <?php endwhile; ?>
                 <?php else: ?>
-                    <div class="alert alert-info">No tips shared yet. Be the first!</div>
+                    <p class="text-muted text-center py-3">No tips shared yet. Be the first! 🌱</p>
                 <?php endif; ?>
             </div>
         </div>
