@@ -32,6 +32,14 @@ $b = BASE_URL;
             </div>
         <?php endif; ?>
 
+        <?php if (isset($_SESSION['login_attempts_left']) && $_SESSION['login_attempts_left'] <= 2): ?>
+            <div class="alert alert-warning">
+                ⚠️ Warning: <?= (int) $_SESSION['login_attempts_left'] ?> attempt(s) remaining
+                before your account is temporarily locked.
+            </div>
+            <?php unset($_SESSION['login_attempts_left']); ?>
+        <?php endif; ?>
+
         <?php if (isset($_SESSION['register_success'])): ?>
             <div class="alert alert-success">
                 ✅ <?= htmlspecialchars($_SESSION['register_success']); unset($_SESSION['register_success']); ?>
