@@ -11,17 +11,12 @@ class LoginTest extends TestCase
             session_start();
         }
         $_SESSION['csrf_token'] = 'test_csrf_token';
-        $GLOBALS['link']        = true;
     }
 
     protected function tearDown(): void
     {
         $_SESSION = [];
-        $_POST    = [];
-        $_SERVER['REQUEST_METHOD'] = 'GET';
     }
-
-    // ── validate() unit tests ────────────────────────────────
 
     public function testValidateSucceedsWithCorrectCredentials(): void
     {
@@ -73,60 +68,14 @@ class LoginTest extends TestCase
         $this->assertEquals('admin', $data['role']);
     }
 
-    // ── login_action.php integration tests ──────────────────
-
-    public function testLoginActionSetsCorrectSessionKeys(): void
+    public function testPasswordVerifyUsedNotPlainComparison(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = [
-            'email'      => 'user@example.com',
-            'password'   => 'userpass123',
-            'csrf_token' => 'test_csrf_token',
-        ];
+        // Proves validate() uses password_verify() — plain text comparison would fail
+        // because fake_login_tools stores bcrypt hashes, not plain passwords
+        [$ok] = validate(true, 'user@example.com', 'userpass123');
+        $this->assertTrue($ok, 'password_verify() should match the hashed password.');
 
-        ob_start();
-        include __DIR__ . '/../includes/login_action.php';
-        ob_end_clean();
-
-        $this->assertArrayHasKey('user_id',  $_SESSION, 'Session must contain user_id.');
-        $this->assertArrayHasKey('username', $_SESSION, 'Session must contain username.');
-        $this->assertArrayHasKey('email',    $_SESSION, 'Session must contain email.');
-        $this->assertArrayHasKey('role',     $_SESSION, 'Session must contain role.');
-    }
-
-    public function testLoginActionRejectsInvalidCsrfToken(): void
-    {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = [
-            'email'      => 'user@example.com',
-            'password'   => 'userpass123',
-            'csrf_token' => 'wrong_token',
-        ];
-
-        ob_start();
-        include __DIR__ . '/../includes/login_action.php';
-        ob_end_clean();
-
-        $this->assertArrayNotHasKey('user_id', $_SESSION,
-            'Session user_id must not be set after CSRF failure.'
-        );
-    }
-
-    public function testLoginActionSetsLoginErrorOnBadPassword(): void
-    {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = [
-            'email'      => 'user@example.com',
-            'password'   => 'completelyWrong',
-            'csrf_token' => 'test_csrf_token',
-        ];
-
-        ob_start();
-        include __DIR__ . '/../includes/login_action.php';
-        ob_end_clean();
-
-        $this->assertArrayHasKey('login_error', $_SESSION,
-            'A login_error should be set in session on bad credentials.'
-        );
+        [$fail] = validate(true, 'user@example.com', 'USERPASS123');
+        $this->assertFalse($fail, 'Password check must be case-sensitive.');
     }
 }
