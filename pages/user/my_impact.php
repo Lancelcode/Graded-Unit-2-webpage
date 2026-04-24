@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
-include ROOT_PATH . '/includes/nav.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ' . BASE_URL . '/pages/auth/login.php');
@@ -78,13 +77,13 @@ $badgeText = match ($badgeSlug) {
     'green_starter'              => "Great start — keep growing green habits! 🌱",
     default                      => "Welcome to your green journey! Let's grow together. 🌱✨",
 };
+include ROOT_PATH . '/includes/nav.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>My Impact Report | GreenScore</title>
-    <meta name="description" content="Your personal GreenScore sustainability impact report and badge progress.">
 </head>
 <body class="bg-page overlay-60 d-flex flex-column min-vh-100"
       style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">

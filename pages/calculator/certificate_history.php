@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
-include ROOT_PATH . '/includes/nav.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ' . BASE_URL . '/pages/auth/login.php');
@@ -110,6 +109,8 @@ if ($level_filter !== '') {
 }
 mysqli_stmt_execute($data_stmt);
 $results = mysqli_stmt_get_result($data_stmt);
+
+include ROOT_PATH . '/includes/nav.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
