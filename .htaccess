@@ -23,5 +23,6 @@ ServerSignature Off
 # ── Block access to includes folder directly ──────────────────
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^includes/ - [F,L]
+    RewriteCond %{REQUEST_METHOD} !POST
+    RewriteRule ^includes/(?!login_action\.php) - [F,L]
 </IfModule>

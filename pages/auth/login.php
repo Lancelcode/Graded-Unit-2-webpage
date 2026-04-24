@@ -32,51 +32,57 @@ $b = BASE_URL;
     <title>Login | GreenScore</title>
     <meta name="description" content="Log in to your GreenScore account to access your sustainability dashboard and certificates.">
     <style>
-        .auth-card { margin-top: 5rem; }
-        footer { background: white; z-index: 2; position: relative; }
+        .auth-wrapper { max-width: 500px; margin: 0 auto; }
+        .form-label   { color: #222; font-weight: 500; }
+        footer        { position: relative; z-index: 1; background-color: #fff;
+                        padding: 2rem 0; width: 100%; }
     </style>
 </head>
-<body class="bg-page overlay-60"
-      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg'); color: #333;">
+<body class="bg-page overlay-50"
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
 <?php include ROOT_PATH . '/includes/nav.php'; ?>
 
-<div class="container" style="max-width: 500px;">
-    <div class="auth-card">
-        <h2 class="text-success text-center mb-4">Login to GreenScore</h2>
+<div class="container content-wrapper">
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h2 class="text-success text-center mb-4">Login to GreenScore</h2>
 
-        <form action="<?= $b ?>/includes/login_action.php" method="post"
-              autocomplete="on" novalidate>
-            <input type="hidden" name="csrf_token"
-                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" id="email" name="email" class="form-control"
-                       required placeholder="Enter your email"
-                       autocomplete="email"
-                       aria-label="Email address"
-                       aria-required="true">
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password:</label>
-                <input type="password" id="password" name="password" class="form-control"
-                       required placeholder="Enter your password"
-                       autocomplete="current-password"
-                       aria-label="Password"
-                       aria-required="true">
-            </div>
-            <button type="submit" class="btn btn-success w-100"
-                    aria-label="Log in to GreenScore">Login</button>
-        </form>
+            <form action="<?= $b ?>/includes/login_action.php" method="post"
+                  autocomplete="on" novalidate>
+                <input type="hidden" name="csrf_token"
+                       value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
-        <div class="text-center mt-3">
-            <a href="<?= $b ?>/pages/auth/forgot_password.php" class="text-success">
-                Forgot your password?
-            </a>
-        </div>
-        <div class="text-center mt-2">
-            <a href="<?= $b ?>/pages/auth/register.php" class="text-muted">
-                Don't have an account? Register
-            </a>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control"
+                           required placeholder="Enter your email"
+                           autocomplete="email"
+                           aria-label="Email address"
+                           aria-required="true">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <input type="password" id="password" name="password" class="form-control"
+                           required placeholder="Enter your password"
+                           autocomplete="current-password"
+                           aria-label="Password"
+                           aria-required="true">
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 py-2"
+                        aria-label="Log in to GreenScore">Login</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="<?= $b ?>/pages/auth/forgot_password.php" class="text-success">
+                    Forgot your password?
+                </a>
+            </div>
+            <div class="text-center mt-2">
+                <a href="<?= $b ?>/pages/auth/register.php" class="text-muted">
+                    Don't have an account? Register
+                </a>
+            </div>
         </div>
     </div>
 </div>
