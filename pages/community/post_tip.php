@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = trim($_POST['message'] ?? '');
     $user_id = (int) $_SESSION['user_id'];
 
-    if (!empty($message)) {
+    if (!empty($message) && strlen($message) <= 500) {
         $stmt = mysqli_prepare($link,
             "INSERT INTO community_tips (user_id, message) VALUES (?, ?)"
         );

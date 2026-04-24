@@ -65,9 +65,14 @@ $results = mysqli_stmt_get_result($stmt);
                 <form action="<?= $b ?>/pages/community/post_tip.php" method="POST">
                     <input type="hidden" name="csrf_token"
                            value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
-                    <textarea name="message" rows="3" class="form-control"
-                              placeholder="E.g. I switched to bamboo toothbrushes!" required></textarea>
-                    <button type="submit" class="btn btn-success mt-3">✅ Post Tip</button>
+                    <textarea name="message" id="tipMessage" rows="3" class="form-control"
+                              placeholder="E.g. I switched to bamboo toothbrushes!"
+                              maxlength="500" required></textarea>
+                    <div class="d-flex justify-content-between align-items-center mt-1 mb-2">
+                        <small id="tipCounter" class="text-muted">0 / 500</small>
+                        <small class="text-muted fst-italic">Keep it concise and helpful 🌱</small>
+                    </div>
+                    <button type="submit" class="btn btn-success">✅ Post Tip</button>
                 </form>
                 <div class="mt-3">
                     <form method="POST" action="<?= $b ?>/pages/community/clear_tips.php"
@@ -155,7 +160,9 @@ $results = mysqli_stmt_get_result($stmt);
             <div class="modal-body">
                 <input type="hidden" name="tip_id" id="editTipId">
                 <textarea class="form-control" name="message"
-                          id="editTipMessage" rows="4" required></textarea>
+                          id="editTipMessage" rows="4"
+                          maxlength="500" required></textarea>
+                <small id="editTipCounter" class="text-muted">0 / 500</small>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success">💾 Save Changes</button>
@@ -169,9 +176,27 @@ $results = mysqli_stmt_get_result($stmt);
 const editModal = document.getElementById('editModal');
 editModal.addEventListener('show.bs.modal', function(event) {
     const button = event.relatedTarget;
+    const msg    = button.getAttribute('data-message');
     document.getElementById('editTipId').value      = button.getAttribute('data-id');
-    document.getElementById('editTipMessage').value = button.getAttribute('data-message');
+    document.getElementById('editTipMessage').value = msg;
+    document.getElementById('editTipCounter').textContent = msg.length + ' / 500';
 });
+
+// Character counters
+function wireCounter(textareaId, counterId) {
+    const ta      = document.getElementById(textareaId);
+    const counter = document.getElementById(counterId);
+    if (!ta || !counter) return;
+    ta.addEventListener('input', function () {
+        const len = ta.value.length;
+        const max = parseInt(ta.getAttribute('maxlength')) || 500;
+        counter.textContent = len + ' / ' + max;
+        counter.style.color = len >= max * 0.9 ? '#dc3545' : '#6c757d';
+    });
+}
+
+wireCounter('tipMessage',    'tipCounter');
+wireCounter('editTipMessage','editTipCounter');
 
 function deleteTip(form, id) {
     fetch(window.location.href, {

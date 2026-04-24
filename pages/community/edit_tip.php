@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = trim($_POST['message']   ?? '');
     $user_id = (int) $_SESSION['user_id'];
 
-    if (!empty($message) && $tip_id > 0) {
+    if (!empty($message) && $tip_id > 0 && strlen($message) <= 500) {
         $stmt = mysqli_prepare($link,
             "UPDATE community_tips SET message = ? WHERE id = ? AND user_id = ?"
         );
