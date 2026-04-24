@@ -168,7 +168,6 @@ CREATE TABLE `new_users` (
   `password` varchar(255) NOT NULL,
   `role` enum('admin','user') DEFAULT 'user',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `cardid` int(10) DEFAULT NULL,
   `status` enum('active','inactive','deactivated') NOT NULL DEFAULT 'active',
   `company_name` varchar(100) DEFAULT NULL,
   `contact_person` varchar(100) DEFAULT NULL,
@@ -190,18 +189,6 @@ INSERT INTO `new_users` (`id`, `username`, `email`, `password`, `role`, `created
 (47, 'test2', 'test2@test2', '$2y$10$NQO3zCquzyQNbtt4bEGIsO.FvAF685X.2qwLUxgVMmZs.nGTp.u2O', 'user', '2025-05-07 14:55:47', NULL, 'deactivated', 'test2', 'test2', 'test2');
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `success_stories`
---
-
-CREATE TABLE `success_stories` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `company_name` varchar(255) NOT NULL,
-  `img` varchar(255) NOT NULL COMMENT 'path or URL to image',
-  `reduction_percentage` decimal(5,2) NOT NULL COMMENT 'e.g. 12.50'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 -- Indexes for dumped tables
 --
@@ -240,12 +227,6 @@ ALTER TABLE `new_users`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `success_stories`
---
-ALTER TABLE `success_stories`
-  ADD PRIMARY KEY (`id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -279,11 +260,6 @@ ALTER TABLE `green_calculator_results`
 ALTER TABLE `new_users`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
---
--- AUTO_INCREMENT for table `success_stories`
---
-ALTER TABLE `success_stories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
