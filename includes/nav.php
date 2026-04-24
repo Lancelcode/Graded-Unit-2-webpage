@@ -123,7 +123,7 @@ $b = BASE_URL;
                     <?php endif; ?>
 
                     <li class="nav-item">
-                        <a class="nav-link <?= isActive('feedback') ?>"
+                        <a class="nav-link <?= isActive('/pages/info/feedback') ?>"
                            href="<?= $b ?>/pages/info/feedback.php">
                             💬 Feedback
                         </a>
