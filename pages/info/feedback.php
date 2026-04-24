@@ -34,6 +34,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
+        die('Invalid CSRF token.');
+    }
+    $message = trim($_POST['message'] ?? '');
+    if (empty($message)) {
+        $_SESSION['toast_warning'] = 'Please enter your feedback before submitting.';
+    } else {
+        $stmt = mysqli_prepare($link,
+            "INSERT INTO feedback (user_id, name, email, message) VALUES (?, ?, ?, ?)"
+        );
+        mysqli_stmt_bind_param($stmt, 'isss', $user_id, $user_name, $user_email, $message);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+        $_SESSION['toast_success'] = 'Thank you! Your feedback has been submitted.';
+    }
+    header('Location: ' . BASE_URL . '/pages/info/feedback.php');
+    exit();
+}
 }
 ?>
 <!DOCTYPE html>
@@ -52,12 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container content-wrapper">
         <h2 class="text-white text-center mb-4">💬 We Value Your Feedback</h2>
 
-        <?php if ($success): ?>
-            <div class="alert alert-success shadow-sm">
-                ✅ Thank you! Your feedback has been submitted and will be answered by
-                one of our admins.
-            </div>
-        <?php endif; ?>
+       
         <?php if ($error): ?>
             <div class="alert alert-warning shadow-sm"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>

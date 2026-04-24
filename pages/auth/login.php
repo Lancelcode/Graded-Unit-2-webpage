@@ -27,27 +27,22 @@ $b = BASE_URL;
     <div class="auth-card">
         <h2 class="text-success text-center mb-4">Login to GreenScore</h2>
 
-        <?php if (isset($_SESSION['login_error'])): ?>
-            <div class="alert alert-danger">
-                <?= $_SESSION['login_error']; unset($_SESSION['login_error']); ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (isset($_SESSION['login_attempts_left'])
+        <?php
+        if (!empty($_SESSION['login_error'])) {
+            $_SESSION['toast_error'] = $_SESSION['login_error'];
+            unset($_SESSION['login_error']);
+        }
+        if (!empty($_SESSION['register_success'])) {
+            $_SESSION['toast_success'] = $_SESSION['register_success'];
+            unset($_SESSION['register_success']);
+        }
+        if (isset($_SESSION['login_attempts_left'])
             && $_SESSION['login_attempts_left'] >= 1
-            && $_SESSION['login_attempts_left'] <= 2): ?>
-            <div class="alert alert-warning">
-                ⚠️ Warning: <?= (int) $_SESSION['login_attempts_left'] ?> attempt(s) remaining
-                before your account is temporarily locked.
-            </div>
-            <?php unset($_SESSION['login_attempts_left']); ?>
-        <?php endif; ?>
-
-        <?php if (isset($_SESSION['register_success'])): ?>
-            <div class="alert alert-success">
-                ✅ <?= htmlspecialchars($_SESSION['register_success']); unset($_SESSION['register_success']); ?>
-            </div>
-        <?php endif; ?>
+            && $_SESSION['login_attempts_left'] <= 2) {
+            $_SESSION['toast_warning'] = '⚠️ ' . (int)$_SESSION['login_attempts_left'] . ' attempt(s) remaining before lockout.';
+            unset($_SESSION['login_attempts_left']);
+        }
+        ?>
 
         <form action="<?= $b ?>/includes/login_action.php" method="post">
             <input type="hidden" name="csrf_token"

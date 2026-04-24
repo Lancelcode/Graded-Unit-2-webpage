@@ -1,4 +1,7 @@
 <?php
+if (isset($_GET['updated'])) {
+    $_SESSION['toast_success'] = 'Feedback changes saved successfully.';
+}
 require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
 include ROOT_PATH . '/includes/nav.php';
@@ -15,6 +18,8 @@ $result = mysqli_query($link,
      ORDER BY created_at DESC"
 );
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,10 +32,6 @@ $result = mysqli_query($link,
 <div class="container content-wrapper">
     <div class="card card-bg shadow-sm mb-4 p-4">
         <h2 class="mb-4 text-success text-center">🛠 Admin Feedback Panel</h2>
-
-        <?php if (isset($_GET['updated'])): ?>
-            <div class="alert alert-success">✔ Feedback changes saved successfully!</div>
-        <?php endif; ?>
 
         <?php if (mysqli_num_rows($result) > 0): ?>
             <form action="<?= $b ?>/pages/admin/process_feedback_admin.php" method="POST">
