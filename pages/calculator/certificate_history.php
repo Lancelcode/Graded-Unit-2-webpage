@@ -205,8 +205,8 @@ include ROOT_PATH . '/includes/nav.php';
                 if (str_contains($row['award_level'], 'Bronze')) { $award_class = 'award-bronze'; $badge_class = 'badge-bronze'; }
             ?>
                 <div class="col-md-6 col-xl-4">
-                    <div class="cert-card <?= $award_class ?> h-100">
-                        <div class="p-3">
+                    <div class="cert-card <?= $award_class ?> h-100 d-flex flex-column">
+                        <div class="p-3 d-flex flex-column h-100">
 
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <span class="cert-ref"><?= $cert_ref ?></span>
@@ -264,7 +264,7 @@ include ROOT_PATH . '/includes/nav.php';
                                 <?php endif; ?>
                             <?php endif; ?>
 
-                            <div class="d-flex gap-2 flex-wrap">
+                            <div class="d-flex gap-2 mt-auto pt-2">
                                 <a href="<?= $b ?>/pages/calculator/certificate_preview.php?id=<?= (int) $row['id'] ?>"
                                    class="btn btn-sm btn-success flex-grow-1">
                                     📄 View
@@ -277,7 +277,7 @@ include ROOT_PATH . '/includes/nav.php';
                                                value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                         <input type="hidden" name="reset_id" value="<?= (int) $row['id'] ?>">
                                         <button type="submit" class="btn btn-sm btn-warning"
-                                                title="Reset">🔁</button>
+                                                title="Reset" style="width:36px;">🔁</button>
                                     </form>
                                 <?php endif; ?>
 
@@ -287,7 +287,7 @@ include ROOT_PATH . '/includes/nav.php';
                                            value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
                                     <input type="hidden" name="delete_id" value="<?= (int) $row['id'] ?>">
                                     <button type="submit" class="btn btn-sm btn-outline-danger"
-                                            title="Delete">🗑️</button>
+                                            title="Delete" style="width:36px;">🗑️</button>
                                 </form>
                             </div>
                         </div>
@@ -330,8 +330,9 @@ include ROOT_PATH . '/includes/nav.php';
         <?php endif; ?>
 
         <div class="text-center mt-4">
-            <a href="<?= $b ?>/pages/user/user_account.php" class="btn btn-outline-light">
-                👤 Back to My Profile
+            <a href="<?= $b ?>/pages/calculator/green_calculator.php"
+               class="btn btn-outline-light">
+                🧮 Take the Calculator Again
             </a>
         </div>
     </div>

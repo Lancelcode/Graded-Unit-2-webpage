@@ -53,7 +53,7 @@ $b = BASE_URL;
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?= isActive('/pages/info/') ?>"
+                        <a class="nav-link dropdown-toggle <?= (isActive('partner') || isActive('green_resources') || isActive('/pages/info/about') || isActive('privacy') || isActive('terms')) ? 'active' : '' ?>"
                            href="#" id="infoDropdown" role="button"
                            data-bs-toggle="dropdown">
                             📚 Resources
@@ -123,7 +123,7 @@ $b = BASE_URL;
                     <?php endif; ?>
 
                     <li class="nav-item">
-                        <a class="nav-link <?= isActive('/pages/info/feedback') ?>"
+                        <a class="nav-link <?= isActive('feedback') ?>"
                            href="<?= $b ?>/pages/info/feedback.php">
                             💬 Feedback
                         </a>

@@ -98,11 +98,20 @@ header {
     opacity: 0.85;
 }
 
-.navbar .nav-link.active,
+/* Active nav-link — on green navbar background, white tint works fine */
+.navbar .nav-link.active {
+    font-weight: 700;
+    background-color: rgba(255, 255, 255, 0.18);
+    border-radius: 0.25rem;
+}
+
+/* Active dropdown-item — on WHITE dropdown background, use green text + left border */
 .navbar .dropdown-item.active {
     font-weight: 700;
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 0.25rem;
+    color: #198754 !important;
+    background-color: #f0f7f0;
+    border-left: 3px solid #198754;
+    padding-left: calc(var(--bs-dropdown-item-padding-x) - 3px);
 }
 
 .navbar .dropdown-toggle.active::after {
@@ -501,10 +510,4 @@ body.dark-mode .border-bottom {
 
 body.dark-mode .progress {
     background-color: #2a2a2a;
-}
-
-/* ── Back to top ────────────────────────────────────────────── */
-body.dark-mode #backToTop {
-    background: #4ade80;
-    color: #121212;
 }
