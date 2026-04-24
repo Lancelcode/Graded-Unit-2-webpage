@@ -101,6 +101,8 @@ if ($level_filter !== '') {
          WHERE user_id = ?
          ORDER BY submitted_at $order LIMIT ? OFFSET ?"
     );
+    // FIX: was missing this bind_param — caused empty results on unfiltered view
+    mysqli_stmt_bind_param($data_stmt, 'iii', $user_id, $entries_per_page, $offset);
 }
 mysqli_stmt_execute($data_stmt);
 $results = mysqli_stmt_get_result($data_stmt);
@@ -110,6 +112,39 @@ $results = mysqli_stmt_get_result($data_stmt);
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Certificate History | GreenScore</title>
+    <style>
+        .award-gold   { border-left: 5px solid #d4a017; }
+        .award-silver { border-left: 5px solid #8a9ba8; }
+        .award-bronze { border-left: 5px solid #a0522d; }
+        .award-other  { border-left: 5px solid #4CAF50; }
+
+        .badge-gold   { background: #fff8e1; color: #b8860b; border: 1px solid #d4a017; }
+        .badge-silver { background: #eceff1; color: #546e7a; border: 1px solid #8a9ba8; }
+        .badge-bronze { background: #fbe9e7; color: #6d4c41; border: 1px solid #a0522d; }
+        .badge-other  { background: #e8f5e9; color: #2e7d32; border: 1px solid #4CAF50; }
+
+        .cert-card {
+            background: rgba(255,255,255,0.96);
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            overflow: hidden;
+        }
+        .cert-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+        .cert-score-bar  { height: 6px; border-radius: 3px; background: #e9ecef; }
+        .cert-score-fill { height: 100%; border-radius: 3px; background: #4CAF50; }
+        .cert-ref { font-family: monospace; font-size: 0.75rem; color: #999; }
+        .pill {
+            display: inline-block;
+            padding: 0.2rem 0.65rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body class="bg-page overlay-50"
       style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
@@ -123,17 +158,21 @@ $results = mysqli_stmt_get_result($data_stmt);
             </div>
         <?php endif; ?>
 
-        <form class="row justify-content-center mb-4" method="get">
-            <div class="col-md-3">
-                <select name="sort" class="form-select" onchange="this.form.submit()">
-                    <option value="">Sort by Date</option>
-                    <option value="newest" <?= (empty($_GET['sort']) || $_GET['sort'] === 'newest') ? 'selected' : '' ?>>Newest First</option>
-                    <option value="oldest" <?= (($_GET['sort'] ?? '') === 'oldest') ? 'selected' : '' ?>>Oldest First</option>
+        <!-- Filters + Clear All -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <form class="d-flex gap-2 flex-wrap" method="get">
+                <select name="sort" class="form-select form-select-sm" style="width:auto;"
+                        onchange="this.form.submit()">
+                    <option value="newest" <?= (($_GET['sort'] ?? 'newest') === 'newest') ? 'selected' : '' ?>>
+                        Newest First
+                    </option>
+                    <option value="oldest" <?= (($_GET['sort'] ?? '') === 'oldest') ? 'selected' : '' ?>>
+                        Oldest First
+                    </option>
                 </select>
-            </div>
-            <div class="col-md-3">
-                <select name="level" class="form-select" onchange="this.form.submit()">
-                    <option value="">Filter by Award</option>
+                <select name="level" class="form-select form-select-sm" style="width:auto;"
+                        onchange="this.form.submit()">
+                    <option value="">All Awards</option>
                     <?php foreach ($award_levels as $level): ?>
                         <option value="<?= htmlspecialchars($level) ?>"
                             <?= (($_GET['level'] ?? '') === $level) ? 'selected' : '' ?>>
@@ -141,124 +180,157 @@ $results = mysqli_stmt_get_result($data_stmt);
                         </option>
                     <?php endforeach; ?>
                 </select>
-            </div>
-        </form>
+            </form>
+
+            <form method="post"
+                  onsubmit="return confirm('Clear all certificates? This cannot be undone.')">
+                <input type="hidden" name="csrf_token"
+                       value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                <button type="submit" name="clear_all" class="btn btn-sm btn-outline-danger">
+                    🧹 Clear All
+                </button>
+            </form>
+        </div>
 
         <?php if (mysqli_num_rows($results) > 0): ?>
-            <div class="card card-bg shadow-sm p-4 mb-4">
-                <form method="post" class="text-end mb-3"
-                      onsubmit="return confirm('Clear all certificates?')">
-                    <input type="hidden" name="csrf_token"
-                           value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                    <button type="submit" name="clear_all" class="btn btn-outline-danger">
-                        🧹 Clear All
-                    </button>
-                </form>
+            <div class="row gy-4">
+            <?php while ($row = mysqli_fetch_assoc($results)):
+                $cert_ref  = 'GS-' . date('Y', strtotime($row['submitted_at']))
+                           . '-' . str_pad($row['id'], 6, '0', STR_PAD_LEFT);
+                $score_pct = min(100, (int) $row['total_score']);
 
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>#</th><th>Date</th><th>Award</th><th>Score</th>
-                                <th>Green</th><th>Amber</th><th>Red</th>
-                                <th>Feedback</th><th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php $count = $offset + 1; while ($row = mysqli_fetch_assoc($results)): ?>
-                            <tr>
+                $award_class = 'award-other';
+                $badge_class = 'badge-other';
+                if (str_contains($row['award_level'], 'Gold'))   { $award_class = 'award-gold';   $badge_class = 'badge-gold'; }
+                if (str_contains($row['award_level'], 'Silver')) { $award_class = 'award-silver'; $badge_class = 'badge-silver'; }
+                if (str_contains($row['award_level'], 'Bronze')) { $award_class = 'award-bronze'; $badge_class = 'badge-bronze'; }
+            ?>
+                <div class="col-md-6 col-xl-4">
+                    <div class="cert-card <?= $award_class ?> h-100">
+                        <div class="p-3">
+
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="cert-ref"><?= $cert_ref ?></span>
+                                <small class="text-muted">
+                                    <?= date('d M Y', strtotime($row['submitted_at'])) ?>
+                                </small>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="pill <?= $badge_class ?>">
+                                    <?= htmlspecialchars($row['award_level']) ?>
+                                </span>
+                            </div>
+
+                            <div class="mb-1 d-flex justify-content-between">
+                                <small class="text-muted">Score</small>
+                                <small class="fw-semibold"><?= $score_pct ?> / 100</small>
+                            </div>
+                            <div class="cert-score-bar mb-3">
+                                <div class="cert-score-fill" style="width:<?= $score_pct ?>%"></div>
+                            </div>
+
+                            <div class="d-flex gap-2 mb-3">
+                                <span class="pill" style="background:#e8f5e9;color:#2e7d32;border:1px solid #4CAF50;">
+                                    🟢 <?= (int) $row['green_count'] ?>
+                                </span>
+                                <span class="pill" style="background:#fff8e1;color:#e65100;border:1px solid #ffa000;">
+                                    🟠 <?= (int) $row['amber_count'] ?>
+                                </span>
+                                <span class="pill" style="background:#fce4ec;color:#c62828;border:1px solid #e53935;">
+                                    🔴 <?= (int) $row['red_count'] ?>
+                                </span>
+                            </div>
+
+                            <?php if ($is_admin): ?>
+                                <form method="POST" class="mb-3">
+                                    <input type="hidden" name="csrf_token"
+                                           value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                                    <input type="hidden" name="update_id" value="<?= (int) $row['id'] ?>">
+                                    <input type="text" name="award_level"
+                                           value="<?= htmlspecialchars($row['award_level']) ?>"
+                                           class="form-control form-control-sm mb-1"
+                                           placeholder="Award level" required>
+                                    <input type="text" name="feedback_message"
+                                           value="<?= htmlspecialchars($row['feedback_message'] ?? '') ?>"
+                                           class="form-control form-control-sm mb-2"
+                                           placeholder="Feedback message" required>
+                                    <button type="submit" class="btn btn-sm btn-primary w-100">💾 Save</button>
+                                </form>
+                            <?php else: ?>
+                                <?php if (!empty($row['feedback_message'])): ?>
+                                    <p class="small text-muted mb-3 fst-italic">
+                                        "<?= htmlspecialchars($row['feedback_message']) ?>"
+                                    </p>
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                            <div class="d-flex gap-2 flex-wrap">
+                                <a href="<?= $b ?>/pages/calculator/certificate_preview.php?id=<?= (int) $row['id'] ?>"
+                                   class="btn btn-sm btn-success flex-grow-1">
+                                    📄 View
+                                </a>
+
                                 <?php if ($is_admin): ?>
-                                    <form method="POST">
-                                        <input type="hidden" name="csrf_token"
-                                               value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                                        <input type="hidden" name="update_id"
-                                               value="<?= (int) $row['id'] ?>">
-                                        <td><?= $count++ ?></td>
-                                        <td><?= date('d/m/Y', strtotime($row['submitted_at'])) ?></td>
-                                        <td>
-                                            <input type="text" name="award_level"
-                                                   value="<?= htmlspecialchars($row['award_level']) ?>"
-                                                   class="form-control form-control-sm" required>
-                                        </td>
-                                        <td><?= (int) $row['total_score'] ?></td>
-                                        <td><?= (int) $row['green_count'] ?></td>
-                                        <td><?= (int) $row['amber_count'] ?></td>
-                                        <td><?= (int) $row['red_count'] ?></td>
-                                        <td>
-                                            <input type="text" name="feedback_message"
-                                                   value="<?= htmlspecialchars($row['feedback_message']) ?>"
-                                                   class="form-control form-control-sm" required>
-                                        </td>
-                                        <td class="text-nowrap">
-                                            <button type="submit" class="btn btn-sm btn-primary"
-                                                    title="Save">💾</button>
-                                    </form>
-                                    <form method="POST" style="display:inline;"
+                                    <form method="POST" class="d-inline"
                                           onsubmit="return confirm('Reset this entry?')">
                                         <input type="hidden" name="csrf_token"
                                                value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                                        <input type="hidden" name="reset_id"
-                                               value="<?= (int) $row['id'] ?>">
+                                        <input type="hidden" name="reset_id" value="<?= (int) $row['id'] ?>">
                                         <button type="submit" class="btn btn-sm btn-warning"
                                                 title="Reset">🔁</button>
                                     </form>
-                                <?php else: ?>
-                                    <td><?= $count++ ?></td>
-                                    <td><?= date('d/m/Y', strtotime($row['submitted_at'])) ?></td>
-                                    <td><?= htmlspecialchars($row['award_level']) ?></td>
-                                    <td><?= (int) $row['total_score'] ?></td>
-                                    <td><?= (int) $row['green_count'] ?></td>
-                                    <td><?= (int) $row['amber_count'] ?></td>
-                                    <td><?= (int) $row['red_count'] ?></td>
-                                    <td><?= htmlspecialchars($row['feedback_message']) ?></td>
-                                    <td class="text-nowrap">
                                 <?php endif; ?>
-                                <form method="POST" style="display:inline;"
+
+                                <form method="POST" class="d-inline"
                                       onsubmit="return confirm('Delete this entry?')">
                                     <input type="hidden" name="csrf_token"
                                            value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
-                                    <input type="hidden" name="delete_id"
-                                           value="<?= (int) $row['id'] ?>">
-                                    <button type="submit" class="btn btn-sm btn-danger"
+                                    <input type="hidden" name="delete_id" value="<?= (int) $row['id'] ?>">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"
                                             title="Delete">🗑️</button>
                                 </form>
-                                    </td>
-                            </tr>
-                        <?php endwhile; ?>
-                        </tbody>
-                    </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            <?php endwhile; ?>
             </div>
 
             <?php if ($total_pages > 1): ?>
-            <nav class="text-center">
-                <ul class="pagination justify-content-center">
-                    <?php
-                    $query_params = $_GET;
-                    for ($i = 1; $i <= $total_pages; $i++) {
-                        $query_params['page'] = $i;
-                        $url    = $b . '/pages/calculator/certificate_history.php?'
-                                . http_build_query($query_params);
-                        $active = ($i === $page) ? 'active' : '';
-                        echo "<li class='page-item $active'>
-                                <a class='page-link' href='" . htmlspecialchars($url) . "'>$i</a>
-                              </li>";
-                    }
-                    ?>
-                </ul>
-            </nav>
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <?php
+                        $query_params = $_GET;
+                        for ($i = 1; $i <= $total_pages; $i++) {
+                            $query_params['page'] = $i;
+                            $url    = $b . '/pages/calculator/certificate_history.php?'
+                                    . http_build_query($query_params);
+                            $active = ($i === $page) ? 'active' : '';
+                            echo "<li class='page-item $active'>
+                                    <a class='page-link' href='" . htmlspecialchars($url) . "'>$i</a>
+                                  </li>";
+                        }
+                        ?>
+                    </ul>
+                </nav>
             <?php endif; ?>
 
         <?php else: ?>
-            <div class="card card-bg shadow-sm p-4 mb-4">
-                <p class="mb-0">No certificates found. Try the
-                    <a href="<?= $b ?>/pages/calculator/green_calculator.php">Green Calculator</a>
-                    to get started.
+            <div class="card card-bg shadow-sm p-5 text-center">
+                <div style="font-size:3rem;">📭</div>
+                <h4 class="mt-3 mb-2">No certificates yet</h4>
+                <p class="text-muted mb-4">
+                    Complete the Green Calculator to earn your first certificate.
                 </p>
+                <a href="<?= $b ?>/pages/calculator/green_calculator.php"
+                   class="btn btn-success px-4">
+                    🧮 Take the Green Calculator
+                </a>
             </div>
         <?php endif; ?>
 
-        <div class="text-center mt-3">
+        <div class="text-center mt-4">
             <a href="<?= $b ?>/pages/user/user_account.php" class="btn btn-outline-light">
                 👤 Back to My Profile
             </a>
