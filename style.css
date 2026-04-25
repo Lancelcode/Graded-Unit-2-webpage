@@ -99,22 +99,27 @@ header {
 }
 
 /* Active nav-link — on green navbar background, white tint works fine */
-.navbar .nav-link.active {
+.navbar .nav-link.active,
+.navbar .nav-link.nav-section-active {
     font-weight: 700;
     background-color: rgba(255, 255, 255, 0.18);
     border-radius: 0.25rem;
 }
 
-/* Active dropdown-item — on WHITE dropdown background, use green text + left border */
+/* Active dropdown-item — override Bootstrap's CSS variables so active item
+   shows green text on light green background instead of white-on-blue */
+.navbar .dropdown-menu {
+    --bs-dropdown-link-active-color: #198754;
+    --bs-dropdown-link-active-bg:    #e8f5e9;
+}
+
 .navbar .dropdown-item.active {
     font-weight: 700;
-    color: #198754 !important;
-    background-color: #f0f7f0;
     border-left: 3px solid #198754;
     padding-left: calc(var(--bs-dropdown-item-padding-x) - 3px);
 }
 
-.navbar .dropdown-toggle.active::after {
+.navbar .dropdown-toggle.nav-section-active::after {
     border-top-color: rgba(255, 255, 255, 0.9);
 }
 

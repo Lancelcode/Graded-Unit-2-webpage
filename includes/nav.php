@@ -25,7 +25,7 @@ $b = BASE_URL;
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?= isActive('/pages/calculator/') ?>"
+                        <a class="nav-link dropdown-toggle <?= isActive('/pages/calculator/') ? 'nav-section-active' : '' ?>"
                            href="#" id="toolsDropdown" role="button"
                            data-bs-toggle="dropdown">
                             🛠️ Tools
@@ -53,7 +53,7 @@ $b = BASE_URL;
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?= (isActive('partner') || isActive('green_resources') || isActive('/pages/info/about') || isActive('privacy') || isActive('terms')) ? 'active' : '' ?>"
+                        <a class="nav-link dropdown-toggle <?= (isActive('partner') || isActive('green_resources') || isActive('/pages/info/about') || isActive('privacy') || isActive('terms')) ? 'nav-section-active' : '' ?>"
                            href="#" id="infoDropdown" role="button"
                            data-bs-toggle="dropdown">
                             📚 Resources
@@ -94,7 +94,7 @@ $b = BASE_URL;
 
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle <?= isActive('/pages/admin/') ?>"
+                            <a class="nav-link dropdown-toggle <?= isActive('/pages/admin/') ? 'nav-section-active' : '' ?>"
                                href="#" id="adminDropdown" role="button"
                                data-bs-toggle="dropdown">
                                 🛠 Admin Dashboard
