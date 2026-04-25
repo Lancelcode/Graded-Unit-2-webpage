@@ -1,11 +1,9 @@
 <?php
 // ── isActive() ───────────────────────────────────────────────
-// Returns 'active' if the current page URL contains $path.
+// Returns 'nav-active' if the current page URL contains $path.
 // Used by nav.php to highlight the current section.
-//
-// Example:
-//   class="nav-link <?= isActive('/pages/calculator/') ?>"
-//
+// Uses a custom class name to avoid conflicting with Bootstrap's
+// own 'active' class which affects dropdown JS behaviour.
 function isActive(string $path): string {
     $current = $_SERVER['SCRIPT_NAME'] ?? '';
     return str_contains($current, $path) ? 'nav-active' : '';
@@ -13,16 +11,14 @@ function isActive(string $path): string {
 
 // ── renderEditButton() ───────────────────────────────────────
 // Renders the Edit Details button for a user row in manage_users.php
-//
 function renderEditButton(int $id, string $b): string {
     return '<a href="' . $b . '/pages/admin/edit_user.php?id=' . $id
-         . '" class="btn btn-sm btn-outline-secondary">✏️ Edit Details</a>';
+         . '" class="btn btn-sm btn-outline-secondary">&#9999;&#65039; Edit Details</a>';
 }
 
 // ── renderRoleStatusForms() ──────────────────────────────────
 // Renders the inline role and status update forms for a user row
 // in manage_users.php
-//
 function renderRoleStatusForms(array $row): string {
     $csrf = htmlspecialchars($_SESSION['csrf_token'] ?? '');
     $id   = (int) $row['id'];
