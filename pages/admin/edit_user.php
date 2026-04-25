@@ -3,7 +3,8 @@ require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    die('Access denied.');
+    include ROOT_PATH . '/403.php';
+    exit();
 }
 
 $b       = BASE_URL;
@@ -25,7 +26,6 @@ mysqli_stmt_close($stmt);
 
 $error   = '';
 $success = '';
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'] ?? '')) {
@@ -66,78 +66,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Username and email cannot be empty.';
     }
 }
+
+include ROOT_PATH . '/includes/nav.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Edit User | GreenScore</title>
+    <style>
+        .auth-wrapper { max-width: 600px; margin: 0 auto; }
+        .form-label   { font-weight: 500; }
+    </style>
 </head>
 <body class="bg-page overlay-60"
       style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
-<?php include ROOT_PATH . '/includes/nav.php'; ?>
 
-<div class="container">
-    <div class="content-box">
-        <h2 class="admin-title">Edit User</h2>
+<div class="container content-wrapper">
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h2 class="text-success text-center mb-4">✏️ Edit User</h2>
 
-        <?php if ($error): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-        <?php elseif ($success): ?>
-            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
-        <?php endif; ?>
+            <?php if ($error): ?>
+                <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+            <?php elseif ($success): ?>
+                <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+            <?php endif; ?>
 
-        <form method="post" class="mt-4">
-            <input type="hidden" name="csrf_token"
-                   value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+            <form method="post">
+                <input type="hidden" name="csrf_token"
+                       value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
-            <div class="mb-3">
-                <label for="username" class="form-label">Username:</label>
-                <input type="text" name="username" id="username" class="form-control"
-                       value="<?= htmlspecialchars($username) ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" name="email" id="email" class="form-control"
-                       value="<?= htmlspecialchars($email) ?>" required>
-            </div>
-            <div class="mb-3">
-                <label for="company_name" class="form-label">Company Name:</label>
-                <input type="text" name="company_name" id="company_name" class="form-control"
-                       value="<?= htmlspecialchars($company ?? '') ?>">
-            </div>
-            <div class="mb-3">
-                <label for="contact_person" class="form-label">Contact Person:</label>
-                <input type="text" name="contact_person" id="contact_person" class="form-control"
-                       value="<?= htmlspecialchars($contact ?? '') ?>">
-            </div>
-            <div class="mb-3">
-                <label for="phone_number" class="form-label">Phone Number:</label>
-                <input type="text" name="phone_number" id="phone_number" class="form-control"
-                       value="<?= htmlspecialchars($phone ?? '') ?>">
-            </div>
-            <div class="mb-3">
-                <label for="role" class="form-label">Role:</label>
-                <select name="role" id="role" class="form-select">
-                    <option value="user"  <?= $role === 'user'  ? 'selected' : '' ?>>User</option>
-                    <option value="admin" <?= $role === 'admin' ? 'selected' : '' ?>>Admin</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="status" class="form-label">Status:</label>
-                <select name="status" id="status" class="form-select">
-                    <option value="active"      <?= $status === 'active'      ? 'selected' : '' ?>>Active</option>
-                    <option value="inactive"    <?= $status === 'inactive'    ? 'selected' : '' ?>>Inactive</option>
-                    <option value="deactivated" <?= $status === 'deactivated' ? 'selected' : '' ?>>Deactivated</option>
-                </select>
-            </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username:</label>
+                    <input type="text" name="username" id="username" class="form-control"
+                           value="<?= htmlspecialchars($username) ?>" required maxlength="50">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" name="email" id="email" class="form-control"
+                           value="<?= htmlspecialchars($email) ?>" required maxlength="100">
+                </div>
+                <div class="mb-3">
+                    <label for="company_name" class="form-label">Company Name:</label>
+                    <input type="text" name="company_name" id="company_name" class="form-control"
+                           value="<?= htmlspecialchars($company ?? '') ?>" maxlength="100">
+                </div>
+                <div class="mb-3">
+                    <label for="contact_person" class="form-label">Contact Person:</label>
+                    <input type="text" name="contact_person" id="contact_person" class="form-control"
+                           value="<?= htmlspecialchars($contact ?? '') ?>" maxlength="100">
+                </div>
+                <div class="mb-3">
+                    <label for="phone_number" class="form-label">Phone Number:</label>
+                    <input type="tel" name="phone_number" id="phone_number" class="form-control"
+                           value="<?= htmlspecialchars($phone ?? '') ?>" maxlength="20">
+                </div>
+                <div class="mb-3">
+                    <label for="role" class="form-label">Role:</label>
+                    <select name="role" id="role" class="form-select">
+                        <option value="user"  <?= $role === 'user'  ? 'selected' : '' ?>>User</option>
+                        <option value="admin" <?= $role === 'admin' ? 'selected' : '' ?>>Admin</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status:</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="active"      <?= $status === 'active'      ? 'selected' : '' ?>>Active</option>
+                        <option value="inactive"    <?= $status === 'inactive'    ? 'selected' : '' ?>>Inactive</option>
+                        <option value="deactivated" <?= $status === 'deactivated' ? 'selected' : '' ?>>Deactivated</option>
+                    </select>
+                </div>
 
-            <div class="d-flex justify-content-between">
-                <a href="<?= $b ?>/pages/admin/manage_users.php"
-                   class="btn btn-secondary">Back</a>
-                <button type="submit" class="btn btn-success">Update User</button>
-            </div>
-        </form>
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="<?= $b ?>/pages/admin/manage_users.php"
+                       class="btn btn-secondary">← Back</a>
+                    <button type="submit" class="btn btn-success">💾 Update User</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

@@ -1,86 +1,99 @@
 <?php
-if (isset($_GET['updated'])) {
-    $_SESSION['toast_success'] = 'Feedback changes saved successfully.';
-}
 require_once __DIR__ . '/../../includes/init.php';
 require_once ROOT_PATH . '/includes/connect_db.php';
-include ROOT_PATH . '/includes/nav.php';
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    http_response_code(403);
     include ROOT_PATH . '/403.php';
     exit();
 }
 
-$b      = BASE_URL;
+$b = BASE_URL;
+
+if (isset($_GET['updated'])) {
+    $_SESSION['toast_success'] = 'Feedback changes saved successfully.';
+}
+
 $result = mysqli_query($link,
     "SELECT id, name, email, message, created_at, visible_to_public, admin_response
      FROM feedback
      ORDER BY created_at DESC"
 );
+
+include ROOT_PATH . '/includes/nav.php';
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include ROOT_PATH . '/includes/head.php'; ?>
     <title>Admin Feedback Panel | GreenScore</title>
+    <style>
+        .auth-wrapper { max-width: 860px; margin: 0 auto; }
+        .feedback-item {
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            padding-bottom: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .feedback-item:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        body.dark-mode .feedback-item { border-color: #444; }
+    </style>
 </head>
 <body class="bg-page overlay-50"
-      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg'); min-height: 100vh;">
+      style="background-image: url('<?= $b ?>/assets/images/forest-hero.jpg');">
 
 <div class="container content-wrapper">
-    <div class="card card-bg shadow-sm mb-4 p-4">
-        <h2 class="mb-4 text-success text-center">🛠 Admin Feedback Panel</h2>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h2 class="text-success text-center mb-4">🛠 Admin Feedback Panel</h2>
 
-        <?php if (mysqli_num_rows($result) > 0): ?>
-            <form action="<?= $b ?>/pages/admin/process_feedback_admin.php" method="POST">
-                <input type="hidden" name="csrf_token"
-                       value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+            <?php if (mysqli_num_rows($result) > 0): ?>
+                <form action="<?= $b ?>/pages/admin/process_feedback_admin.php" method="POST">
+                    <input type="hidden" name="csrf_token"
+                           value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
 
-                <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                    <div class="card card-bg mb-4 shadow-sm p-3">
-                        <div class="card-body">
-                            <p>
-                                <strong>👤 User:</strong> <?= htmlspecialchars($row['name']) ?>
-                                (<?= htmlspecialchars($row['email']) ?>)
-                            </p>
-                            <p><strong>💬 Feedback:</strong><br>
-                                <?= nl2br(htmlspecialchars($row['message'])) ?>
-                            </p>
-                            <p><strong>🕒 Submitted:</strong> <?= $row['created_at'] ?></p>
+                    <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                        <div class="feedback-item">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <strong><?= htmlspecialchars($row['name']) ?></strong>
+                                <small class="text-muted"><?= $row['created_at'] ?></small>
+                            </div>
+                            <small class="text-muted"><?= htmlspecialchars($row['email']) ?></small>
+                            <p class="mt-2 mb-2"><?= nl2br(htmlspecialchars($row['message'])) ?></p>
 
-                            <div class="form-check form-switch mt-3">
+                            <div class="form-check form-switch mb-2">
                                 <input class="form-check-input" type="checkbox" role="switch"
                                        name="visible_to_public[<?= $row['id'] ?>]"
-                                       id="visible_to_public<?= $row['id'] ?>"
+                                       id="vis<?= $row['id'] ?>"
                                     <?= $row['visible_to_public'] ? 'checked' : '' ?>>
-                                <label class="form-check-label fw-semibold"
-                                       for="visible_to_public<?= $row['id'] ?>">
+                                <label class="form-check-label fw-semibold" for="vis<?= $row['id'] ?>">
                                     Publicly Visible
                                 </label>
                             </div>
 
-                            <div class="mt-3">
-                                <label for="admin_response_<?= $row['id'] ?>">✍️ Admin Response</label>
-                                <textarea class="form-control"
-                                          name="admin_response[<?= $row['id'] ?>]"
-                                          id="admin_response_<?= $row['id'] ?>"
-                                          rows="3"><?= htmlspecialchars($row['admin_response'] ?? '') ?></textarea>
-                            </div>
+                            <label for="resp<?= $row['id'] ?>" class="form-label small fw-semibold">
+                                ✍️ Admin Response
+                            </label>
+                            <textarea class="form-control form-control-sm"
+                                      name="admin_response[<?= $row['id'] ?>]"
+                                      id="resp<?= $row['id'] ?>"
+                                      rows="2"><?= htmlspecialchars($row['admin_response'] ?? '') ?></textarea>
                         </div>
-                    </div>
-                <?php endwhile; ?>
+                    <?php endwhile; ?>
 
-                <div class="text-end">
-                    <button type="submit" class="btn btn-success px-4 py-2 fw-bold shadow-sm">
-                        <i class="fas fa-save me-2"></i> Save Feedback Updates
-                    </button>
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-success px-4 fw-bold">
+                            <i class="fas fa-save me-2"></i> Save All Changes
+                        </button>
+                    </div>
+                </form>
+            <?php else: ?>
+                <div class="text-center py-4">
+                    <div style="font-size:3rem;">💬</div>
+                    <h5 class="mt-3 mb-1">No feedback yet</h5>
+                    <p class="text-muted">Feedback submitted by users will appear here.</p>
                 </div>
-            </form>
-        <?php else: ?>
-            <div class="alert alert-info">No feedback submitted yet.</div>
-        <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
 
