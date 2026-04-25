@@ -98,23 +98,19 @@ header {
     opacity: 0.85;
 }
 
-/* Active nav-link — on green navbar background, white tint works fine */
-.navbar .nav-link.active,
+/* Active nav-link and dropdown toggle — on green navbar background */
+.navbar .nav-link.nav-active,
 .navbar .nav-link.nav-section-active {
     font-weight: 700;
     background-color: rgba(255, 255, 255, 0.18);
     border-radius: 0.25rem;
 }
 
-/* Active dropdown-item — override Bootstrap's CSS variables so active item
-   shows green text on light green background instead of white-on-blue */
-.navbar .dropdown-menu {
-    --bs-dropdown-link-active-color: #198754;
-    --bs-dropdown-link-active-bg:    #e8f5e9;
-}
-
-.navbar .dropdown-item.active {
+/* Active dropdown-item — green text + left border on white dropdown */
+.navbar .dropdown-item.nav-active {
     font-weight: 700;
+    color: #198754;
+    background-color: #e8f5e9;
     border-left: 3px solid #198754;
     padding-left: calc(var(--bs-dropdown-item-padding-x) - 3px);
 }
@@ -515,4 +511,9 @@ body.dark-mode .border-bottom {
 
 body.dark-mode .progress {
     background-color: #2a2a2a;
+}
+/* ── Back to top ────────────────────────────────────────────── */
+body.dark-mode #backToTop {
+    background: #4ade80;
+    color: #121212;
 }

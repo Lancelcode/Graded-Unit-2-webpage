@@ -1,14 +1,28 @@
 <?php
+// ── isActive() ───────────────────────────────────────────────
+// Returns 'active' if the current page URL contains $path.
+// Used by nav.php to highlight the current section.
+//
+// Example:
+//   class="nav-link <?= isActive('/pages/calculator/') ?>"
+//
 function isActive(string $path): string {
     $current = $_SERVER['SCRIPT_NAME'] ?? '';
-    return str_contains($current, $path) ? 'active' : '';
+    return str_contains($current, $path) ? 'nav-active' : '';
 }
 
+// ── renderEditButton() ───────────────────────────────────────
+// Renders the Edit Details button for a user row in manage_users.php
+//
 function renderEditButton(int $id, string $b): string {
     return '<a href="' . $b . '/pages/admin/edit_user.php?id=' . $id
          . '" class="btn btn-sm btn-outline-secondary">✏️ Edit Details</a>';
 }
 
+// ── renderRoleStatusForms() ──────────────────────────────────
+// Renders the inline role and status update forms for a user row
+// in manage_users.php
+//
 function renderRoleStatusForms(array $row): string {
     $csrf = htmlspecialchars($_SESSION['csrf_token'] ?? '');
     $id   = (int) $row['id'];
