@@ -201,18 +201,20 @@ http://localhost/Graded-Unit-2-webpage/
 | User | `joe@joe.com` | *(set in your DB)* |
 
 ---
+## 👤 Author
+
+**Djiby Sow Rebollo**
+
+[![GitHub](https://img.shields.io/badge/GitHub-@Lancelcode-181717?style=for-the-badge&logo=github)](https://github.com/Lancelcode)
+
+Edinburgh College — Software Development
+Graded Unit 2 — Academic Year 2024/2025
+
+---
 
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
-
----
-
-## 👤 Author
-
-**Djiby Sow Rebollo** ([@Lancelcode](https://github.com/Lancelcode))  
-Edinburgh College — Software Development  
-Graded Unit 2 — Academic Year 2024/2025
 
 ---
 
