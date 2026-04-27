@@ -1,6 +1,6 @@
 # ── Error pages ──────────────────────────────────────────────
-ErrorDocument 404 /Graded-Unit-2-webpage/404.php
-ErrorDocument 403 /Graded-Unit-2-webpage/403.php
+ErrorDocument 404 /GreenScore/404.php
+ErrorDocument 403 /GreenScore/403.php
 
 # ── Security headers (backup for servers without PHP) ────────
 <IfModule mod_headers.c>
