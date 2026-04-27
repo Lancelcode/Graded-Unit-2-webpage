@@ -1,25 +1,34 @@
 
-# 🌱 GreenScore — Sustainability Tracking & Certification Web App
+<div align="center">
 
-<p align="center">
-  <img src="assets/favicon.svg" alt="GreenScore Logo" width="80">
-</p>
+<img src="assets/favicon.svg" alt="GreenScore Logo" width="90" height="90" />
 
-![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?logo=php&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-MariaDB-4479A1?logo=mysql&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?logo=bootstrap&logoColor=white)
-![PHPUnit](https://img.shields.io/badge/PHPUnit-11.5-6c757d?logo=php)
-![Tests](https://img.shields.io/badge/Tests-42%20passing-198754)
+# 🌱 GreenScore
 
-> Empowering organisations to measure, track, and showcase their environmental impact — with structured scoring, digital certificates, and community engagement.
+**Sustainability Tracking & Certification Web Application**
 
-Developed as part of the **Graded Unit 2 Software Development** assessment at **Edinburgh College** (2024/2025).
+[![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
+[![MySQL](https://img.shields.io/badge/MySQL-MariaDB-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
+[![PHPUnit](https://img.shields.io/badge/PHPUnit-11.5-366488?style=for-the-badge&logo=php&logoColor=white)](https://phpunit.de/)
+[![Tests](https://img.shields.io/badge/Tests-42%20passing-198754?style=for-the-badge)](#-testing)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+
+*Empowering organisations to measure, track, and showcase their environmental impact — with structured scoring, digital certificates, and community engagement.*
+
+[🚀 Getting Started](#%EF%B8%8F-installation) · [✨ Features](#-key-features) · [🧪 Tests](#-testing) · [🛡️ Security](#%EF%B8%8F-security) · [🗄️ Database](#%EF%B8%8F-database)
+
+</div>
 
 ---
 
-## 🌍 What It Does
+## 📌 About the Project
 
-GreenScore lets businesses and organisations complete a **10-category sustainability assessment**, earning a score out of 100. Based on their score, they receive an award-level certificate — Gold, Silver, Bronze, or Participation — and unlock one of **14 progressive badge levels** tracked across all submissions. Organisations can contribute to close any score gap and upgrade their certificate to Gold.
+**GreenScore** is a full-stack sustainability platform built with PHP and MySQL. Organisations complete a structured environmental assessment across **10 categories**, earn one of **14 progressive badge levels**, and receive official downloadable **certificates** — Gold, Silver, Bronze, or Participation — based on their cumulative performance.
+
+The platform includes a community tip board, a user feedback system, a secure contribution flow for upgrading certificates, a comprehensive admin dashboard, dark mode, and a full toast notification system — all built with a strong emphasis on security best practices.
+
+> 🎓 Developed as part of the **Graded Unit 2 Software Development** assessment at **Edinburgh College** — Academic Year 2024/2025.
 
 ---
 
@@ -30,32 +39,34 @@ GreenScore lets businesses and organisations complete a **10-category sustainabi
 | 🔐 Authentication | Registration, login, logout, password reset, session-based role management |
 | 🧮 Green Calculator | 10-category assessment rated RED / AMBER / GREEN — score out of 100 |
 | 🏅 14 Badge Levels | Progressive badges from Green Starter to Champion of Sustainability |
-| 📄 Certificates | Gold / Silver / Bronze / Participation — with real submission date, company name, certificate ref number, and print-to-PDF |
+| 📄 Certificates | Gold / Silver / Bronze / Participation — real submission date, company name, certificate ref number, print-to-PDF |
 | 📜 Certificate History | Responsive card layout — colour-coded by award, score bar, filter by level, sort by date |
-| 💸 Buy Points | Users can contribute to close their score gap and upgrade to Gold |
+| 💸 Buy Points | Contribute to close a score gap and upgrade a certificate to Gold |
 | 📊 My Impact | Personal dashboard — badge level, green answer count, contribution total, progress bar |
 | 📝 Community Board | Paginated tip board with keyword search, character counter, create/edit/delete per user |
 | 📬 Feedback System | User submission with admin response panel and public visibility toggle |
 | 👥 Admin Dashboard | Role/status management, user editing, feedback moderation |
 | 🌙 Dark Mode | Full dark mode with `localStorage` persistence across page navigation |
-| 🔔 Toast Notifications | Dismissible floating toasts replace all inline alert divs sitewide |
+| 🔔 Toast Notifications | Dismissible floating toasts sitewide — success, error, warning, info |
 
 ---
 
 ## 🛡️ Security
 
+Security was a core design priority throughout development:
+
 | Protection | Implementation |
 |---|---|
 | Password hashing | `password_hash()` with bcrypt — auto-salted, unique per user |
-| SQL injection | Prepared statements with bound parameters on every query across all 44 PHP files |
+| SQL injection | Prepared statements with bound parameters across all 44 PHP files |
 | CSRF protection | Token generated once per session in `init.php`, validated on every state-changing form |
 | Session fixation | `session_regenerate_id(true)` immediately on login; periodic regeneration every 15 min |
 | Idle timeout | Session destroyed after 30 minutes of inactivity |
 | Login rate limiting | IP blocked after 5 failed attempts in 15 minutes — recorded in `login_attempts` table |
-| Password complexity | Min 8 chars, uppercase + lowercase + number required, common passwords rejected |
+| Password complexity | Min 8 chars, uppercase + lowercase + number required, common passwords blocked |
 | Cookie flags | `HttpOnly`, `SameSite=Strict` on session cookie |
 | Security headers | `X-Frame-Options: DENY`, `X-Content-Type-Options`, `Referrer-Policy`, `X-XSS-Protection`, `Permissions-Policy` |
-| Role-based access | Admin routes return HTTP 403 if accessed without the correct session role |
+| Role-based access | Admin routes return HTTP 403 if accessed without correct session role |
 | Output sanitisation | All user data escaped with `htmlspecialchars()` before rendering |
 | `.htaccess` | Blocks direct GET to `includes/`, blocks `.sql/.env/.log` files, custom 403/404 pages |
 
@@ -87,6 +98,8 @@ Six tables with foreign key constraints and cascading deletes:
 | `feedback` | Messages, admin responses, public visibility flag |
 | `credit_cards` | Saved card details per user |
 | `login_attempts` | IP-based rate limiting records |
+
+The full schema with seed data is available at [`database/gradedunit.sql`](database/gradedunit.sql).
 
 ---
 
@@ -126,7 +139,7 @@ Six tables with foreign key constraints and cascading deletes:
     ├── GreenCalculatorTest.php
     ├── CommunityTipsTest.php
     ├── PaymentTest.php
-    └── fake_login_tools.php
+    └── fake_login_tools.php     ← Session simulation helper for testing
 ```
 
 ---
@@ -138,9 +151,11 @@ Six tables with foreign key constraints and cascading deletes:
 | Test Class | What it covers |
 |---|---|
 | `LoginTest` | `password_verify()` path, correct session keys, wrong password, unknown email, admin role |
-| `GreenCalculatorTest` | All 4 award thresholds by boundary value, all-green/amber/red scoring, shortfall and cost calculation |
+| `GreenCalculatorTest` | All 4 award thresholds by boundary value, all-green/amber/red scoring, shortfall and cost |
 | `CommunityTipsTest` | Message validation, trimming, HTML escaping, auth guard, ownership check, pagination |
 | `PaymentTest` | Cost from shortfall, clamping (min/max), formatting, float conversion, post-payment state |
+
+A `fake_login_tools.php` helper simulates authenticated session state for testing protected routes without a live database connection.
 
 ```bash
 php phpunit.phar --testdox --colors=never
@@ -149,6 +164,10 @@ php phpunit.phar --testdox --colors=never
 ---
 
 ## ⚙️ Installation
+
+### Prerequisites
+- [XAMPP](https://www.apachefriends.org/) with Apache + MySQL
+- PHP 8.2+
 
 ### 1. Clone
 
@@ -163,7 +182,8 @@ git clone https://github.com/Lancelcode/Graded-Unit-2-webpage.git
 
 ### 3. Database
 
-- Open **phpMyAdmin** → create database `gradedunit`
+- Open **phpMyAdmin** at `http://localhost/phpmyadmin`
+- Create a database named `gradedunit`
 - Import `database/gradedunit.sql`
 - Default credentials in `includes/connect_db.php`: host `localhost`, user `root`, password empty
 
@@ -182,8 +202,22 @@ http://localhost/Graded-Unit-2-webpage/
 
 ---
 
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
 ## 👤 Author
 
 **Djiby Sow Rebollo** ([@Lancelcode](https://github.com/Lancelcode))  
 Edinburgh College — Software Development  
 Graded Unit 2 — Academic Year 2024/2025
+
+---
+
+<div align="center">
+
+*Built with 💚 to make sustainability measurable.*
+
+</div>
