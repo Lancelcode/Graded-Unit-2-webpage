@@ -1,5 +1,4 @@
-[README.md](https://github.com/user-attachments/files/27138136/README.md)
-[README (1).md](https://github.com/user-attachments/files/27137946/README.1.md)<div align="center">
+
 
 <img src="assets/images/logo.png" alt="GreenScore Logo" width="120" height="120" />
 
