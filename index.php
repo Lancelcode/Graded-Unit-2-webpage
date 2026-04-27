@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/includes/init.php';
-require_once __DIR__ . '/includes/connect_db.php';
 include __DIR__ . '/includes/nav.php';
 $b = BASE_URL;
 ?>
@@ -171,4 +170,3 @@ $b = BASE_URL;
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-<?php mysqli_close($link); ?>

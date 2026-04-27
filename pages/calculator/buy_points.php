@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['donate'])) {
                     🎉 Thank you! Your certificate has been updated to
                     <strong>Certificate of Gold 🥇</strong>.
                 </div>
-                <a href="<?= $b ?>/pages/calculator/certificate_preview.php?level=<?= urlencode('Certificate of Gold 🥇') ?>"
+                <a href="<?= $b ?>/pages/calculator/certificate_preview.php?id=<?= $last_id ?>"
                    class="btn btn-success mt-3 me-2">
                     📄 View Your Certificate
                 </a>

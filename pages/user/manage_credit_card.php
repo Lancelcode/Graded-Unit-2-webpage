@@ -6,83 +6,91 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Redirect GET requests — this page only handles POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ' . BASE_URL . '/pages/user/view_cards.php');
+    exit();
+}
+
+if (!hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'] ?? '')) {
+    die('CSRF token validation failed.');
+}
+
 require_once ROOT_PATH . '/includes/connect_db.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-        die('CSRF token validation failed.');
-    }
+$action = $_POST['action'] ?? null;
+$userId = (int) $_SESSION['user_id'];
 
-    $action = $_POST['action'] ?? null;
-    if (!$action) die('No action specified.');
+if ($action === 'add') {
+    $cardNumber = trim($_POST['card_number'] ?? '');
+    $expiryDate = trim($_POST['expiry_date'] ?? '');
+    $cardHolder = trim($_POST['card_name']   ?? '');
+    $cvv        = trim($_POST['cvv']         ?? '');
 
-    $userId = (int) $_SESSION['user_id'];
+    $date = DateTime::createFromFormat('Y-m-d', $expiryDate);
+    if (!$date) die('Invalid date format.');
+    $expiryDateFormatted = $date->format('Y-m-d');
 
-    if ($action === 'add') {
-        $cardNumber = trim($_POST['card_number']);
-        $expiryDate = trim($_POST['expiry_date']);
-        $cardHolder = trim($_POST['card_name']);
-        $cvv        = trim($_POST['cvv']);
+    $stmt = mysqli_prepare($link,
+        "INSERT INTO credit_cards (user_id, card_number, expiry_date, cardholder_name, cvv)
+         VALUES (?, ?, ?, ?, ?)"
+    );
+    mysqli_stmt_bind_param($stmt, 'issss',
+        $userId, $cardNumber, $expiryDateFormatted, $cardHolder, $cvv
+    );
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($link);
 
-        $date = DateTime::createFromFormat('Y-m-d', $expiryDate);
-        if (!$date) die('Invalid date format.');
-        $expiryDateFormatted = $date->format('Y-m-d');
+    $_SESSION['toast_success'] = 'Card added successfully.';
+    header('Location: ' . BASE_URL . '/pages/user/view_cards.php');
+    exit();
+}
 
-        $stmt = mysqli_prepare($link,
-            "INSERT INTO credit_cards (user_id, card_number, expiry_date, cardholder_name, cvv)
-             VALUES (?, ?, ?, ?, ?)"
-        );
-        mysqli_stmt_bind_param($stmt, 'issss',
-            $userId, $cardNumber, $expiryDateFormatted, $cardHolder, $cvv
-        );
-        if (!mysqli_stmt_execute($stmt)) die('Error adding card: ' . mysqli_error($link));
-        mysqli_stmt_close($stmt);
+if ($action === 'update') {
+    $cardId     = (int) ($_POST['card_id']   ?? 0);
+    $cardNumber = trim($_POST['card_number'] ?? '');
+    $expiryDate = trim($_POST['expiry_date'] ?? '');
+    $cardHolder = trim($_POST['card_name']   ?? '');
+    $cvv        = trim($_POST['cvv']         ?? '');
 
-        header('Location: ' . BASE_URL . '/pages/user/view_cards.php');
-        exit();
-    }
+    $date = DateTime::createFromFormat('Y-m-d', $expiryDate);
+    if (!$date) die('Invalid date format.');
+    $expiryDateFormatted = $date->format('Y-m-d');
 
-    if ($action === 'update') {
-        $cardId     = (int) $_POST['card_id'];
-        $cardNumber = trim($_POST['card_number']);
-        $expiryDate = trim($_POST['expiry_date']);
-        $cardHolder = trim($_POST['card_name']);
-        $cvv        = trim($_POST['cvv']);
+    $stmt = mysqli_prepare($link,
+        "UPDATE credit_cards
+         SET card_number = ?, expiry_date = ?, cardholder_name = ?, cvv = ?
+         WHERE id = ? AND user_id = ?"
+    );
+    mysqli_stmt_bind_param($stmt, 'ssssii',
+        $cardNumber, $expiryDateFormatted, $cardHolder, $cvv, $cardId, $userId
+    );
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($link);
 
-        $date = DateTime::createFromFormat('Y-m-d', $expiryDate);
-        if (!$date) die('Invalid date format.');
-        $expiryDateFormatted = $date->format('Y-m-d');
+    $_SESSION['toast_success'] = 'Card updated successfully.';
+    header('Location: ' . BASE_URL . '/pages/user/view_cards.php');
+    exit();
+}
 
-        $stmt = mysqli_prepare($link,
-            "UPDATE credit_cards
-             SET card_number = ?, expiry_date = ?, cardholder_name = ?, cvv = ?
-             WHERE id = ? AND user_id = ?"
-        );
-        mysqli_stmt_bind_param($stmt, 'ssssii',
-            $cardNumber, $expiryDateFormatted, $cardHolder, $cvv, $cardId, $userId
-        );
-        if (!mysqli_stmt_execute($stmt)) die('Error updating card: ' . mysqli_error($link));
-        mysqli_stmt_close($stmt);
+if ($action === 'delete') {
+    $cardId = (int) ($_POST['card_id'] ?? 0);
 
-        header('Location: ' . BASE_URL . '/pages/user/view_cards.php');
-        exit();
-    }
+    $stmt = mysqli_prepare($link,
+        "DELETE FROM credit_cards WHERE id = ? AND user_id = ?"
+    );
+    mysqli_stmt_bind_param($stmt, 'ii', $cardId, $userId);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    mysqli_close($link);
 
-    if ($action === 'delete') {
-        $cardId = (int) $_POST['card_id'];
-
-        $stmt = mysqli_prepare($link,
-            "DELETE FROM credit_cards WHERE id = ? AND user_id = ?"
-        );
-        mysqli_stmt_bind_param($stmt, 'ii', $cardId, $userId);
-        if (!mysqli_stmt_execute($stmt)) die('Error deleting card: ' . mysqli_error($link));
-        mysqli_stmt_close($stmt);
-
-        header('Location: ' . BASE_URL . '/pages/user/view_cards.php');
-        exit();
-    }
-
-    die('Invalid action.');
+    $_SESSION['toast_success'] = 'Card deleted.';
+    header('Location: ' . BASE_URL . '/pages/user/view_cards.php');
+    exit();
 }
 
 mysqli_close($link);
+header('Location: ' . BASE_URL . '/pages/user/view_cards.php');
+exit();

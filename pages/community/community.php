@@ -41,7 +41,7 @@ if ($search !== '') {
     mysqli_stmt_close($count_stmt);
 
     $stmt = mysqli_prepare($link,
-        "SELECT ct.*, u.username, u.email
+        "SELECT ct.id, ct.user_id, ct.message, ct.created_at, u.username, u.email
          FROM community_tips ct
          JOIN new_users u ON ct.user_id = u.id
          WHERE ct.message LIKE ?
@@ -54,7 +54,7 @@ if ($search !== '') {
     $total        = (int) mysqli_fetch_assoc($count_result)['total'];
 
     $stmt = mysqli_prepare($link,
-        "SELECT ct.*, u.username, u.email
+        "SELECT ct.id, ct.user_id, ct.message, ct.created_at, u.username, u.email
          FROM community_tips ct
          JOIN new_users u ON ct.user_id = u.id
          ORDER BY ct.created_at DESC
@@ -198,7 +198,7 @@ $results = mysqli_stmt_get_result($stmt);
                 </ul>
             </nav>
         <?php endif; ?>
-    </div>
+    </div>m   
 
     <?php include ROOT_PATH . '/includes/footer.php'; ?>
 </div>
