@@ -3,60 +3,63 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2025 at 05:17 PM
+-- Generation Time: May 02, 2026 at 01:30 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
- 
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
- 
- 
+
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
- 
+
 --
 -- Database: `gradedunit`
 --
- 
+
 -- --------------------------------------------------------
- 
+
 --
 -- Table structure for table `community_tips`
 --
- 
+
 CREATE TABLE `community_tips` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `message` text NOT NULL,
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
- 
+
 --
 -- Dumping data for table `community_tips`
 --
- 
+
 INSERT INTO `community_tips` (`id`, `user_id`, `message`, `created_at`) VALUES
-(29, 36, 'Hi this is the tip number 1', '2025-05-02 09:25:36'),
-(38, 39, 'yes sir', '2025-05-02 16:45:09'),
-(39, 40, 'hello crif', '2025-05-02 18:22:40'),
-(40, 36, 'I want to be the best company ever', '2025-05-07 13:06:53'),
-(41, 36, 'rgthetrwthggre', '2025-05-07 13:37:03'),
-(42, 36, 'trtrhrthhtrthrwrthhrthtrhtr', '2025-05-07 13:37:13'),
-(43, 36, 'trhrhthttehtrureyjerytj', '2025-05-07 13:37:16'),
-(44, 36, 'tyjjytjytyjjyyjtyj', '2025-05-07 13:37:19'),
-(45, 36, 'rgtgrthrttrhtggtt', '2025-05-07 13:37:26'),
-(46, 36, 'ttrtrtr', '2025-05-07 13:37:30'),
-(47, 37, 'hellooooo', '2025-05-07 14:38:56');
- 
+(29, 36, 'We switched all office lighting to LED and cut energy costs by 30% in one quarter.', '2025-05-02 09:25:36'),
+(38, 39, 'Started a company-wide recycling programme — engagement from staff has been brilliant.', '2025-05-02 16:45:09'),
+(39, 40, 'Moved to paperless invoicing and eliminated over 2,000 printed documents per year.', '2025-05-02 18:22:40'),
+(40, 36, 'Partnered with a local carbon offset scheme — highly recommend looking into this.', '2025-05-07 13:06:53'),
+(41, 36, 'Installed solar panels on our warehouse roof. ROI within 4 years and zero emissions.', '2025-05-07 13:37:03'),
+(42, 36, 'Switched our company fleet to electric vehicles. Charging is cheaper than fuel.', '2025-05-07 13:37:13'),
+(43, 36, 'Reduced single-use plastics in our canteen entirely. Staff adapted quickly.', '2025-05-07 13:37:16'),
+(44, 36, 'Remote working two days per week cut our commuter emissions by nearly 40%.', '2025-05-07 13:37:19'),
+(45, 36, 'Water-saving taps installed across all facilities. Small change, big impact.', '2025-05-07 13:37:26'),
+(46, 36, 'Started measuring our Scope 3 emissions this year. Eye-opening and highly recommended.', '2025-05-07 13:37:30'),
+(47, 37, 'Joined a local sustainability network — sharing knowledge with peers has accelerated our progress.', '2025-05-07 14:38:56'),
+(48, 36, 'testadorrrrrrr', '2026-04-23 19:54:27'),
+(50, 39, 'huhuhuhuhuhu', '2026-04-23 23:39:39'),
+(53, 47, '873683575', '2026-04-25 17:27:38');
+
 -- --------------------------------------------------------
- 
+
 --
 -- Table structure for table `credit_cards`
 --
- 
+
 CREATE TABLE `credit_cards` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -66,21 +69,23 @@ CREATE TABLE `credit_cards` (
   `cvv` varchar(4) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
- 
+
 --
 -- Dumping data for table `credit_cards`
 --
- 
+
 INSERT INTO `credit_cards` (`id`, `user_id`, `card_number`, `expiry_date`, `cardholder_name`, `cvv`, `created_at`) VALUES
 (38, 35, '1234567890', '2025-05-01', 'fumanchu', '233', '2025-05-01 19:17:11'),
-(39, 39, '32435678', '2025-05-08', 'user', '3223', '2025-05-02 17:17:15');
- 
+(39, 39, '32435678', '2025-05-08', 'user', '3223', '2025-05-02 17:17:15'),
+(40, 47, '123456789', '2026-04-11', 'test1', '654', '2026-04-23 18:58:03'),
+(41, 34, '123456789', '2026-04-24', 'test', '123', '2026-04-24 20:02:06');
+
 -- --------------------------------------------------------
- 
+
 --
 -- Table structure for table `feedback`
 --
- 
+
 CREATE TABLE `feedback` (
   `id` int(11) NOT NULL,
   `user_id` int(10) UNSIGNED DEFAULT NULL,
@@ -93,29 +98,35 @@ CREATE TABLE `feedback` (
   `admin_username` varchar(100) DEFAULT NULL,
   `admin_response_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
- 
+
 --
 -- Dumping data for table `feedback`
 --
- 
+
 INSERT INTO `feedback` (`id`, `user_id`, `name`, `email`, `message`, `created_at`, `visible_to_public`, `admin_response`, `admin_username`, `admin_response_at`) VALUES
-(10, NULL, 'fumanchu', 'fu@fu', 'testing please', '2025-05-01 21:45:49', 1, 'here you have!', 'admin@admin', '2025-05-07 16:14:18'),
-(11, NULL, 'fumanchu', 'fu@fu', 'what 123', '2025-05-01 21:45:57', 1, 'bruh 321', 'admin@admin', '2025-05-07 16:14:18'),
-(12, 35, 'fumanchu', 'fu@fu', 'yes?', '2025-05-01 21:46:35', 1, 'no!', 'admin@admin', '2025-05-07 16:14:18'),
-(14, 40, 'cris', 'crif@gmail.com', 'I love your website, its brutal', '2025-05-02 17:23:03', 1, 'i love you !!', 'admin@admin', '2025-05-07 16:14:18'),
-(15, 39, 'Joe', 'joe@joe.com', 'this is feedback', '2025-05-02 18:22:20', 1, 'huaaaa', 'admin@admin', '2025-05-07 16:14:18'),
-(16, 39, 'Joe', 'joe@joe.com', 'this is feedback', '2025-05-02 18:31:46', 1, 'let do it', 'admin@admin', '2025-05-07 16:14:18'),
-(18, 36, 'admin@admin', 'admin@admin', 'haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa test', '2025-05-07 12:32:45', 1, 'sssssss', 'admin@admin', '2025-05-07 16:14:18'),
-(19, 36, 'admin@admin', 'admin@admin', 'ajjajajjajja testing', '2025-05-07 12:32:53', 1, 'ddddd', 'admin@admin', '2025-05-07 16:14:18'),
-(20, 37, 'jamoncin', 'pernil@pernil', 'holaaa', '2025-05-07 13:39:04', 1, 'nope', 'admin@admin', '2025-05-07 16:14:18'),
-(21, 47, 'test2', 'test2@test2', 'testing?', '2025-05-07 15:13:52', 1, 'nope', 'admin@admin', '2025-05-07 16:14:18');
- 
+(10, NULL, 'GreenTech Solutions', 'contact@greentech.com', 'Great platform, really helped us identify areas for improvement in our sustainability practices.', '2025-05-01 21:45:49', 1, 'Thank you for your feedback. We are glad GreenScore is making a difference for your organisation.', 'test1', '2026-04-24 21:18:42'),
+(11, NULL, 'GreenTech Solutions', 'contact@greentech.com', 'Great platform, really helped us identify areas for improvement in our sustainability practices.', '2025-05-01 21:45:57', 1, 'Thank you for your feedback. We are glad GreenScore is making a difference for your organisation.', 'test1', '2026-04-24 21:18:42'),
+(12, 35, 'GreenTech Solutions', 'contact@greentech.com', 'Great platform, really helped us identify areas for improvement in our sustainability practices.', '2025-05-01 21:46:35', 1, 'Thank you for your feedback. We are glad GreenScore is making a difference for your organisation.', 'test1', '2026-04-24 21:18:42'),
+(14, 40, 'cris', 'crif@gmail.com', 'The certificate system is a great incentive for our team to keep improving.', '2025-05-02 17:23:03', 1, 'We appreciate your kind words. Keep working towards that Gold certificate!', 'test1', '2026-04-24 21:18:42'),
+(15, 39, 'Joe', 'joe@joe.com', 'Really intuitive platform. The green calculator gave us clear actionable insights.', '2025-05-02 18:22:20', 1, 'Thank you for taking the time to share this. We hope to see you reach Gold soon.', 'test1', '2026-04-24 21:18:42'),
+(16, 39, 'Joe', 'joe@joe.com', 'Excellent tool for benchmarking our environmental impact year on year.', '2025-05-02 18:31:46', 1, 'Fantastic to hear. Consistent benchmarking is key to real sustainability progress.', 'test1', '2026-04-24 21:18:42'),
+(18, 36, 'admin@admin', 'admin@admin', 'The badge system is a brilliant touch. Our team is now competing to improve our score.', '2025-05-07 12:32:45', 1, 'Love hearing this — that is exactly what the badge system was designed for!', 'test1', '2026-04-24 21:18:42'),
+(19, 36, 'admin@admin', 'admin@admin', 'Very well structured assessment. Would love to see more categories added in the future.', '2025-05-07 12:32:53', 1, 'Great suggestion — we are always looking to expand the assessment categories.', 'test1', '2026-04-24 21:18:42'),
+(20, 37, 'jamoncin', 'pernil@pernil', 'Simple to use and the certificate looks very professional. Impressed overall.', '2025-05-07 13:39:04', 1, 'Thank you for the positive feedback. The certificates are designed to be share-worthy!', 'test1', '2026-04-24 21:18:42'),
+(21, 47, 'test2', 'test2@test2', 'Would recommend GreenScore to any organisation serious about sustainability.', '2025-05-07 15:13:52', 1, 'That means a lot to us. Thank you for your support!', 'test1', '2026-04-24 21:18:42'),
+(22, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:03:01', 0, '', 'test1', '2026-04-24 21:18:42'),
+(23, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:03:19', 0, '', 'test1', '2026-04-24 21:18:42'),
+(24, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:03:57', 0, '', 'test1', '2026-04-24 21:18:42'),
+(25, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:04:26', 0, '', 'test1', '2026-04-24 21:18:42'),
+(26, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:14:33', 1, 'jhgv;iyhgv;oiujk', 'test1', '2026-04-24 21:18:42'),
+(27, 34, 'test1', 'test@test.test', 'testooooo', '2026-04-24 20:14:45', 1, 'hgcjugfj,vg,jhgv', 'test1', '2026-04-24 21:18:42');
+
 -- --------------------------------------------------------
- 
+
 --
 -- Table structure for table `green_calculator_results`
 --
- 
+
 CREATE TABLE `green_calculator_results` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
@@ -130,11 +141,11 @@ CREATE TABLE `green_calculator_results` (
   `donation_cost` decimal(6,2) NOT NULL,
   `submitted_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
- 
+
 --
 -- Dumping data for table `green_calculator_results`
 --
- 
+
 INSERT INTO `green_calculator_results` (`id`, `user_id`, `total_score`, `green_count`, `amber_count`, `red_count`, `award_level`, `emoji`, `feedback_message`, `shortfall`, `donation_cost`, `submitted_at`) VALUES
 (98, 35, 0, 0, 0, 10, 'Certificate of Gold 🥇', '🥇', 'Thank you for your contribution! You\'ve unlocked full recognition!', 0, 1.00, '2025-05-01 21:25:32'),
 (99, 35, 75, 6, 3, 1, 'Certificate of Gold 🥇', '🥇', 'Thank you for your contribution! You\'ve unlocked full recognition!', 0, 250.00, '2025-05-01 21:28:28'),
@@ -149,35 +160,37 @@ INSERT INTO `green_calculator_results` (`id`, `user_id`, `total_score`, `green_c
 (111, 36, 65, 4, 5, 1, 'Certificate of Silver 🥈', '🥈', 'Great job! You\'re making a positive environmental impact.', 35, 350.00, '2025-05-07 12:05:06'),
 (112, 36, 65, 4, 5, 1, 'Certificate of Silver 🥈', '🥈', 'Great job! You\'re making a positive environmental impact.', 35, 350.00, '2025-05-07 12:05:18'),
 (113, 36, 55, 3, 5, 2, 'Certificate of Bronze 🥉', '🥉', 'Nice effort! Keep building sustainable habits.', 45, 450.00, '2025-05-07 12:05:29'),
-(114, 36, 45, 2, 5, 3, 'Certificate of Participation 👏', '🌟', 'You\'re almost there! Just a few more changes will go a long way.', 55, 550.00, '2025-05-07 12:05:39'),
-(115, 36, 40, 2, 4, 4, 'Certificate of Participation 👏', '💪', 'You\'re making progress. Small steps matter — keep going!', 60, 600.00, '2025-05-07 12:05:52'),
-(116, 36, 35, 2, 3, 5, 'Certificate of Participation 👏', '💪', 'You\'re making progress. Small steps matter — keep going!', 65, 650.00, '2025-05-07 12:06:04'),
-(117, 36, 25, 1, 3, 6, 'Certificate of Participation 👏', '🌱', 'Every journey starts somewhere — you\'ve taken that first step!', 75, 750.00, '2025-05-07 12:06:13'),
-(120, 47, 0, 0, 0, 0, 'Initial Registration 🎟️', '🎟️', 'Thank you for joining GreenScore!', 0, 99.00, '2025-05-07 14:55:47');
- 
+(114, 36, 45, 2, 5, 3, 'Certificate of participation 👏', '🌟', 'You\'re almost there! Just a few more changes will go a long way.', 55, 550.00, '2025-05-07 12:05:39'),
+(115, 36, 40, 2, 4, 4, 'Certificate of participation 👏', '💪', 'You\'re making progress. Small steps matter — keep going!', 60, 600.00, '2025-05-07 12:05:52'),
+(116, 36, 35, 2, 3, 5, 'Certificate of participation 👏', '💪', 'You\'re making progress. Small steps matter — keep going!', 65, 650.00, '2025-05-07 12:06:04'),
+(117, 36, 25, 1, 3, 6, 'Certificate of participation 👏', '🌱', 'Every journey starts somewhere — you\'ve taken that first step!', 75, 750.00, '2025-05-07 12:06:13'),
+(123, 47, 25, 1, 3, 6, 'Certificate of Gold 🥇', '🥇', 'Thank you for your contribution! You\'ve unlocked full recognition!', 0, 750.00, '2026-04-23 19:12:27'),
+(124, 48, 0, 0, 0, 0, 'Initial Registration 🎟️', '🎟️', 'Thank you for joining GreenScore!', 0, 99.00, '2026-04-23 19:44:17'),
+(125, 39, 55, 3, 5, 2, 'Certificate of Gold 🥇', '🥇', 'Thank you for your contribution! You\'ve unlocked full recognition!', 0, 450.00, '2026-04-23 22:39:19'),
+(126, 39, 0, 0, 0, 10, 'Certificate of Gold 🥇', '🥇', 'Thank you for your contribution! You\'ve unlocked full recognition!', 0, 1000.00, '2026-04-23 22:50:05'),
+(127, 49, 0, 0, 0, 0, 'Initial Registration 🎟️', '🎟️', 'Thank you for joining GreenScore!', 0, 99.00, '2026-04-24 19:53:40'),
+(128, 34, 80, 6, 4, 0, 'Certificate of Gold 🥇', '🥇', 'Thank you for your contribution! You\'ve unlocked full recognition!', 0, 200.00, '2026-04-24 20:23:12'),
+(129, 34, 25, 1, 3, 6, 'Certificate of Gold 🥇', '🥇', 'Thank you for your contribution! You\'ve unlocked full recognition!', 0, 750.00, '2026-04-27 21:04:06');
+
 -- --------------------------------------------------------
- 
+
 --
 -- Table structure for table `login_attempts`
 --
- 
+
 CREATE TABLE `login_attempts` (
-  `id`           int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ip_address`   varchar(45)      NOT NULL,
-  `email`        varchar(100)     NOT NULL,
-  `attempted_at` datetime         NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `idx_ip`    (`ip_address`),
-  KEY `idx_email` (`email`),
-  KEY `idx_time`  (`attempted_at`)
+  `id` int(10) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `attempted_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
- 
+
 -- --------------------------------------------------------
- 
+
 --
 -- Table structure for table `new_users`
 --
- 
+
 CREATE TABLE `new_users` (
   `id` int(10) UNSIGNED NOT NULL,
   `username` varchar(50) NOT NULL,
@@ -190,129 +203,132 @@ CREATE TABLE `new_users` (
   `contact_person` varchar(100) DEFAULT NULL,
   `phone_number` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
- 
+
 --
 -- Dumping data for table `new_users`
 --
- 
+
 INSERT INTO `new_users` (`id`, `username`, `email`, `password`, `role`, `created_at`, `status`, `company_name`, `contact_person`, `phone_number`) VALUES
 (34, 'test1', 'test@test.test', '$2y$10$azg83r8x.QMs767x0yLGs.p9cDYfg7FOebTXxGb8H4Avvhk2QH08K', 'admin', '2025-05-01 17:23:54', 'active', 'test1 company', 'testone', '1234567890'),
-(35, 'fumancher', 'fu@fu.com', '$2y$10$n4vh11tJxOgY5MPkKfH5Q.0XKnyot30AWMCy.TAAKWC3KYn7MjKgy', 'user', '2025-05-01 17:34:52', 'active', 'fum fum fum co', 'smoke', '0000000000'),
-(36, 'admin', 'admin@greenscore.com', '$2y$10$VdFdg3VD8VoaIuHaSG327u3.y8Qy8PHuZ.orewXdhofHYxvgJP09q', 'admin', '2025-05-01 21:47:23', 'active', 'GreenScore', 'Administrator', '0000000000'),
-(37, 'jamoncin', 'jamoncin@example.com', '$2y$10$Hwwe8aOkZ0lGX1bpCtjP7uOwoEAnIdCStqnJ4U0KuoMzkignZKG2i', 'admin', '2025-05-02 00:26:03', 'inactive', 'JAM company', 'pig', '0645217654'),
-(39, 'Joe', 'joe@joe.com', '$2y$10$gDVJKK.y0c99dkaMLJrdZOObGQsRo5AN7YlsPglg1vZvJU4IooQ6S', 'user', '2025-05-02 12:24:05', 'active', 'joe.Corporation', 'Joe DOE', '5555555555'),
-(40, 'cris', 'crif@gmail.com', '$2y$10$7nHeemAINX68isS/zeOY4OYXpof6s48TZ6RAQgfuPOyaWvnwc/o4O', 'user', '2025-05-02 17:20:19', 'active', 'Crif', 'Crif', '0889795668'),
-(41, 'Juan', 'juan@example.com', '$2y$10$sZKDAfwxbh4GUbD8Z18Spe3DmyNcziIz6cfIb2gR3taMoRri68hau', 'user', '2025-05-02 19:09:47', 'deactivated', 'One', 'Juan', '1111111111'),
-(47, 'test2', 'test2@example.com', '$2y$10$NQO3zCquzyQNbtt4bEGIsO.FvAF685X.2qwLUxgVMmZs.nGTp.u2O', 'user', '2025-05-07 14:55:47', 'deactivated', 'test2', 'test2', '0000000000');
- 
--- --------------------------------------------------------
- 
+(35, 'GreenTech Solutions', 'contact@greentech.com', '$2y$10$n4vh11tJxOgY5MPkKfH5Q.0XKnyot30AWMCy.TAAKWC3KYn7MjKgy', 'user', '2025-05-01 17:34:52', 'active', 'GreenTech Solutions Ltd', 'Sarah Mitchell', '07911234567'),
+(36, 'EcoAdmin', 'admin@greenscore.com', '$2y$10$VdFdg3VD8VoaIuHaSG327u3.y8Qy8PHuZ.orewXdhofHYxvgJP09q', 'admin', '2025-05-01 21:47:23', 'active', 'GreenScore', 'Administrator', '07911234568'),
+(37, 'CarbonCo', 'info@carbonco.com', '$2y$10$Hwwe8aOkZ0lGX1bpCtjP7uOwoEAnIdCStqnJ4U0KuoMzkignZKG2i', 'admin', '2025-05-02 00:26:03', 'inactive', 'Carbon Co Ltd', 'James Walker', '07911234569'),
+(39, 'EcoVentures', 'hello@ecoventures.com', '$2y$10$gDVJKK.y0c99dkaMLJrdZOObGQsRo5AN7YlsPglg1vZvJU4IooQ6S', 'user', '2025-05-02 12:24:05', 'active', 'EcoVentures UK', 'Joe Doe', '07911234570'),
+(40, 'SustainCorp', 'info@sustaincorp.com', '$2y$10$7nHeemAINX68isS/zeOY4OYXpof6s48TZ6RAQgfuPOyaWvnwc/o4O', 'user', '2025-05-02 17:20:19', 'active', 'SustainCorp Ltd', 'Chris Reid', '07911234571'),
+(41, 'Juan', '1@1', '$2y$10$sZKDAfwxbh4GUbD8Z18Spe3DmyNcziIz6cfIb2gR3taMoRri68hau', 'user', '2025-05-02 19:09:47', 'deactivated', 'One', 'Juan', '11111111111111'),
+(47, 'test2', 'test2@test2', '$2y$10$NQO3zCquzyQNbtt4bEGIsO.FvAF685X.2qwLUxgVMmZs.nGTp.u2O', 'user', '2025-05-07 14:55:47', 'deactivated', 'test2', 'test2', 'test2'),
+(48, '12', 'Djiby.sowrebollo@vaste.bio', '$2y$10$wcs4t4Vvq8u5zlyRYaWfGuiDhQuJSpcu/wS.2X.8UaRu3UAhcqTxu', 'user', '2026-04-23 19:44:17', 'active', '1', '9ioj po', '876954368970'),
+(49, 'plantito', 'plant@plant.plant', '$2y$10$KgWxejuicTgVYxRNlNOFVu4pgodVmM38Pw6.udbt.DhYXKuS6z14m', 'user', '2026-04-24 19:53:40', 'active', 'plantas', 'pipo', '123456789');
+
 --
 -- Indexes for dumped tables
 --
- 
+
 --
 -- Indexes for table `community_tips`
 --
 ALTER TABLE `community_tips`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
- 
+
 --
 -- Indexes for table `credit_cards`
 --
 ALTER TABLE `credit_cards`
   ADD PRIMARY KEY (`id`);
- 
+
 --
 -- Indexes for table `feedback`
 --
 ALTER TABLE `feedback`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
- 
+
 --
 -- Indexes for table `green_calculator_results`
 --
 ALTER TABLE `green_calculator_results`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_user` (`user_id`);
- 
+
+--
+-- Indexes for table `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_ip` (`ip_address`),
+  ADD KEY `idx_email` (`email`),
+  ADD KEY `idx_time` (`attempted_at`);
+
 --
 -- Indexes for table `new_users`
 --
 ALTER TABLE `new_users`
   ADD PRIMARY KEY (`id`);
- 
--- --------------------------------------------------------
- 
+
 --
 -- AUTO_INCREMENT for dumped tables
 --
- 
+
 --
 -- AUTO_INCREMENT for table `community_tips`
 --
 ALTER TABLE `community_tips`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
- 
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+
 --
 -- AUTO_INCREMENT for table `credit_cards`
 --
 ALTER TABLE `credit_cards`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
- 
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
 --
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
- 
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
 --
 -- AUTO_INCREMENT for table `green_calculator_results`
 --
 ALTER TABLE `green_calculator_results`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
- 
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+
 --
 -- AUTO_INCREMENT for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
- 
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT for table `new_users`
 --
 ALTER TABLE `new_users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
- 
--- --------------------------------------------------------
- 
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+
 --
 -- Constraints for dumped tables
 --
- 
+
 --
 -- Constraints for table `community_tips`
 --
 ALTER TABLE `community_tips`
   ADD CONSTRAINT `community_tips_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `new_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
- 
+
 --
 -- Constraints for table `feedback`
 --
 ALTER TABLE `feedback`
   ADD CONSTRAINT `feedback_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `new_users` (`id`);
- 
+
 --
 -- Constraints for table `green_calculator_results`
 --
 ALTER TABLE `green_calculator_results`
   ADD CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `new_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
- 
 COMMIT;
- 
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
- 
