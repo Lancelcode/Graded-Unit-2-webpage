@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 02, 2026 at 01:30 PM
+-- Generation Time: May 02, 2026 at 01:35 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -50,9 +50,9 @@ INSERT INTO `community_tips` (`id`, `user_id`, `message`, `created_at`) VALUES
 (45, 36, 'Water-saving taps installed across all facilities. Small change, big impact.', '2025-05-07 13:37:26'),
 (46, 36, 'Started measuring our Scope 3 emissions this year. Eye-opening and highly recommended.', '2025-05-07 13:37:30'),
 (47, 37, 'Joined a local sustainability network — sharing knowledge with peers has accelerated our progress.', '2025-05-07 14:38:56'),
-(48, 36, 'testadorrrrrrr', '2026-04-23 19:54:27'),
-(50, 39, 'huhuhuhuhuhu', '2026-04-23 23:39:39'),
-(53, 47, '873683575', '2026-04-25 17:27:38');
+(54, 34, 'Switched to a green energy supplier — renewable electricity now powers our entire office.', '2026-04-01 09:00:00'),
+(55, 39, 'Set up a staff sustainability committee to drive internal eco-initiatives month by month.', '2026-04-05 10:30:00'),
+(56, 47, 'Introduced a cycle-to-work scheme — 12 staff now commute by bike, cutting transport emissions.', '2026-04-10 14:00:00');
 
 -- --------------------------------------------------------
 
@@ -75,10 +75,10 @@ CREATE TABLE `credit_cards` (
 --
 
 INSERT INTO `credit_cards` (`id`, `user_id`, `card_number`, `expiry_date`, `cardholder_name`, `cvv`, `created_at`) VALUES
-(38, 35, '1234567890', '2025-05-01', 'fumanchu', '233', '2025-05-01 19:17:11'),
-(39, 39, '32435678', '2025-05-08', 'user', '3223', '2025-05-02 17:17:15'),
-(40, 47, '123456789', '2026-04-11', 'test1', '654', '2026-04-23 18:58:03'),
-(41, 34, '123456789', '2026-04-24', 'test', '123', '2026-04-24 20:02:06');
+(38, 35, '4111111111111111', '2025-05-01', 'Sarah Mitchell', '123', '2025-05-01 19:17:11'),
+(39, 39, '4111111111112222', '2025-05-08', 'Joe Doe', '456', '2025-05-02 17:17:15'),
+(40, 47, '4111111111113333', '2026-04-11', 'David Sow', '789', '2026-04-23 18:58:03'),
+(41, 34, '4111111111114444', '2026-04-24', 'GreenScore Admin', '321', '2026-04-24 20:02:06');
 
 -- --------------------------------------------------------
 
@@ -110,16 +110,10 @@ INSERT INTO `feedback` (`id`, `user_id`, `name`, `email`, `message`, `created_at
 (14, 40, 'cris', 'crif@gmail.com', 'The certificate system is a great incentive for our team to keep improving.', '2025-05-02 17:23:03', 1, 'We appreciate your kind words. Keep working towards that Gold certificate!', 'test1', '2026-04-24 21:18:42'),
 (15, 39, 'Joe', 'joe@joe.com', 'Really intuitive platform. The green calculator gave us clear actionable insights.', '2025-05-02 18:22:20', 1, 'Thank you for taking the time to share this. We hope to see you reach Gold soon.', 'test1', '2026-04-24 21:18:42'),
 (16, 39, 'Joe', 'joe@joe.com', 'Excellent tool for benchmarking our environmental impact year on year.', '2025-05-02 18:31:46', 1, 'Fantastic to hear. Consistent benchmarking is key to real sustainability progress.', 'test1', '2026-04-24 21:18:42'),
-(18, 36, 'admin@admin', 'admin@admin', 'The badge system is a brilliant touch. Our team is now competing to improve our score.', '2025-05-07 12:32:45', 1, 'Love hearing this — that is exactly what the badge system was designed for!', 'test1', '2026-04-24 21:18:42'),
-(19, 36, 'admin@admin', 'admin@admin', 'Very well structured assessment. Would love to see more categories added in the future.', '2025-05-07 12:32:53', 1, 'Great suggestion — we are always looking to expand the assessment categories.', 'test1', '2026-04-24 21:18:42'),
-(20, 37, 'jamoncin', 'pernil@pernil', 'Simple to use and the certificate looks very professional. Impressed overall.', '2025-05-07 13:39:04', 1, 'Thank you for the positive feedback. The certificates are designed to be share-worthy!', 'test1', '2026-04-24 21:18:42'),
-(21, 47, 'test2', 'test2@test2', 'Would recommend GreenScore to any organisation serious about sustainability.', '2025-05-07 15:13:52', 1, 'That means a lot to us. Thank you for your support!', 'test1', '2026-04-24 21:18:42'),
-(22, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:03:01', 0, '', 'test1', '2026-04-24 21:18:42'),
-(23, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:03:19', 0, '', 'test1', '2026-04-24 21:18:42'),
-(24, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:03:57', 0, '', 'test1', '2026-04-24 21:18:42'),
-(25, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:04:26', 0, '', 'test1', '2026-04-24 21:18:42'),
-(26, 34, 'test1', 'test@test.test', 'yvgkujykhblikj', '2026-04-24 20:14:33', 1, 'jhgv;iyhgv;oiujk', 'test1', '2026-04-24 21:18:42'),
-(27, 34, 'test1', 'test@test.test', 'testooooo', '2026-04-24 20:14:45', 1, 'hgcjugfj,vg,jhgv', 'test1', '2026-04-24 21:18:42');
+(18, 36, 'EcoAdmin', 'admin@greenscore.com', 'The badge system is a brilliant touch. Our team is now competing to improve our score.', '2025-05-07 12:32:45', 1, 'Love hearing this — that is exactly what the badge system was designed for!', 'test1', '2026-04-24 21:18:42'),
+(19, 36, 'EcoAdmin', 'admin@greenscore.com', 'Very well structured assessment. Would love to see more categories added in the future.', '2025-05-07 12:32:53', 1, 'Great suggestion — we are always looking to expand the assessment categories.', 'test1', '2026-04-24 21:18:42'),
+(20, 37, 'CarbonCo', 'info@carbonco.com', 'Simple to use and the certificate looks very professional. Impressed overall.', '2025-05-07 13:39:04', 1, 'Thank you for the positive feedback. The certificates are designed to be share-worthy!', 'test1', '2026-04-24 21:18:42'),
+(21, 47, 'CleanFuture Ltd', 'team@cleanfuture.co.uk', 'Would recommend GreenScore to any organisation serious about sustainability.', '2025-05-07 15:13:52', 1, 'That means a lot to us. Thank you for your support!', 'test1', '2026-04-24 21:18:42');
 
 -- --------------------------------------------------------
 
@@ -209,16 +203,16 @@ CREATE TABLE `new_users` (
 --
 
 INSERT INTO `new_users` (`id`, `username`, `email`, `password`, `role`, `created_at`, `status`, `company_name`, `contact_person`, `phone_number`) VALUES
-(34, 'test1', 'test@test.test', '$2y$10$azg83r8x.QMs767x0yLGs.p9cDYfg7FOebTXxGb8H4Avvhk2QH08K', 'admin', '2025-05-01 17:23:54', 'active', 'test1 company', 'testone', '1234567890'),
+(34, 'GreenScore Admin', 'admin@greenscore.com', '$2y$10$azg83r8x.QMs767x0yLGs.p9cDYfg7FOebTXxGb8H4Avvhk2QH08K', 'admin', '2025-05-01 17:23:54', 'active', 'GreenScore', 'Administrator', '07700000001'),
 (35, 'GreenTech Solutions', 'contact@greentech.com', '$2y$10$n4vh11tJxOgY5MPkKfH5Q.0XKnyot30AWMCy.TAAKWC3KYn7MjKgy', 'user', '2025-05-01 17:34:52', 'active', 'GreenTech Solutions Ltd', 'Sarah Mitchell', '07911234567'),
 (36, 'EcoAdmin', 'admin@greenscore.com', '$2y$10$VdFdg3VD8VoaIuHaSG327u3.y8Qy8PHuZ.orewXdhofHYxvgJP09q', 'admin', '2025-05-01 21:47:23', 'active', 'GreenScore', 'Administrator', '07911234568'),
 (37, 'CarbonCo', 'info@carbonco.com', '$2y$10$Hwwe8aOkZ0lGX1bpCtjP7uOwoEAnIdCStqnJ4U0KuoMzkignZKG2i', 'admin', '2025-05-02 00:26:03', 'inactive', 'Carbon Co Ltd', 'James Walker', '07911234569'),
 (39, 'EcoVentures', 'hello@ecoventures.com', '$2y$10$gDVJKK.y0c99dkaMLJrdZOObGQsRo5AN7YlsPglg1vZvJU4IooQ6S', 'user', '2025-05-02 12:24:05', 'active', 'EcoVentures UK', 'Joe Doe', '07911234570'),
 (40, 'SustainCorp', 'info@sustaincorp.com', '$2y$10$7nHeemAINX68isS/zeOY4OYXpof6s48TZ6RAQgfuPOyaWvnwc/o4O', 'user', '2025-05-02 17:20:19', 'active', 'SustainCorp Ltd', 'Chris Reid', '07911234571'),
-(41, 'Juan', '1@1', '$2y$10$sZKDAfwxbh4GUbD8Z18Spe3DmyNcziIz6cfIb2gR3taMoRri68hau', 'user', '2025-05-02 19:09:47', 'deactivated', 'One', 'Juan', '11111111111111'),
-(47, 'test2', 'test2@test2', '$2y$10$NQO3zCquzyQNbtt4bEGIsO.FvAF685X.2qwLUxgVMmZs.nGTp.u2O', 'user', '2025-05-07 14:55:47', 'deactivated', 'test2', 'test2', 'test2'),
-(48, '12', 'Djiby.sowrebollo@vaste.bio', '$2y$10$wcs4t4Vvq8u5zlyRYaWfGuiDhQuJSpcu/wS.2X.8UaRu3UAhcqTxu', 'user', '2026-04-23 19:44:17', 'active', '1', '9ioj po', '876954368970'),
-(49, 'plantito', 'plant@plant.plant', '$2y$10$KgWxejuicTgVYxRNlNOFVu4pgodVmM38Pw6.udbt.DhYXKuS6z14m', 'user', '2026-04-24 19:53:40', 'active', 'plantas', 'pipo', '123456789');
+(41, 'BluePlanet Co', 'info@blueplanet.co.uk', '$2y$10$sZKDAfwxbh4GUbD8Z18Spe3DmyNcziIz6cfIb2gR3taMoRri68hau', 'user', '2025-05-02 19:09:47', 'deactivated', 'BluePlanet Co', 'Mark Jensen', '07700000004'),
+(47, 'CleanFuture Ltd', 'team@cleanfuture.co.uk', '$2y$10$NQO3zCquzyQNbtt4bEGIsO.FvAF685X.2qwLUxgVMmZs.nGTp.u2O', 'user', '2025-05-07 14:55:47', 'deactivated', 'CleanFuture Ltd', 'Anna Torres', '07700000005'),
+(48, 'EcoPath Ltd', 'contact@ecopath.co.uk', '$2y$10$wcs4t4Vvq8u5zlyRYaWfGuiDhQuJSpcu/wS.2X.8UaRu3UAhcqTxu', 'user', '2026-04-23 19:44:17', 'active', 'EcoPath Ltd', 'David Sow', '07700000002'),
+(49, 'GreenLeaf Group', 'hello@greenleaf.co.uk', '$2y$10$KgWxejuicTgVYxRNlNOFVu4pgodVmM38Pw6.udbt.DhYXKuS6z14m', 'user', '2026-04-24 19:53:40', 'active', 'GreenLeaf Group', 'Patricia Mills', '07700000003');
 
 --
 -- Indexes for dumped tables
@@ -274,7 +268,7 @@ ALTER TABLE `new_users`
 -- AUTO_INCREMENT for table `community_tips`
 --
 ALTER TABLE `community_tips`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `credit_cards`
