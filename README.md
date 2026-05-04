@@ -72,7 +72,7 @@ Security was a core design priority throughout development:
 
 ---
 
-## 🧩 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -86,7 +86,7 @@ Security was a core design priority throughout development:
 
 ---
 
-## 🗄️ Database
+## Database
 
 Six tables with foreign key constraints and cascading deletes:
 
@@ -103,7 +103,7 @@ The full schema with seed data is available at [`database/gradedunit.sql`](datab
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 /
@@ -144,7 +144,7 @@ The full schema with seed data is available at [`database/gradedunit.sql`](datab
 
 ---
 
-## 🧪 Testing
+## Testing
 
 **42 tests — 63 assertions — all passing**
 
@@ -201,7 +201,7 @@ http://localhost/Graded-Unit-2-webpage/
 | User | `joe@joe.com` | *(set in your DB)* |
 
 ---
-## 👤 Author
+##  Author
 
 **Djiby Sow Rebollo**
 
